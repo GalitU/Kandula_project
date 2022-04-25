@@ -18,7 +18,7 @@ variable "db_instance_type" {
 }
 variable "ami" {
   description = "Image type of instance"
-  default     = "ami-0d527b8c289b4af7f"
+  default     = "ami-01ec9ccdf0676a480" # AMI UBUNTU 21.04
 }
 variable "count_instances" {
   description = "Count of Web server/ DB  instances"
