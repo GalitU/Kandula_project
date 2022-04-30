@@ -29,10 +29,7 @@ variable "cidr_block_pvt" {
   description = "CIDR block of private subnet"
   type        = list(string)
 }
-variable "special_cidr_block" {
-  description = "Special CIDR block for ingress and egress for SSH"
-  type        = list(string)
-}
+
 variable "subnet_pvt_prefix_template_arr" {
   description = "Prefix for pvt subnets"
 }

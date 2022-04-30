@@ -67,7 +67,7 @@ tee /etc/consul.d/config.json > /dev/null <<EOF
   "disable_remote_exec": true,
   "disable_update_check": true,
   "leave_on_terminate": true,
-  "retry_join": ["provider=aws tag_key=Task tag_value=Consul"],
+   "retry_join": ["provider=aws tag_key=${CONSUL_TAG_NAME} tag_value=${CONSUL_TAG_VALUE}"],
   "server": true,
   "bootstrap_expect": 3,
   "ui": true,

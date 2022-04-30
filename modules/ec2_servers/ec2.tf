@@ -56,6 +56,7 @@ resource "aws_instance" "ec2_server" {
     Task      = var.application_task
     Owner     = var.application_owner
     OS        = var.ec2_OS
+    ConsulTag = "Consul-${var.application_name}-${var.application_task}"
     CreatedBy = var.created_by
   }
 }

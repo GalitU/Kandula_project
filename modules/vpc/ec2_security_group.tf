@@ -104,20 +104,13 @@ data "http" "local_workstation_ip" {
   url = "http://ipv4.icanhazip.com"
 }
 
-/*
-# get my external ip
-data "http" "local_workstation_ip" {
-  url = "http://ifconfig.me"
-}
-*/
-
 resource "aws_security_group_rule" "special_ingress_ssh" {
   type        = "ingress"
   description = "Inbound SSH access from special address"
   from_port   = 22
   to_port     = 22
   protocol    = "tcp"
-  cidr_blocks = ["${chomp(data.http.local_workstation_ip.body)}/32"] #["${data.http.local_workstation_ip.body}/32"] # var.special_cidr_block
+  cidr_blocks = ["${chomp(data.http.local_workstation_ip.body)}/32"]
 
   security_group_id = aws_security_group.special_sec_grp_ssh.id
 }

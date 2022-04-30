@@ -19,7 +19,6 @@ module "vpc" {
   region                         = var.region
   cidr_block_pvt                 = local.subnet_pvt_cidr_arr
   cidr_block_pub                 = local.subnet_pub_cidr_arr
-  special_cidr_block             = ["0.0.0.0/0"] #["212.235.2.148"]
   subnet_pvt_prefix_template_arr = local.subnet_pvt_prefix_arr
   subnet_pub_prefix_template_arr = local.subnet_pub_prefix_arr
   application_name               = var.application_name
@@ -157,7 +156,7 @@ module "ec2_consul_servers" {
   vpc_id                      = module.vpc.vpc_id
   ec2_OS                      = "Ubuntu"
   iam_instance_profile        = module.iam_roles_describe.iam_instance_profile
-  user_data_file              = file("${path.module}/../modules/scripts/consule-server.sh")
+  user_data_file              = data.template_file.consul_server_setup_script.template # file("${path.module}/../modules/scripts/consule-server.sh")
   associate_public_ip_address = false
   application_name            = var.application_name
   application_task            = var.application_task
@@ -178,7 +177,7 @@ module "ec2_web_servers" {
   vpc_id                      = module.vpc.vpc_id
   ec2_OS                      = "Ubuntu"
   iam_instance_profile        = module.iam_roles_describe.iam_instance_profile
-  user_data_file              = file("${path.module}/../modules/scripts/consule-agent.sh")
+  user_data_file              = data.template_file.consul_agent_setup_script.template # file("${path.module}/../modules/scripts/consule-agent.sh")
   associate_public_ip_address = false
   application_name            = var.application_name
   application_task            = var.application_task
