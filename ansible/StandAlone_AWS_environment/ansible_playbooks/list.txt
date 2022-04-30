@@ -1,0 +1,2285 @@
+{
+    "_meta": {
+        "hostvars": {
+            "ec2-3-67-88-136.eu-central-1.compute.amazonaws.com": {
+                "ami_launch_index": 0,
+                "architecture": "x86_64",
+                "block_device_mappings": [
+                    {
+                        "device_name": "/dev/sda1",
+                        "ebs": {
+                            "attach_time": "2022-04-26T23:55:39+00:00",
+                            "delete_on_termination": true,
+                            "status": "attached",
+                            "volume_id": "vol-07392d8dc19d7e63a"
+                        }
+                    },
+                    {
+                        "device_name": "/dev/xvda",
+                        "ebs": {
+                            "attach_time": "2022-04-26T23:55:39+00:00",
+                            "delete_on_termination": true,
+                            "status": "attached",
+                            "volume_id": "vol-070aa661cb7f35294"
+                        }
+                    }
+                ],
+                "capacity_reservation_specification": {
+                    "capacity_reservation_preference": "open"
+                },
+                "client_token": "DE2C5227-A33B-4997-90D5-D381D2BD301D",
+                "cpu_options": {
+                    "core_count": 1,
+                    "threads_per_core": 1
+                },
+                "ebs_optimized": false,
+                "ena_support": true,
+                "enclave_options": {
+                    "enabled": false
+                },
+                "hibernation_options": {
+                    "configured": false
+                },
+                "hypervisor": "xen",
+                "iam_instance_profile": {
+                    "arn": "arn:aws:iam::504723606770:instance-profile/Role_Instance_Describe_Kandula_Ansible_MidPrj_join1",
+                    "id": "AIPAXLA67BTZGRKV7T6JY"
+                },
+                "image_id": "ami-01ec9ccdf0676a480",
+                "instance_id": "i-0d555120982717eb3",
+                "instance_type": "t2.micro",
+                "key_name": "Key_Kandula_bastion",
+                "launch_time": "2022-04-26T23:55:38+00:00",
+                "maintenance_options": {
+                    "auto_recovery": "default"
+                },
+                "metadata_options": {
+                    "http_endpoint": "enabled",
+                    "http_protocol_ipv6": "disabled",
+                    "http_put_response_hop_limit": 1,
+                    "http_tokens": "optional",
+                    "instance_metadata_tags": "disabled",
+                    "state": "applied"
+                },
+                "monitoring": {
+                    "state": "disabled"
+                },
+                "network_interfaces": [
+                    {
+                        "association": {
+                            "ip_owner_id": "amazon",
+                            "public_dns_name": "ec2-3-67-88-136.eu-central-1.compute.amazonaws.com",
+                            "public_ip": "3.67.88.136"
+                        },
+                        "attachment": {
+                            "attach_time": "2022-04-26T23:55:38+00:00",
+                            "attachment_id": "eni-attach-0c942a9437893ea9a",
+                            "delete_on_termination": true,
+                            "device_index": 0,
+                            "network_card_index": 0,
+                            "status": "attached"
+                        },
+                        "description": "",
+                        "groups": [
+                            {
+                                "group_id": "sg-0276feb5897f2404c",
+                                "group_name": "Sec. group for SSH-ansible_midprj-Kandula"
+                            }
+                        ],
+                        "interface_type": "interface",
+                        "ipv6_addresses": [],
+                        "mac_address": "02:d3:c8:2b:3d:52",
+                        "network_interface_id": "eni-091ffcda0e93bb41e",
+                        "owner_id": "504723606770",
+                        "private_dns_name": "ip-10-0-31-128.eu-central-1.compute.internal",
+                        "private_ip_address": "10.0.31.128",
+                        "private_ip_addresses": [
+                            {
+                                "association": {
+                                    "ip_owner_id": "amazon",
+                                    "public_dns_name": "ec2-3-67-88-136.eu-central-1.compute.amazonaws.com",
+                                    "public_ip": "3.67.88.136"
+                                },
+                                "primary": true,
+                                "private_dns_name": "ip-10-0-31-128.eu-central-1.compute.internal",
+                                "private_ip_address": "10.0.31.128"
+                            }
+                        ],
+                        "source_dest_check": true,
+                        "status": "in-use",
+                        "subnet_id": "subnet-03d39667c624a3d63",
+                        "vpc_id": "vpc-03c262363ef3542c9"
+                    }
+                ],
+                "owner_id": "504723606770",
+                "placement": {
+                    "availability_zone": "eu-central-1a",
+                    "group_name": "",
+                    "region": "eu-central-1",
+                    "tenancy": "default"
+                },
+                "platform_details": "Linux/UNIX",
+                "private_dns_name": "ip-10-0-31-128.eu-central-1.compute.internal",
+                "private_dns_name_options": {
+                    "enable_resource_name_dns_a_record": false,
+                    "enable_resource_name_dns_aaaa_record": false,
+                    "hostname_type": "ip-name"
+                },
+                "private_ip_address": "10.0.31.128",
+                "product_codes": [],
+                "public_dns_name": "ec2-3-67-88-136.eu-central-1.compute.amazonaws.com",
+                "public_ip_address": "3.67.88.136",
+                "requester_id": "",
+                "reservation_id": "r-06d90b27e5ccf666d",
+                "root_device_name": "/dev/sda1",
+                "root_device_type": "ebs",
+                "security_groups": [
+                    {
+                        "group_id": "sg-0276feb5897f2404c",
+                        "group_name": "Sec. group for SSH-ansible_midprj-Kandula"
+                    }
+                ],
+                "source_dest_check": true,
+                "state": {
+                    "code": 16,
+                    "name": "running"
+                },
+                "state_transition_reason": "",
+                "subnet_id": "subnet-03d39667c624a3d63",
+                "tags": {
+                    "App_name": "Ansible_MidPrj",
+                    "CreatedBy": "terraform",
+                    "Name": "Kandula Ansible_MidPrj Bastion Ubuntu_0",
+                    "OS": "Ubuntu",
+                    "Owner": "Galit Udovik",
+                    "Purpose": "Bastion",
+                    "Task": "Kandula"
+                },
+                "usage_operation": "RunInstances",
+                "usage_operation_update_time": "2022-04-26T23:55:38+00:00",
+                "virtualization_type": "hvm",
+                "vpc_id": "vpc-03c262363ef3542c9"
+            },
+            "ip-10-0-1-28.eu-central-1.compute.internal": {
+                "ami_launch_index": 0,
+                "architecture": "x86_64",
+                "block_device_mappings": [
+                    {
+                        "device_name": "/dev/sda1",
+                        "ebs": {
+                            "attach_time": "2022-04-26T23:55:39+00:00",
+                            "delete_on_termination": true,
+                            "status": "attached",
+                            "volume_id": "vol-085455b43f51b9e70"
+                        }
+                    },
+                    {
+                        "device_name": "/dev/xvda",
+                        "ebs": {
+                            "attach_time": "2022-04-26T23:55:39+00:00",
+                            "delete_on_termination": true,
+                            "status": "attached",
+                            "volume_id": "vol-015107753b214f5db"
+                        }
+                    }
+                ],
+                "capacity_reservation_specification": {
+                    "capacity_reservation_preference": "open"
+                },
+                "client_token": "FA38B030-DEDE-428C-B273-1784B5B3ADB8",
+                "cpu_options": {
+                    "core_count": 1,
+                    "threads_per_core": 1
+                },
+                "ebs_optimized": false,
+                "ena_support": true,
+                "enclave_options": {
+                    "enabled": false
+                },
+                "hibernation_options": {
+                    "configured": false
+                },
+                "hypervisor": "xen",
+                "iam_instance_profile": {
+                    "arn": "arn:aws:iam::504723606770:instance-profile/Role_Instance_Describe_Kandula_Ansible_MidPrj_join1",
+                    "id": "AIPAXLA67BTZGRKV7T6JY"
+                },
+                "image_id": "ami-01ec9ccdf0676a480",
+                "instance_id": "i-0d4543d1f0db52c5f",
+                "instance_type": "t2.micro",
+                "key_name": "Key_Kandula_Ansible_MidPrj",
+                "launch_time": "2022-04-26T23:55:38+00:00",
+                "maintenance_options": {
+                    "auto_recovery": "default"
+                },
+                "metadata_options": {
+                    "http_endpoint": "enabled",
+                    "http_protocol_ipv6": "disabled",
+                    "http_put_response_hop_limit": 1,
+                    "http_tokens": "optional",
+                    "instance_metadata_tags": "disabled",
+                    "state": "applied"
+                },
+                "monitoring": {
+                    "state": "disabled"
+                },
+                "network_interfaces": [
+                    {
+                        "attachment": {
+                            "attach_time": "2022-04-26T23:55:38+00:00",
+                            "attachment_id": "eni-attach-06f404cf759365868",
+                            "delete_on_termination": true,
+                            "device_index": 0,
+                            "network_card_index": 0,
+                            "status": "attached"
+                        },
+                        "description": "",
+                        "groups": [
+                            {
+                                "group_id": "sg-01d13f24e4adfdd09",
+                                "group_name": "Sec. group for relevant ports -ansible_midprj-Kandula"
+                            },
+                            {
+                                "group_id": "sg-0adf6dd4a8b0c3459",
+                                "group_name": "Sec. group for HTTP-ansible_midprj-Kandula"
+                            },
+                            {
+                                "group_id": "sg-0276feb5897f2404c",
+                                "group_name": "Sec. group for SSH-ansible_midprj-Kandula"
+                            }
+                        ],
+                        "interface_type": "interface",
+                        "ipv6_addresses": [],
+                        "mac_address": "02:8f:70:52:23:2e",
+                        "network_interface_id": "eni-0600b4131781facb5",
+                        "owner_id": "504723606770",
+                        "private_dns_name": "ip-10-0-1-28.eu-central-1.compute.internal",
+                        "private_ip_address": "10.0.1.28",
+                        "private_ip_addresses": [
+                            {
+                                "primary": true,
+                                "private_dns_name": "ip-10-0-1-28.eu-central-1.compute.internal",
+                                "private_ip_address": "10.0.1.28"
+                            }
+                        ],
+                        "source_dest_check": true,
+                        "status": "in-use",
+                        "subnet_id": "subnet-0e18e23a19e0074df",
+                        "vpc_id": "vpc-03c262363ef3542c9"
+                    }
+                ],
+                "owner_id": "504723606770",
+                "placement": {
+                    "availability_zone": "eu-central-1a",
+                    "group_name": "",
+                    "region": "eu-central-1",
+                    "tenancy": "default"
+                },
+                "platform_details": "Linux/UNIX",
+                "private_dns_name": "ip-10-0-1-28.eu-central-1.compute.internal",
+                "private_dns_name_options": {
+                    "enable_resource_name_dns_a_record": false,
+                    "enable_resource_name_dns_aaaa_record": false,
+                    "hostname_type": "ip-name"
+                },
+                "private_ip_address": "10.0.1.28",
+                "product_codes": [],
+                "public_dns_name": "",
+                "requester_id": "",
+                "reservation_id": "r-0b4235019dcd078a8",
+                "root_device_name": "/dev/sda1",
+                "root_device_type": "ebs",
+                "security_groups": [
+                    {
+                        "group_id": "sg-01d13f24e4adfdd09",
+                        "group_name": "Sec. group for relevant ports -ansible_midprj-Kandula"
+                    },
+                    {
+                        "group_id": "sg-0adf6dd4a8b0c3459",
+                        "group_name": "Sec. group for HTTP-ansible_midprj-Kandula"
+                    },
+                    {
+                        "group_id": "sg-0276feb5897f2404c",
+                        "group_name": "Sec. group for SSH-ansible_midprj-Kandula"
+                    }
+                ],
+                "source_dest_check": true,
+                "state": {
+                    "code": 16,
+                    "name": "running"
+                },
+                "state_transition_reason": "",
+                "subnet_id": "subnet-0e18e23a19e0074df",
+                "tags": {
+                    "App_name": "Ansible_MidPrj",
+                    "CreatedBy": "terraform",
+                    "Name": "Kandula Ansible_MidPrj WebServer Ubuntu_0",
+                    "OS": "Ubuntu",
+                    "Owner": "Galit Udovik",
+                    "Purpose": "WebServer",
+                    "Task": "Kandula"
+                },
+                "usage_operation": "RunInstances",
+                "usage_operation_update_time": "2022-04-26T23:55:38+00:00",
+                "virtualization_type": "hvm",
+                "vpc_id": "vpc-03c262363ef3542c9"
+            },
+            "ip-10-0-3-209.eu-central-1.compute.internal": {
+                "ami_launch_index": 0,
+                "architecture": "x86_64",
+                "block_device_mappings": [
+                    {
+                        "device_name": "/dev/sda1",
+                        "ebs": {
+                            "attach_time": "2022-04-26T23:55:39+00:00",
+                            "delete_on_termination": true,
+                            "status": "attached",
+                            "volume_id": "vol-0f02e649618a79451"
+                        }
+                    },
+                    {
+                        "device_name": "/dev/xvda",
+                        "ebs": {
+                            "attach_time": "2022-04-26T23:55:39+00:00",
+                            "delete_on_termination": true,
+                            "status": "attached",
+                            "volume_id": "vol-07ad58ae37bf4200e"
+                        }
+                    }
+                ],
+                "capacity_reservation_specification": {
+                    "capacity_reservation_preference": "open"
+                },
+                "client_token": "6F2A1CB6-F01C-4450-A29F-97F758E89518",
+                "cpu_options": {
+                    "core_count": 1,
+                    "threads_per_core": 1
+                },
+                "ebs_optimized": false,
+                "ena_support": true,
+                "enclave_options": {
+                    "enabled": false
+                },
+                "hibernation_options": {
+                    "configured": false
+                },
+                "hypervisor": "xen",
+                "iam_instance_profile": {
+                    "arn": "arn:aws:iam::504723606770:instance-profile/Role_Instance_Describe_Kandula_Ansible_MidPrj_join1",
+                    "id": "AIPAXLA67BTZGRKV7T6JY"
+                },
+                "image_id": "ami-01ec9ccdf0676a480",
+                "instance_id": "i-0e91ca4d6425fbaa3",
+                "instance_type": "t2.micro",
+                "key_name": "Key_Kandula_ansible",
+                "launch_time": "2022-04-26T23:55:39+00:00",
+                "maintenance_options": {
+                    "auto_recovery": "default"
+                },
+                "metadata_options": {
+                    "http_endpoint": "enabled",
+                    "http_protocol_ipv6": "disabled",
+                    "http_put_response_hop_limit": 1,
+                    "http_tokens": "optional",
+                    "instance_metadata_tags": "disabled",
+                    "state": "applied"
+                },
+                "monitoring": {
+                    "state": "disabled"
+                },
+                "network_interfaces": [
+                    {
+                        "attachment": {
+                            "attach_time": "2022-04-26T23:55:39+00:00",
+                            "attachment_id": "eni-attach-0bf061a539f1ae382",
+                            "delete_on_termination": true,
+                            "device_index": 0,
+                            "network_card_index": 0,
+                            "status": "attached"
+                        },
+                        "description": "",
+                        "groups": [
+                            {
+                                "group_id": "sg-0276feb5897f2404c",
+                                "group_name": "Sec. group for SSH-ansible_midprj-Kandula"
+                            }
+                        ],
+                        "interface_type": "interface",
+                        "ipv6_addresses": [],
+                        "mac_address": "02:c1:c0:1d:ba:56",
+                        "network_interface_id": "eni-0945385383ad7e8e6",
+                        "owner_id": "504723606770",
+                        "private_dns_name": "ip-10-0-3-209.eu-central-1.compute.internal",
+                        "private_ip_address": "10.0.3.209",
+                        "private_ip_addresses": [
+                            {
+                                "primary": true,
+                                "private_dns_name": "ip-10-0-3-209.eu-central-1.compute.internal",
+                                "private_ip_address": "10.0.3.209"
+                            }
+                        ],
+                        "source_dest_check": true,
+                        "status": "in-use",
+                        "subnet_id": "subnet-0d9c563171c1abd4c",
+                        "vpc_id": "vpc-03c262363ef3542c9"
+                    }
+                ],
+                "owner_id": "504723606770",
+                "placement": {
+                    "availability_zone": "eu-central-1a",
+                    "group_name": "",
+                    "region": "eu-central-1",
+                    "tenancy": "default"
+                },
+                "platform_details": "Linux/UNIX",
+                "private_dns_name": "ip-10-0-3-209.eu-central-1.compute.internal",
+                "private_dns_name_options": {
+                    "enable_resource_name_dns_a_record": false,
+                    "enable_resource_name_dns_aaaa_record": false,
+                    "hostname_type": "ip-name"
+                },
+                "private_ip_address": "10.0.3.209",
+                "product_codes": [],
+                "public_dns_name": "",
+                "requester_id": "",
+                "reservation_id": "r-0cb764238fd58526a",
+                "root_device_name": "/dev/sda1",
+                "root_device_type": "ebs",
+                "security_groups": [
+                    {
+                        "group_id": "sg-0276feb5897f2404c",
+                        "group_name": "Sec. group for SSH-ansible_midprj-Kandula"
+                    }
+                ],
+                "source_dest_check": true,
+                "state": {
+                    "code": 16,
+                    "name": "running"
+                },
+                "state_transition_reason": "",
+                "subnet_id": "subnet-0d9c563171c1abd4c",
+                "tags": {
+                    "App_name": "Ansible_MidPrj",
+                    "CreatedBy": "terraform",
+                    "Name": "Kandula Ansible_MidPrj Ansible Ubuntu_0",
+                    "OS": "Ubuntu",
+                    "Owner": "Galit Udovik",
+                    "Purpose": "Ansible",
+                    "Task": "Kandula"
+                },
+                "usage_operation": "RunInstances",
+                "usage_operation_update_time": "2022-04-26T23:55:39+00:00",
+                "virtualization_type": "hvm",
+                "vpc_id": "vpc-03c262363ef3542c9"
+            },
+            "ip-10-0-4-148.eu-central-1.compute.internal": {
+                "ami_launch_index": 0,
+                "architecture": "x86_64",
+                "block_device_mappings": [
+                    {
+                        "device_name": "/dev/sda1",
+                        "ebs": {
+                            "attach_time": "2022-04-03T16:05:40+00:00",
+                            "delete_on_termination": true,
+                            "status": "attached",
+                            "volume_id": "vol-08531d92b7699f3c3"
+                        }
+                    }
+                ],
+                "capacity_reservation_specification": {
+                    "capacity_reservation_preference": "open"
+                },
+                "client_token": "1BA82512-440E-4038-AC63-E0500BF8EFC4",
+                "cpu_options": {
+                    "core_count": 1,
+                    "threads_per_core": 1
+                },
+                "ebs_optimized": false,
+                "ena_support": true,
+                "enclave_options": {
+                    "enabled": false
+                },
+                "hibernation_options": {
+                    "configured": false
+                },
+                "hypervisor": "xen",
+                "iam_instance_profile": {
+                    "arn": "arn:aws:iam::504723606770:instance-profile/opsschool-consul-join",
+                    "id": "AIPAXLA67BTZBDGKVMMXO"
+                },
+                "image_id": "ami-0e1ce3e0deb8896d2",
+                "instance_id": "i-0974dc42a929c80ba",
+                "instance_type": "t2.micro",
+                "key_name": "opsschool_consul_key",
+                "launch_time": "2022-04-25T12:02:26+00:00",
+                "maintenance_options": {
+                    "auto_recovery": "default"
+                },
+                "metadata_options": {
+                    "http_endpoint": "enabled",
+                    "http_protocol_ipv6": "disabled",
+                    "http_put_response_hop_limit": 1,
+                    "http_tokens": "optional",
+                    "instance_metadata_tags": "disabled",
+                    "state": "applied"
+                },
+                "monitoring": {
+                    "state": "disabled"
+                },
+                "network_interfaces": [
+                    {
+                        "attachment": {
+                            "attach_time": "2022-04-03T16:05:39+00:00",
+                            "attachment_id": "eni-attach-0efeeae6a40dd4b62",
+                            "delete_on_termination": true,
+                            "device_index": 0,
+                            "network_card_index": 0,
+                            "status": "attached"
+                        },
+                        "description": "",
+                        "groups": [
+                            {
+                                "group_id": "sg-0e5b95ba9720dfc7b",
+                                "group_name": "opsschool-consul"
+                            }
+                        ],
+                        "interface_type": "interface",
+                        "ipv6_addresses": [],
+                        "mac_address": "0a:8f:9f:1e:e8:a4",
+                        "network_interface_id": "eni-0a0b5a5eb17b5e311",
+                        "owner_id": "504723606770",
+                        "private_ip_address": "10.0.4.148",
+                        "private_ip_addresses": [
+                            {
+                                "primary": true,
+                                "private_ip_address": "10.0.4.148"
+                            }
+                        ],
+                        "source_dest_check": true,
+                        "status": "in-use",
+                        "subnet_id": "subnet-05c2bce2a2ee0ae25",
+                        "vpc_id": "vpc-0a1eeb5860976c5b4"
+                    }
+                ],
+                "owner_id": "504723606770",
+                "placement": {
+                    "availability_zone": "eu-central-1c",
+                    "group_name": "",
+                    "region": "eu-central-1",
+                    "tenancy": "default"
+                },
+                "platform_details": "Linux/UNIX",
+                "private_dns_name": "ip-10-0-4-148.eu-central-1.compute.internal",
+                "private_dns_name_options": {
+                    "enable_resource_name_dns_a_record": false,
+                    "enable_resource_name_dns_aaaa_record": false,
+                    "hostname_type": "ip-name"
+                },
+                "private_ip_address": "10.0.4.148",
+                "product_codes": [],
+                "public_dns_name": "",
+                "requester_id": "",
+                "reservation_id": "r-01bb452c720375b3b",
+                "root_device_name": "/dev/sda1",
+                "root_device_type": "ebs",
+                "security_groups": [
+                    {
+                        "group_id": "sg-0e5b95ba9720dfc7b",
+                        "group_name": "opsschool-consul"
+                    }
+                ],
+                "source_dest_check": true,
+                "state": {
+                    "code": 80,
+                    "name": "stopped"
+                },
+                "state_reason": {
+                    "code": "Client.UserInitiatedShutdown",
+                    "message": "Client.UserInitiatedShutdown: User initiated shutdown"
+                },
+                "state_transition_reason": "User initiated (2022-04-25 15:56:45 GMT)",
+                "subnet_id": "subnet-05c2bce2a2ee0ae25",
+                "tags": {
+                    "CreatedBy": "terraform",
+                    "Name": "opsschool-server",
+                    "Task": "Consul",
+                    "consul_server": "true"
+                },
+                "usage_operation": "RunInstances",
+                "usage_operation_update_time": "2022-04-03T16:05:39+00:00",
+                "virtualization_type": "hvm",
+                "vpc_id": "vpc-0a1eeb5860976c5b4"
+            },
+            "ip-10-0-4-184.eu-central-1.compute.internal": {
+                "ami_launch_index": 0,
+                "architecture": "x86_64",
+                "block_device_mappings": [
+                    {
+                        "device_name": "/dev/sda1",
+                        "ebs": {
+                            "attach_time": "2022-04-03T16:03:50+00:00",
+                            "delete_on_termination": true,
+                            "status": "attached",
+                            "volume_id": "vol-04c3c6bf3b0bae5dc"
+                        }
+                    }
+                ],
+                "capacity_reservation_specification": {
+                    "capacity_reservation_preference": "open"
+                },
+                "client_token": "8FA94330-23A8-460E-A09F-FB98CEF528BD",
+                "cpu_options": {
+                    "core_count": 1,
+                    "threads_per_core": 1
+                },
+                "ebs_optimized": false,
+                "ena_support": true,
+                "enclave_options": {
+                    "enabled": false
+                },
+                "hibernation_options": {
+                    "configured": false
+                },
+                "hypervisor": "xen",
+                "iam_instance_profile": {
+                    "arn": "arn:aws:iam::504723606770:instance-profile/opsschool-consul-join",
+                    "id": "AIPAXLA67BTZBDGKVMMXO"
+                },
+                "image_id": "ami-0e1ce3e0deb8896d2",
+                "instance_id": "i-05e4f78ec5cea4f5a",
+                "instance_type": "t2.micro",
+                "key_name": "opsschool_consul_key",
+                "launch_time": "2022-04-25T17:55:04+00:00",
+                "maintenance_options": {
+                    "auto_recovery": "default"
+                },
+                "metadata_options": {
+                    "http_endpoint": "enabled",
+                    "http_protocol_ipv6": "disabled",
+                    "http_put_response_hop_limit": 1,
+                    "http_tokens": "optional",
+                    "instance_metadata_tags": "disabled",
+                    "state": "applied"
+                },
+                "monitoring": {
+                    "state": "disabled"
+                },
+                "network_interfaces": [
+                    {
+                        "attachment": {
+                            "attach_time": "2022-04-03T16:03:49+00:00",
+                            "attachment_id": "eni-attach-02577fdf9c3cdf0b2",
+                            "delete_on_termination": true,
+                            "device_index": 0,
+                            "network_card_index": 0,
+                            "status": "attached"
+                        },
+                        "description": "",
+                        "groups": [
+                            {
+                                "group_id": "sg-0e5b95ba9720dfc7b",
+                                "group_name": "opsschool-consul"
+                            }
+                        ],
+                        "interface_type": "interface",
+                        "ipv6_addresses": [],
+                        "mac_address": "0a:2f:e9:d9:2f:74",
+                        "network_interface_id": "eni-023134afcde3419fc",
+                        "owner_id": "504723606770",
+                        "private_ip_address": "10.0.4.184",
+                        "private_ip_addresses": [
+                            {
+                                "primary": true,
+                                "private_ip_address": "10.0.4.184"
+                            }
+                        ],
+                        "source_dest_check": true,
+                        "status": "in-use",
+                        "subnet_id": "subnet-05c2bce2a2ee0ae25",
+                        "vpc_id": "vpc-0a1eeb5860976c5b4"
+                    }
+                ],
+                "owner_id": "504723606770",
+                "placement": {
+                    "availability_zone": "eu-central-1c",
+                    "group_name": "",
+                    "region": "eu-central-1",
+                    "tenancy": "default"
+                },
+                "platform_details": "Linux/UNIX",
+                "private_dns_name": "ip-10-0-4-184.eu-central-1.compute.internal",
+                "private_dns_name_options": {
+                    "enable_resource_name_dns_a_record": false,
+                    "enable_resource_name_dns_aaaa_record": false,
+                    "hostname_type": "ip-name"
+                },
+                "private_ip_address": "10.0.4.184",
+                "product_codes": [],
+                "public_dns_name": "",
+                "requester_id": "",
+                "reservation_id": "r-0b3c22fda71972243",
+                "root_device_name": "/dev/sda1",
+                "root_device_type": "ebs",
+                "security_groups": [
+                    {
+                        "group_id": "sg-0e5b95ba9720dfc7b",
+                        "group_name": "opsschool-consul"
+                    }
+                ],
+                "source_dest_check": true,
+                "state": {
+                    "code": 80,
+                    "name": "stopped"
+                },
+                "state_reason": {
+                    "code": "Client.UserInitiatedShutdown",
+                    "message": "Client.UserInitiatedShutdown: User initiated shutdown"
+                },
+                "state_transition_reason": "User initiated (2022-04-25 21:45:10 GMT)",
+                "subnet_id": "subnet-05c2bce2a2ee0ae25",
+                "tags": {
+                    "CreatedBy": "terraform",
+                    "Name": "opsschool-agent",
+                    "Task": "Consul"
+                },
+                "usage_operation": "RunInstances",
+                "usage_operation_update_time": "2022-04-03T16:03:49+00:00",
+                "virtualization_type": "hvm",
+                "vpc_id": "vpc-0a1eeb5860976c5b4"
+            },
+            "ip-172-31-10-152.eu-central-1.compute.internal": {
+                "ami_launch_index": 0,
+                "architecture": "x86_64",
+                "block_device_mappings": [
+                    {
+                        "device_name": "/dev/sda1",
+                        "ebs": {
+                            "attach_time": "2022-03-27T15:37:36+00:00",
+                            "delete_on_termination": true,
+                            "status": "attached",
+                            "volume_id": "vol-07a46185452ad8e70"
+                        }
+                    }
+                ],
+                "capacity_reservation_specification": {
+                    "capacity_reservation_preference": "open"
+                },
+                "client_token": "3BC36781-59AA-4ADE-989C-BC3BA3B67700",
+                "cpu_options": {
+                    "core_count": 1,
+                    "threads_per_core": 1
+                },
+                "ebs_optimized": false,
+                "ena_support": true,
+                "enclave_options": {
+                    "enabled": false
+                },
+                "hibernation_options": {
+                    "configured": false
+                },
+                "hypervisor": "xen",
+                "image_id": "ami-035e017c94c3cbe9c",
+                "instance_id": "i-0bea3e358c2c686f4",
+                "instance_type": "t2.micro",
+                "key_name": "coredns_key",
+                "launch_time": "2022-03-28T12:08:18+00:00",
+                "maintenance_options": {
+                    "auto_recovery": "default"
+                },
+                "metadata_options": {
+                    "http_endpoint": "enabled",
+                    "http_protocol_ipv6": "disabled",
+                    "http_put_response_hop_limit": 1,
+                    "http_tokens": "optional",
+                    "instance_metadata_tags": "disabled",
+                    "state": "applied"
+                },
+                "monitoring": {
+                    "state": "disabled"
+                },
+                "network_interfaces": [
+                    {
+                        "attachment": {
+                            "attach_time": "2022-03-27T15:37:35+00:00",
+                            "attachment_id": "eni-attach-0d33ae96fbbd6b3c1",
+                            "delete_on_termination": true,
+                            "device_index": 0,
+                            "network_card_index": 0,
+                            "status": "attached"
+                        },
+                        "description": "",
+                        "groups": [
+                            {
+                                "group_id": "sg-009685f752efbb925",
+                                "group_name": "coredns_sg"
+                            }
+                        ],
+                        "interface_type": "interface",
+                        "ipv6_addresses": [],
+                        "mac_address": "0a:d8:44:81:7e:ac",
+                        "network_interface_id": "eni-095b15e138b64d33d",
+                        "owner_id": "504723606770",
+                        "private_dns_name": "ip-172-31-10-152.eu-central-1.compute.internal",
+                        "private_ip_address": "172.31.10.152",
+                        "private_ip_addresses": [
+                            {
+                                "primary": true,
+                                "private_dns_name": "ip-172-31-10-152.eu-central-1.compute.internal",
+                                "private_ip_address": "172.31.10.152"
+                            }
+                        ],
+                        "source_dest_check": true,
+                        "status": "in-use",
+                        "subnet_id": "subnet-01029356651c7da07",
+                        "vpc_id": "vpc-005fae72cfde4a7fd"
+                    }
+                ],
+                "owner_id": "504723606770",
+                "placement": {
+                    "availability_zone": "eu-central-1c",
+                    "group_name": "",
+                    "region": "eu-central-1",
+                    "tenancy": "default"
+                },
+                "platform_details": "Linux/UNIX",
+                "private_dns_name": "ip-172-31-10-152.eu-central-1.compute.internal",
+                "private_dns_name_options": {
+                    "enable_resource_name_dns_a_record": false,
+                    "enable_resource_name_dns_aaaa_record": false,
+                    "hostname_type": "ip-name"
+                },
+                "private_ip_address": "172.31.10.152",
+                "product_codes": [],
+                "public_dns_name": "",
+                "requester_id": "",
+                "reservation_id": "r-0828999505fe0ab69",
+                "root_device_name": "/dev/sda1",
+                "root_device_type": "ebs",
+                "security_groups": [
+                    {
+                        "group_id": "sg-009685f752efbb925",
+                        "group_name": "coredns_sg"
+                    }
+                ],
+                "source_dest_check": true,
+                "state": {
+                    "code": 80,
+                    "name": "stopped"
+                },
+                "state_reason": {
+                    "code": "Client.UserInitiatedShutdown",
+                    "message": "Client.UserInitiatedShutdown: User initiated shutdown"
+                },
+                "state_transition_reason": "User initiated (2022-03-28 12:47:54 GMT)",
+                "subnet_id": "subnet-01029356651c7da07",
+                "tags": {
+                    "Name": "coredns-0",
+                    "Owner": "DNS-Class"
+                },
+                "usage_operation": "RunInstances",
+                "usage_operation_update_time": "2022-03-27T15:37:35+00:00",
+                "virtualization_type": "hvm",
+                "vpc_id": "vpc-005fae72cfde4a7fd"
+            },
+            "ip-172-31-10-235.eu-central-1.compute.internal": {
+                "ami_launch_index": 0,
+                "architecture": "x86_64",
+                "block_device_mappings": [
+                    {
+                        "device_name": "/dev/xvda",
+                        "ebs": {
+                            "attach_time": "2022-04-02T21:25:37+00:00",
+                            "delete_on_termination": true,
+                            "status": "attached",
+                            "volume_id": "vol-00ea2d93cc0a41f94"
+                        }
+                    }
+                ],
+                "capacity_reservation_specification": {
+                    "capacity_reservation_preference": "open"
+                },
+                "client_token": "",
+                "cpu_options": {
+                    "core_count": 1,
+                    "threads_per_core": 1
+                },
+                "ebs_optimized": false,
+                "ena_support": true,
+                "enclave_options": {
+                    "enabled": false
+                },
+                "hibernation_options": {
+                    "configured": false
+                },
+                "hypervisor": "xen",
+                "image_id": "ami-0dcc0ebde7b2e00db",
+                "instance_id": "i-078981293233d0fdd",
+                "instance_type": "t2.micro",
+                "key_name": "jenkins_ec2_key",
+                "launch_time": "2022-04-12T14:44:45+00:00",
+                "maintenance_options": {
+                    "auto_recovery": "default"
+                },
+                "metadata_options": {
+                    "http_endpoint": "enabled",
+                    "http_protocol_ipv6": "disabled",
+                    "http_put_response_hop_limit": 1,
+                    "http_tokens": "optional",
+                    "instance_metadata_tags": "disabled",
+                    "state": "applied"
+                },
+                "monitoring": {
+                    "state": "disabled"
+                },
+                "network_interfaces": [
+                    {
+                        "attachment": {
+                            "attach_time": "2022-04-02T21:25:36+00:00",
+                            "attachment_id": "eni-attach-0e3c36befa4aba217",
+                            "delete_on_termination": true,
+                            "device_index": 0,
+                            "network_card_index": 0,
+                            "status": "attached"
+                        },
+                        "description": "Primary network interface",
+                        "groups": [
+                            {
+                                "group_id": "sg-0ca51f683954d5a09",
+                                "group_name": "jenkins"
+                            },
+                            {
+                                "group_id": "sg-0ff87b7ec08443f5d",
+                                "group_name": "default"
+                            }
+                        ],
+                        "interface_type": "interface",
+                        "ipv6_addresses": [],
+                        "mac_address": "0a:4d:f0:42:ff:d8",
+                        "network_interface_id": "eni-0a037f7a470a3d077",
+                        "owner_id": "504723606770",
+                        "private_dns_name": "ip-172-31-10-235.eu-central-1.compute.internal",
+                        "private_ip_address": "172.31.10.235",
+                        "private_ip_addresses": [
+                            {
+                                "primary": true,
+                                "private_dns_name": "ip-172-31-10-235.eu-central-1.compute.internal",
+                                "private_ip_address": "172.31.10.235"
+                            }
+                        ],
+                        "source_dest_check": true,
+                        "status": "in-use",
+                        "subnet_id": "subnet-01029356651c7da07",
+                        "vpc_id": "vpc-005fae72cfde4a7fd"
+                    }
+                ],
+                "owner_id": "504723606770",
+                "placement": {
+                    "availability_zone": "eu-central-1c",
+                    "group_name": "",
+                    "region": "eu-central-1",
+                    "tenancy": "default"
+                },
+                "platform_details": "Linux/UNIX",
+                "private_dns_name": "ip-172-31-10-235.eu-central-1.compute.internal",
+                "private_dns_name_options": {
+                    "enable_resource_name_dns_a_record": true,
+                    "enable_resource_name_dns_aaaa_record": false,
+                    "hostname_type": "ip-name"
+                },
+                "private_ip_address": "172.31.10.235",
+                "product_codes": [],
+                "public_dns_name": "",
+                "requester_id": "",
+                "reservation_id": "r-0a79e14319d32044b",
+                "root_device_name": "/dev/xvda",
+                "root_device_type": "ebs",
+                "security_groups": [
+                    {
+                        "group_id": "sg-0ca51f683954d5a09",
+                        "group_name": "jenkins"
+                    },
+                    {
+                        "group_id": "sg-0ff87b7ec08443f5d",
+                        "group_name": "default"
+                    }
+                ],
+                "source_dest_check": true,
+                "state": {
+                    "code": 80,
+                    "name": "stopped"
+                },
+                "state_reason": {
+                    "code": "Client.UserInitiatedShutdown",
+                    "message": "Client.UserInitiatedShutdown: User initiated shutdown"
+                },
+                "state_transition_reason": "User initiated (2022-04-12 19:07:40 GMT)",
+                "subnet_id": "subnet-01029356651c7da07",
+                "tags": {
+                    "CreatedBy": "manually",
+                    "Name": "GU_Jenkins Slave_2",
+                    "Task": "CI-CD"
+                },
+                "usage_operation": "RunInstances",
+                "usage_operation_update_time": "2022-04-02T21:25:36+00:00",
+                "virtualization_type": "hvm",
+                "vpc_id": "vpc-005fae72cfde4a7fd"
+            },
+            "ip-172-31-10-250.eu-central-1.compute.internal": {
+                "ami_launch_index": 0,
+                "architecture": "x86_64",
+                "block_device_mappings": [
+                    {
+                        "device_name": "/dev/sda1",
+                        "ebs": {
+                            "attach_time": "2022-03-23T16:26:59+00:00",
+                            "delete_on_termination": true,
+                            "status": "attached",
+                            "volume_id": "vol-06d0a9b0bb1a8a0e0"
+                        }
+                    }
+                ],
+                "capacity_reservation_specification": {
+                    "capacity_reservation_preference": "open"
+                },
+                "client_token": "83849BE6-E8ED-4BAF-8F8E-54032C170EA3",
+                "cpu_options": {
+                    "core_count": 1,
+                    "threads_per_core": 2
+                },
+                "ebs_optimized": false,
+                "ena_support": true,
+                "enclave_options": {
+                    "enabled": false
+                },
+                "hibernation_options": {
+                    "configured": false
+                },
+                "hypervisor": "xen",
+                "image_id": "ami-0ac05733838eabc06",
+                "instance_id": "i-02c1fee73da935a30",
+                "instance_type": "t3.micro",
+                "key_name": "jenkins_ec2_key",
+                "launch_time": "2022-04-12T14:44:45+00:00",
+                "maintenance_options": {
+                    "auto_recovery": "default"
+                },
+                "metadata_options": {
+                    "http_endpoint": "enabled",
+                    "http_protocol_ipv6": "disabled",
+                    "http_put_response_hop_limit": 1,
+                    "http_tokens": "optional",
+                    "instance_metadata_tags": "disabled",
+                    "state": "applied"
+                },
+                "monitoring": {
+                    "state": "disabled"
+                },
+                "network_interfaces": [
+                    {
+                        "attachment": {
+                            "attach_time": "2022-03-23T16:26:59+00:00",
+                            "attachment_id": "eni-attach-019271480b34fb481",
+                            "delete_on_termination": true,
+                            "device_index": 0,
+                            "network_card_index": 0,
+                            "status": "attached"
+                        },
+                        "description": "",
+                        "groups": [
+                            {
+                                "group_id": "sg-0ca51f683954d5a09",
+                                "group_name": "jenkins"
+                            },
+                            {
+                                "group_id": "sg-0ff87b7ec08443f5d",
+                                "group_name": "default"
+                            }
+                        ],
+                        "interface_type": "interface",
+                        "ipv6_addresses": [],
+                        "mac_address": "0a:f3:2c:ea:62:f8",
+                        "network_interface_id": "eni-06b12e7c430ea278e",
+                        "owner_id": "504723606770",
+                        "private_dns_name": "ip-172-31-10-250.eu-central-1.compute.internal",
+                        "private_ip_address": "172.31.10.250",
+                        "private_ip_addresses": [
+                            {
+                                "primary": true,
+                                "private_dns_name": "ip-172-31-10-250.eu-central-1.compute.internal",
+                                "private_ip_address": "172.31.10.250"
+                            }
+                        ],
+                        "source_dest_check": true,
+                        "status": "in-use",
+                        "subnet_id": "subnet-01029356651c7da07",
+                        "vpc_id": "vpc-005fae72cfde4a7fd"
+                    }
+                ],
+                "owner_id": "504723606770",
+                "placement": {
+                    "availability_zone": "eu-central-1c",
+                    "group_name": "",
+                    "region": "eu-central-1",
+                    "tenancy": "default"
+                },
+                "platform_details": "Linux/UNIX",
+                "private_dns_name": "ip-172-31-10-250.eu-central-1.compute.internal",
+                "private_dns_name_options": {
+                    "enable_resource_name_dns_a_record": false,
+                    "enable_resource_name_dns_aaaa_record": false,
+                    "hostname_type": "ip-name"
+                },
+                "private_ip_address": "172.31.10.250",
+                "product_codes": [],
+                "public_dns_name": "",
+                "requester_id": "",
+                "reservation_id": "r-0a9b6463aefe337a8",
+                "root_device_name": "/dev/sda1",
+                "root_device_type": "ebs",
+                "security_groups": [
+                    {
+                        "group_id": "sg-0ca51f683954d5a09",
+                        "group_name": "jenkins"
+                    },
+                    {
+                        "group_id": "sg-0ff87b7ec08443f5d",
+                        "group_name": "default"
+                    }
+                ],
+                "source_dest_check": true,
+                "state": {
+                    "code": 80,
+                    "name": "stopped"
+                },
+                "state_reason": {
+                    "code": "Client.UserInitiatedShutdown",
+                    "message": "Client.UserInitiatedShutdown: User initiated shutdown"
+                },
+                "state_transition_reason": "User initiated (2022-04-12 19:07:24 GMT)",
+                "subnet_id": "subnet-01029356651c7da07",
+                "tags": {
+                    "CreatedBy": "terraform",
+                    "Name": "GU_Jenkins Server",
+                    "Task": "CI-CD"
+                },
+                "usage_operation": "RunInstances",
+                "usage_operation_update_time": "2022-03-23T16:26:59+00:00",
+                "virtualization_type": "hvm",
+                "vpc_id": "vpc-005fae72cfde4a7fd"
+            },
+            "ip-172-31-18-152.eu-central-1.compute.internal": {
+                "ami_launch_index": 0,
+                "architecture": "x86_64",
+                "block_device_mappings": [
+                    {
+                        "device_name": "/dev/sda1",
+                        "ebs": {
+                            "attach_time": "2022-03-15T22:02:54+00:00",
+                            "delete_on_termination": true,
+                            "status": "attached",
+                            "volume_id": "vol-0e0a4967439f97e49"
+                        }
+                    }
+                ],
+                "capacity_reservation_specification": {
+                    "capacity_reservation_preference": "open"
+                },
+                "client_token": "F7BCD768-CC2E-4310-ADCD-96E4F09FAD98",
+                "cpu_options": {
+                    "core_count": 1,
+                    "threads_per_core": 1
+                },
+                "ebs_optimized": false,
+                "ena_support": true,
+                "enclave_options": {
+                    "enabled": false
+                },
+                "hibernation_options": {
+                    "configured": false
+                },
+                "hypervisor": "xen",
+                "image_id": "ami-0498a49a15494604f",
+                "instance_id": "i-07928cb8f470fe1a8",
+                "instance_type": "t2.micro",
+                "key_name": "ansible_key_8",
+                "launch_time": "2022-04-09T23:26:17+00:00",
+                "maintenance_options": {
+                    "auto_recovery": "default"
+                },
+                "metadata_options": {
+                    "http_endpoint": "enabled",
+                    "http_protocol_ipv6": "disabled",
+                    "http_put_response_hop_limit": 1,
+                    "http_tokens": "optional",
+                    "instance_metadata_tags": "disabled",
+                    "state": "applied"
+                },
+                "monitoring": {
+                    "state": "disabled"
+                },
+                "network_interfaces": [
+                    {
+                        "attachment": {
+                            "attach_time": "2022-03-15T22:02:53+00:00",
+                            "attachment_id": "eni-attach-0fecc8926cb8d603a",
+                            "delete_on_termination": true,
+                            "device_index": 0,
+                            "network_card_index": 0,
+                            "status": "attached"
+                        },
+                        "description": "",
+                        "groups": [
+                            {
+                                "group_id": "sg-059665281dcb15951",
+                                "group_name": "ansible-sg-8"
+                            }
+                        ],
+                        "interface_type": "interface",
+                        "ipv6_addresses": [],
+                        "mac_address": "02:7e:b8:d0:3c:b8",
+                        "network_interface_id": "eni-0fdbb4f1a172d1947",
+                        "owner_id": "504723606770",
+                        "private_dns_name": "ip-172-31-18-152.eu-central-1.compute.internal",
+                        "private_ip_address": "172.31.18.152",
+                        "private_ip_addresses": [
+                            {
+                                "primary": true,
+                                "private_dns_name": "ip-172-31-18-152.eu-central-1.compute.internal",
+                                "private_ip_address": "172.31.18.152"
+                            }
+                        ],
+                        "source_dest_check": true,
+                        "status": "in-use",
+                        "subnet_id": "subnet-0ede667bfc12a1ef2",
+                        "vpc_id": "vpc-005fae72cfde4a7fd"
+                    }
+                ],
+                "owner_id": "504723606770",
+                "placement": {
+                    "availability_zone": "eu-central-1a",
+                    "group_name": "",
+                    "region": "eu-central-1",
+                    "tenancy": "default"
+                },
+                "platform_details": "Linux/UNIX",
+                "private_dns_name": "ip-172-31-18-152.eu-central-1.compute.internal",
+                "private_dns_name_options": {
+                    "enable_resource_name_dns_a_record": false,
+                    "enable_resource_name_dns_aaaa_record": false,
+                    "hostname_type": "ip-name"
+                },
+                "private_ip_address": "172.31.18.152",
+                "product_codes": [],
+                "public_dns_name": "",
+                "requester_id": "",
+                "reservation_id": "r-053091603ef59fcd4",
+                "root_device_name": "/dev/sda1",
+                "root_device_type": "ebs",
+                "security_groups": [
+                    {
+                        "group_id": "sg-059665281dcb15951",
+                        "group_name": "ansible-sg-8"
+                    }
+                ],
+                "source_dest_check": true,
+                "state": {
+                    "code": 80,
+                    "name": "stopped"
+                },
+                "state_reason": {
+                    "code": "Client.UserInitiatedShutdown",
+                    "message": "Client.UserInitiatedShutdown: User initiated shutdown"
+                },
+                "state_transition_reason": "User initiated (2022-04-09 23:37:16 GMT)",
+                "subnet_id": "subnet-0ede667bfc12a1ef2",
+                "tags": {
+                    "CreatedBy": "terraform",
+                    "Name": "Ansible Node Ubuntu_0",
+                    "OS": "Ubuntu",
+                    "Owner": "Galit Udovik",
+                    "Task": "Ansible_Docker"
+                },
+                "usage_operation": "RunInstances",
+                "usage_operation_update_time": "2022-03-15T22:02:53+00:00",
+                "virtualization_type": "hvm",
+                "vpc_id": "vpc-005fae72cfde4a7fd"
+            },
+            "ip-172-31-2-227.eu-central-1.compute.internal": {
+                "ami_launch_index": 0,
+                "architecture": "x86_64",
+                "block_device_mappings": [
+                    {
+                        "device_name": "/dev/sda1",
+                        "ebs": {
+                            "attach_time": "2022-03-02T21:33:28+00:00",
+                            "delete_on_termination": true,
+                            "status": "attached",
+                            "volume_id": "vol-04b557d5404e7be0b"
+                        }
+                    }
+                ],
+                "capacity_reservation_specification": {
+                    "capacity_reservation_preference": "open"
+                },
+                "client_token": "",
+                "cpu_options": {
+                    "core_count": 1,
+                    "threads_per_core": 1
+                },
+                "ebs_optimized": false,
+                "ena_support": true,
+                "enclave_options": {
+                    "enabled": false
+                },
+                "hibernation_options": {
+                    "configured": false
+                },
+                "hypervisor": "xen",
+                "image_id": "ami-0d527b8c289b4af7f",
+                "instance_id": "i-0afbec3ef7365af3f",
+                "instance_type": "t2.micro",
+                "key_name": "K1_PPK_Frankfurt",
+                "launch_time": "2022-03-17T10:16:01+00:00",
+                "maintenance_options": {
+                    "auto_recovery": "default"
+                },
+                "metadata_options": {
+                    "http_endpoint": "enabled",
+                    "http_protocol_ipv6": "disabled",
+                    "http_put_response_hop_limit": 1,
+                    "http_tokens": "optional",
+                    "instance_metadata_tags": "disabled",
+                    "state": "applied"
+                },
+                "monitoring": {
+                    "state": "disabled"
+                },
+                "network_interfaces": [
+                    {
+                        "attachment": {
+                            "attach_time": "2022-03-02T21:33:28+00:00",
+                            "attachment_id": "eni-attach-00811a733b0bfafc4",
+                            "delete_on_termination": true,
+                            "device_index": 0,
+                            "network_card_index": 0,
+                            "status": "attached"
+                        },
+                        "description": "",
+                        "groups": [
+                            {
+                                "group_id": "sg-05df2991771f52885",
+                                "group_name": "launch-wizard-6"
+                            }
+                        ],
+                        "interface_type": "interface",
+                        "ipv6_addresses": [],
+                        "mac_address": "0a:f0:b4:83:01:b8",
+                        "network_interface_id": "eni-0949ce838e4f9cee5",
+                        "owner_id": "504723606770",
+                        "private_dns_name": "ip-172-31-2-227.eu-central-1.compute.internal",
+                        "private_ip_address": "172.31.2.227",
+                        "private_ip_addresses": [
+                            {
+                                "primary": true,
+                                "private_dns_name": "ip-172-31-2-227.eu-central-1.compute.internal",
+                                "private_ip_address": "172.31.2.227"
+                            }
+                        ],
+                        "source_dest_check": true,
+                        "status": "in-use",
+                        "subnet_id": "subnet-01029356651c7da07",
+                        "vpc_id": "vpc-005fae72cfde4a7fd"
+                    }
+                ],
+                "owner_id": "504723606770",
+                "placement": {
+                    "availability_zone": "eu-central-1c",
+                    "group_name": "",
+                    "region": "eu-central-1",
+                    "tenancy": "default"
+                },
+                "platform_details": "Linux/UNIX",
+                "private_dns_name": "ip-172-31-2-227.eu-central-1.compute.internal",
+                "private_dns_name_options": {
+                    "enable_resource_name_dns_a_record": true,
+                    "enable_resource_name_dns_aaaa_record": false,
+                    "hostname_type": "ip-name"
+                },
+                "private_ip_address": "172.31.2.227",
+                "product_codes": [],
+                "public_dns_name": "",
+                "requester_id": "",
+                "reservation_id": "r-068a2c297990ce25e",
+                "root_device_name": "/dev/sda1",
+                "root_device_type": "ebs",
+                "security_groups": [
+                    {
+                        "group_id": "sg-05df2991771f52885",
+                        "group_name": "launch-wizard-6"
+                    }
+                ],
+                "source_dest_check": true,
+                "state": {
+                    "code": 80,
+                    "name": "stopped"
+                },
+                "state_reason": {
+                    "code": "Client.UserInitiatedShutdown",
+                    "message": "Client.UserInitiatedShutdown: User initiated shutdown"
+                },
+                "state_transition_reason": "User initiated (2022-03-17 10:17:45 GMT)",
+                "subnet_id": "subnet-01029356651c7da07",
+                "tags": {
+                    "CreatedBy": "manually",
+                    "Name": "Ubuntu #1"
+                },
+                "usage_operation": "RunInstances",
+                "usage_operation_update_time": "2022-03-02T21:33:28+00:00",
+                "virtualization_type": "hvm",
+                "vpc_id": "vpc-005fae72cfde4a7fd"
+            },
+            "ip-172-31-20-131.eu-central-1.compute.internal": {
+                "ami_launch_index": 0,
+                "architecture": "x86_64",
+                "block_device_mappings": [
+                    {
+                        "device_name": "/dev/sda1",
+                        "ebs": {
+                            "attach_time": "2022-03-15T22:02:54+00:00",
+                            "delete_on_termination": true,
+                            "status": "attached",
+                            "volume_id": "vol-016961096aa6818d5"
+                        }
+                    }
+                ],
+                "capacity_reservation_specification": {
+                    "capacity_reservation_preference": "open"
+                },
+                "client_token": "E74EB734-82D2-414D-B232-98382CEF60C3",
+                "cpu_options": {
+                    "core_count": 1,
+                    "threads_per_core": 1
+                },
+                "ebs_optimized": false,
+                "ena_support": true,
+                "enclave_options": {
+                    "enabled": false
+                },
+                "hibernation_options": {
+                    "configured": false
+                },
+                "hypervisor": "xen",
+                "image_id": "ami-0498a49a15494604f",
+                "instance_id": "i-05d77484216f26f8d",
+                "instance_type": "t2.micro",
+                "key_name": "ansible_key_8",
+                "launch_time": "2022-04-09T20:16:33+00:00",
+                "maintenance_options": {
+                    "auto_recovery": "default"
+                },
+                "metadata_options": {
+                    "http_endpoint": "enabled",
+                    "http_protocol_ipv6": "disabled",
+                    "http_put_response_hop_limit": 1,
+                    "http_tokens": "optional",
+                    "instance_metadata_tags": "disabled",
+                    "state": "applied"
+                },
+                "monitoring": {
+                    "state": "disabled"
+                },
+                "network_interfaces": [
+                    {
+                        "attachment": {
+                            "attach_time": "2022-03-15T22:02:53+00:00",
+                            "attachment_id": "eni-attach-09ad9d3a7236ba627",
+                            "delete_on_termination": true,
+                            "device_index": 0,
+                            "network_card_index": 0,
+                            "status": "attached"
+                        },
+                        "description": "",
+                        "groups": [
+                            {
+                                "group_id": "sg-059665281dcb15951",
+                                "group_name": "ansible-sg-8"
+                            }
+                        ],
+                        "interface_type": "interface",
+                        "ipv6_addresses": [],
+                        "mac_address": "02:0c:e6:bb:3c:44",
+                        "network_interface_id": "eni-0a1c27559e78ab30a",
+                        "owner_id": "504723606770",
+                        "private_dns_name": "ip-172-31-20-131.eu-central-1.compute.internal",
+                        "private_ip_address": "172.31.20.131",
+                        "private_ip_addresses": [
+                            {
+                                "primary": true,
+                                "private_dns_name": "ip-172-31-20-131.eu-central-1.compute.internal",
+                                "private_ip_address": "172.31.20.131"
+                            }
+                        ],
+                        "source_dest_check": true,
+                        "status": "in-use",
+                        "subnet_id": "subnet-0ede667bfc12a1ef2",
+                        "vpc_id": "vpc-005fae72cfde4a7fd"
+                    }
+                ],
+                "owner_id": "504723606770",
+                "placement": {
+                    "availability_zone": "eu-central-1a",
+                    "group_name": "",
+                    "region": "eu-central-1",
+                    "tenancy": "default"
+                },
+                "platform_details": "Linux/UNIX",
+                "private_dns_name": "ip-172-31-20-131.eu-central-1.compute.internal",
+                "private_dns_name_options": {
+                    "enable_resource_name_dns_a_record": false,
+                    "enable_resource_name_dns_aaaa_record": false,
+                    "hostname_type": "ip-name"
+                },
+                "private_ip_address": "172.31.20.131",
+                "product_codes": [],
+                "public_dns_name": "",
+                "requester_id": "",
+                "reservation_id": "r-0e95200bc316762b4",
+                "root_device_name": "/dev/sda1",
+                "root_device_type": "ebs",
+                "security_groups": [
+                    {
+                        "group_id": "sg-059665281dcb15951",
+                        "group_name": "ansible-sg-8"
+                    }
+                ],
+                "source_dest_check": true,
+                "state": {
+                    "code": 80,
+                    "name": "stopped"
+                },
+                "state_reason": {
+                    "code": "Client.UserInitiatedShutdown",
+                    "message": "Client.UserInitiatedShutdown: User initiated shutdown"
+                },
+                "state_transition_reason": "User initiated (2022-04-09 23:50:11 GMT)",
+                "subnet_id": "subnet-0ede667bfc12a1ef2",
+                "tags": {
+                    "CreatedBy": "terraform",
+                    "Name": "Ansible Server",
+                    "Owner": "Galit Udovik",
+                    "Task": "Ansible_Docker"
+                },
+                "usage_operation": "RunInstances",
+                "usage_operation_update_time": "2022-03-15T22:02:53+00:00",
+                "virtualization_type": "hvm",
+                "vpc_id": "vpc-005fae72cfde4a7fd"
+            },
+            "ip-172-31-22-52.eu-central-1.compute.internal": {
+                "ami_launch_index": 0,
+                "architecture": "x86_64",
+                "block_device_mappings": [
+                    {
+                        "device_name": "/dev/sda1",
+                        "ebs": {
+                            "attach_time": "2022-04-09T21:04:37+00:00",
+                            "delete_on_termination": true,
+                            "status": "attached",
+                            "volume_id": "vol-09a6af782d33a8f21"
+                        }
+                    }
+                ],
+                "capacity_reservation_specification": {
+                    "capacity_reservation_preference": "open"
+                },
+                "client_token": "91D0A2B6-AB84-49DA-B18D-439C92BCF474",
+                "cpu_options": {
+                    "core_count": 1,
+                    "threads_per_core": 1
+                },
+                "ebs_optimized": false,
+                "ena_support": true,
+                "enclave_options": {
+                    "enabled": false
+                },
+                "hibernation_options": {
+                    "configured": false
+                },
+                "hypervisor": "xen",
+                "image_id": "ami-0498a49a15494604f",
+                "instance_id": "i-0a6d1781793de0edd",
+                "instance_type": "t2.micro",
+                "key_name": "ansible_key_8",
+                "launch_time": "2022-04-09T23:26:17+00:00",
+                "maintenance_options": {
+                    "auto_recovery": "default"
+                },
+                "metadata_options": {
+                    "http_endpoint": "enabled",
+                    "http_protocol_ipv6": "disabled",
+                    "http_put_response_hop_limit": 1,
+                    "http_tokens": "optional",
+                    "instance_metadata_tags": "disabled",
+                    "state": "applied"
+                },
+                "monitoring": {
+                    "state": "disabled"
+                },
+                "network_interfaces": [
+                    {
+                        "attachment": {
+                            "attach_time": "2022-04-09T21:04:36+00:00",
+                            "attachment_id": "eni-attach-0c1c00535af13e967",
+                            "delete_on_termination": true,
+                            "device_index": 0,
+                            "network_card_index": 0,
+                            "status": "attached"
+                        },
+                        "description": "",
+                        "groups": [
+                            {
+                                "group_id": "sg-059665281dcb15951",
+                                "group_name": "ansible-sg-8"
+                            }
+                        ],
+                        "interface_type": "interface",
+                        "ipv6_addresses": [],
+                        "mac_address": "02:8f:7f:61:f2:0e",
+                        "network_interface_id": "eni-0fabf13707fd75137",
+                        "owner_id": "504723606770",
+                        "private_dns_name": "ip-172-31-22-52.eu-central-1.compute.internal",
+                        "private_ip_address": "172.31.22.52",
+                        "private_ip_addresses": [
+                            {
+                                "primary": true,
+                                "private_dns_name": "ip-172-31-22-52.eu-central-1.compute.internal",
+                                "private_ip_address": "172.31.22.52"
+                            }
+                        ],
+                        "source_dest_check": true,
+                        "status": "in-use",
+                        "subnet_id": "subnet-0ede667bfc12a1ef2",
+                        "vpc_id": "vpc-005fae72cfde4a7fd"
+                    }
+                ],
+                "owner_id": "504723606770",
+                "placement": {
+                    "availability_zone": "eu-central-1a",
+                    "group_name": "",
+                    "region": "eu-central-1",
+                    "tenancy": "default"
+                },
+                "platform_details": "Linux/UNIX",
+                "private_dns_name": "ip-172-31-22-52.eu-central-1.compute.internal",
+                "private_dns_name_options": {
+                    "enable_resource_name_dns_a_record": false,
+                    "enable_resource_name_dns_aaaa_record": false,
+                    "hostname_type": "ip-name"
+                },
+                "private_ip_address": "172.31.22.52",
+                "product_codes": [],
+                "public_dns_name": "",
+                "requester_id": "",
+                "reservation_id": "r-0acc595c3eb6923b4",
+                "root_device_name": "/dev/sda1",
+                "root_device_type": "ebs",
+                "security_groups": [
+                    {
+                        "group_id": "sg-059665281dcb15951",
+                        "group_name": "ansible-sg-8"
+                    }
+                ],
+                "source_dest_check": true,
+                "state": {
+                    "code": 80,
+                    "name": "stopped"
+                },
+                "state_reason": {
+                    "code": "Client.UserInitiatedShutdown",
+                    "message": "Client.UserInitiatedShutdown: User initiated shutdown"
+                },
+                "state_transition_reason": "User initiated (2022-04-09 23:50:11 GMT)",
+                "subnet_id": "subnet-0ede667bfc12a1ef2",
+                "tags": {
+                    "CreatedBy": "terraform",
+                    "Name": "Ansible Node Ubuntu_2",
+                    "OS": "Ubuntu",
+                    "Owner": "Galit Udovik",
+                    "Task": "Ansible_Docker"
+                },
+                "usage_operation": "RunInstances",
+                "usage_operation_update_time": "2022-04-09T21:04:36+00:00",
+                "virtualization_type": "hvm",
+                "vpc_id": "vpc-005fae72cfde4a7fd"
+            },
+            "ip-172-31-28-226.eu-central-1.compute.internal": {
+                "ami_launch_index": 0,
+                "architecture": "x86_64",
+                "block_device_mappings": [
+                    {
+                        "device_name": "/dev/sda1",
+                        "ebs": {
+                            "attach_time": "2022-04-04T14:58:44+00:00",
+                            "delete_on_termination": true,
+                            "status": "attached",
+                            "volume_id": "vol-00bdfec252382f69d"
+                        }
+                    }
+                ],
+                "capacity_reservation_specification": {
+                    "capacity_reservation_preference": "open"
+                },
+                "client_token": "9F083C32-4018-446B-984D-A923455DBB94",
+                "cpu_options": {
+                    "core_count": 1,
+                    "threads_per_core": 1
+                },
+                "ebs_optimized": false,
+                "ena_support": true,
+                "enclave_options": {
+                    "enabled": false
+                },
+                "hibernation_options": {
+                    "configured": false
+                },
+                "hypervisor": "xen",
+                "image_id": "ami-06ec8443c2a35b0ba",
+                "instance_id": "i-0412013f284c873b2",
+                "instance_type": "t2.micro",
+                "key_name": "ansible_key_8",
+                "launch_time": "2022-04-26T00:01:57+00:00",
+                "maintenance_options": {
+                    "auto_recovery": "default"
+                },
+                "metadata_options": {
+                    "http_endpoint": "enabled",
+                    "http_protocol_ipv6": "disabled",
+                    "http_put_response_hop_limit": 1,
+                    "http_tokens": "optional",
+                    "instance_metadata_tags": "disabled",
+                    "state": "applied"
+                },
+                "monitoring": {
+                    "state": "disabled"
+                },
+                "network_interfaces": [
+                    {
+                        "attachment": {
+                            "attach_time": "2022-04-04T14:58:44+00:00",
+                            "attachment_id": "eni-attach-0e1bf0ec7631d4a97",
+                            "delete_on_termination": true,
+                            "device_index": 0,
+                            "network_card_index": 0,
+                            "status": "attached"
+                        },
+                        "description": "",
+                        "groups": [
+                            {
+                                "group_id": "sg-059665281dcb15951",
+                                "group_name": "ansible-sg-8"
+                            }
+                        ],
+                        "interface_type": "interface",
+                        "ipv6_addresses": [],
+                        "mac_address": "02:91:85:c4:12:e0",
+                        "network_interface_id": "eni-03f8b93024b473a9e",
+                        "owner_id": "504723606770",
+                        "private_dns_name": "ip-172-31-28-226.eu-central-1.compute.internal",
+                        "private_ip_address": "172.31.28.226",
+                        "private_ip_addresses": [
+                            {
+                                "primary": true,
+                                "private_dns_name": "ip-172-31-28-226.eu-central-1.compute.internal",
+                                "private_ip_address": "172.31.28.226"
+                            }
+                        ],
+                        "source_dest_check": true,
+                        "status": "in-use",
+                        "subnet_id": "subnet-0ede667bfc12a1ef2",
+                        "vpc_id": "vpc-005fae72cfde4a7fd"
+                    }
+                ],
+                "owner_id": "504723606770",
+                "placement": {
+                    "availability_zone": "eu-central-1a",
+                    "group_name": "",
+                    "region": "eu-central-1",
+                    "tenancy": "default"
+                },
+                "platform_details": "Red Hat Enterprise Linux with High Availability",
+                "private_dns_name": "ip-172-31-28-226.eu-central-1.compute.internal",
+                "private_dns_name_options": {
+                    "enable_resource_name_dns_a_record": false,
+                    "enable_resource_name_dns_aaaa_record": false,
+                    "hostname_type": "ip-name"
+                },
+                "private_ip_address": "172.31.28.226",
+                "product_codes": [],
+                "public_dns_name": "",
+                "requester_id": "",
+                "reservation_id": "r-0cdd6a513948bf752",
+                "root_device_name": "/dev/sda1",
+                "root_device_type": "ebs",
+                "security_groups": [
+                    {
+                        "group_id": "sg-059665281dcb15951",
+                        "group_name": "ansible-sg-8"
+                    }
+                ],
+                "source_dest_check": true,
+                "state": {
+                    "code": 80,
+                    "name": "stopped"
+                },
+                "state_reason": {
+                    "code": "Client.UserInitiatedShutdown",
+                    "message": "Client.UserInitiatedShutdown: User initiated shutdown"
+                },
+                "state_transition_reason": "User initiated (2022-04-26 00:59:05 GMT)",
+                "subnet_id": "subnet-0ede667bfc12a1ef2",
+                "tags": {
+                    "CreatedBy": "terraform",
+                    "Name": "Ansible Node RedHat_0",
+                    "OS": "RedHat",
+                    "Owner": "Galit Udovik",
+                    "Task": "Ansible_Docker"
+                },
+                "usage_operation": "RunInstances:1010",
+                "usage_operation_update_time": "2022-04-04T14:58:44+00:00",
+                "virtualization_type": "hvm",
+                "vpc_id": "vpc-005fae72cfde4a7fd"
+            },
+            "ip-172-31-31-50.eu-central-1.compute.internal": {
+                "ami_launch_index": 0,
+                "architecture": "x86_64",
+                "block_device_mappings": [
+                    {
+                        "device_name": "/dev/sda1",
+                        "ebs": {
+                            "attach_time": "2022-03-15T22:02:54+00:00",
+                            "delete_on_termination": true,
+                            "status": "attached",
+                            "volume_id": "vol-05f69d82e38d1d08e"
+                        }
+                    }
+                ],
+                "capacity_reservation_specification": {
+                    "capacity_reservation_preference": "open"
+                },
+                "client_token": "3668601F-A742-4983-A2C3-C1025FEF1FEC",
+                "cpu_options": {
+                    "core_count": 1,
+                    "threads_per_core": 1
+                },
+                "ebs_optimized": false,
+                "ena_support": true,
+                "enclave_options": {
+                    "enabled": false
+                },
+                "hibernation_options": {
+                    "configured": false
+                },
+                "hypervisor": "xen",
+                "image_id": "ami-0498a49a15494604f",
+                "instance_id": "i-05339b405131cabb1",
+                "instance_type": "t2.micro",
+                "key_name": "ansible_key_8",
+                "launch_time": "2022-04-09T23:26:17+00:00",
+                "maintenance_options": {
+                    "auto_recovery": "default"
+                },
+                "metadata_options": {
+                    "http_endpoint": "enabled",
+                    "http_protocol_ipv6": "disabled",
+                    "http_put_response_hop_limit": 1,
+                    "http_tokens": "optional",
+                    "instance_metadata_tags": "disabled",
+                    "state": "applied"
+                },
+                "monitoring": {
+                    "state": "disabled"
+                },
+                "network_interfaces": [
+                    {
+                        "attachment": {
+                            "attach_time": "2022-03-15T22:02:53+00:00",
+                            "attachment_id": "eni-attach-080cb61ed59e2758b",
+                            "delete_on_termination": true,
+                            "device_index": 0,
+                            "network_card_index": 0,
+                            "status": "attached"
+                        },
+                        "description": "",
+                        "groups": [
+                            {
+                                "group_id": "sg-059665281dcb15951",
+                                "group_name": "ansible-sg-8"
+                            }
+                        ],
+                        "interface_type": "interface",
+                        "ipv6_addresses": [],
+                        "mac_address": "02:9d:3d:16:2d:0a",
+                        "network_interface_id": "eni-06aaad3d720324a28",
+                        "owner_id": "504723606770",
+                        "private_dns_name": "ip-172-31-31-50.eu-central-1.compute.internal",
+                        "private_ip_address": "172.31.31.50",
+                        "private_ip_addresses": [
+                            {
+                                "primary": true,
+                                "private_dns_name": "ip-172-31-31-50.eu-central-1.compute.internal",
+                                "private_ip_address": "172.31.31.50"
+                            }
+                        ],
+                        "source_dest_check": true,
+                        "status": "in-use",
+                        "subnet_id": "subnet-0ede667bfc12a1ef2",
+                        "vpc_id": "vpc-005fae72cfde4a7fd"
+                    }
+                ],
+                "owner_id": "504723606770",
+                "placement": {
+                    "availability_zone": "eu-central-1a",
+                    "group_name": "",
+                    "region": "eu-central-1",
+                    "tenancy": "default"
+                },
+                "platform_details": "Linux/UNIX",
+                "private_dns_name": "ip-172-31-31-50.eu-central-1.compute.internal",
+                "private_dns_name_options": {
+                    "enable_resource_name_dns_a_record": false,
+                    "enable_resource_name_dns_aaaa_record": false,
+                    "hostname_type": "ip-name"
+                },
+                "private_ip_address": "172.31.31.50",
+                "product_codes": [],
+                "public_dns_name": "",
+                "requester_id": "",
+                "reservation_id": "r-0236a59cb21de50c3",
+                "root_device_name": "/dev/sda1",
+                "root_device_type": "ebs",
+                "security_groups": [
+                    {
+                        "group_id": "sg-059665281dcb15951",
+                        "group_name": "ansible-sg-8"
+                    }
+                ],
+                "source_dest_check": true,
+                "state": {
+                    "code": 80,
+                    "name": "stopped"
+                },
+                "state_reason": {
+                    "code": "Client.UserInitiatedShutdown",
+                    "message": "Client.UserInitiatedShutdown: User initiated shutdown"
+                },
+                "state_transition_reason": "User initiated (2022-04-09 23:50:11 GMT)",
+                "subnet_id": "subnet-0ede667bfc12a1ef2",
+                "tags": {
+                    "CreatedBy": "terraform",
+                    "Name": "Ansible Node Ubuntu_1",
+                    "OS": "Ubuntu",
+                    "Owner": "Galit Udovik",
+                    "Task": "Ansible_Docker"
+                },
+                "usage_operation": "RunInstances",
+                "usage_operation_update_time": "2022-03-15T22:02:53+00:00",
+                "virtualization_type": "hvm",
+                "vpc_id": "vpc-005fae72cfde4a7fd"
+            },
+            "ip-172-31-39-18.eu-central-1.compute.internal": {
+                "ami_launch_index": 0,
+                "architecture": "x86_64",
+                "block_device_mappings": [
+                    {
+                        "device_name": "/dev/sda1",
+                        "ebs": {
+                            "attach_time": "2022-03-17T20:26:46+00:00",
+                            "delete_on_termination": true,
+                            "status": "attached",
+                            "volume_id": "vol-010eabc579e23f4fa"
+                        }
+                    }
+                ],
+                "capacity_reservation_specification": {
+                    "capacity_reservation_preference": "open"
+                },
+                "client_token": "",
+                "cpu_options": {
+                    "core_count": 1,
+                    "threads_per_core": 1
+                },
+                "ebs_optimized": false,
+                "ena_support": true,
+                "enclave_options": {
+                    "enabled": false
+                },
+                "hibernation_options": {
+                    "configured": false
+                },
+                "hypervisor": "xen",
+                "image_id": "ami-0d527b8c289b4af7f",
+                "instance_id": "i-03a853e8da9b45b94",
+                "instance_type": "t2.micro",
+                "key_name": "ansible_key_8",
+                "launch_time": "2022-04-25T23:23:47+00:00",
+                "maintenance_options": {
+                    "auto_recovery": "default"
+                },
+                "metadata_options": {
+                    "http_endpoint": "enabled",
+                    "http_protocol_ipv6": "disabled",
+                    "http_put_response_hop_limit": 1,
+                    "http_tokens": "optional",
+                    "instance_metadata_tags": "disabled",
+                    "state": "applied"
+                },
+                "monitoring": {
+                    "state": "disabled"
+                },
+                "network_interfaces": [
+                    {
+                        "attachment": {
+                            "attach_time": "2022-03-17T20:26:46+00:00",
+                            "attachment_id": "eni-attach-01d1cb47e48c36d27",
+                            "delete_on_termination": true,
+                            "device_index": 0,
+                            "network_card_index": 0,
+                            "status": "attached"
+                        },
+                        "description": "",
+                        "groups": [
+                            {
+                                "group_id": "sg-05b13a1f8289d0a6f",
+                                "group_name": "launch-wizard-7"
+                            }
+                        ],
+                        "interface_type": "interface",
+                        "ipv6_addresses": [],
+                        "mac_address": "06:c6:eb:eb:05:98",
+                        "network_interface_id": "eni-006f934ff02c96cc7",
+                        "owner_id": "504723606770",
+                        "private_dns_name": "ip-172-31-39-18.eu-central-1.compute.internal",
+                        "private_ip_address": "172.31.39.18",
+                        "private_ip_addresses": [
+                            {
+                                "primary": true,
+                                "private_dns_name": "ip-172-31-39-18.eu-central-1.compute.internal",
+                                "private_ip_address": "172.31.39.18"
+                            }
+                        ],
+                        "source_dest_check": true,
+                        "status": "in-use",
+                        "subnet_id": "subnet-08ac582e96b637bfd",
+                        "vpc_id": "vpc-005fae72cfde4a7fd"
+                    }
+                ],
+                "owner_id": "504723606770",
+                "placement": {
+                    "availability_zone": "eu-central-1b",
+                    "group_name": "",
+                    "region": "eu-central-1",
+                    "tenancy": "default"
+                },
+                "platform_details": "Linux/UNIX",
+                "private_dns_name": "ip-172-31-39-18.eu-central-1.compute.internal",
+                "private_dns_name_options": {
+                    "enable_resource_name_dns_a_record": false,
+                    "enable_resource_name_dns_aaaa_record": false,
+                    "hostname_type": "ip-name"
+                },
+                "private_ip_address": "172.31.39.18",
+                "product_codes": [],
+                "public_dns_name": "",
+                "requester_id": "",
+                "reservation_id": "r-0130f93e7d2ab4e71",
+                "root_device_name": "/dev/sda1",
+                "root_device_type": "ebs",
+                "security_groups": [
+                    {
+                        "group_id": "sg-05b13a1f8289d0a6f",
+                        "group_name": "launch-wizard-7"
+                    }
+                ],
+                "source_dest_check": true,
+                "state": {
+                    "code": 80,
+                    "name": "stopped"
+                },
+                "state_reason": {
+                    "code": "Client.UserInitiatedShutdown",
+                    "message": "Client.UserInitiatedShutdown: User initiated shutdown"
+                },
+                "state_transition_reason": "User initiated (2022-04-26 00:59:05 GMT)",
+                "subnet_id": "subnet-08ac582e96b637bfd",
+                "tags": {
+                    "CreatedBy": "manually",
+                    "Name": "DockerTest",
+                    "Task": "my private usage"
+                },
+                "usage_operation": "RunInstances",
+                "usage_operation_update_time": "2022-03-17T20:26:46+00:00",
+                "virtualization_type": "hvm",
+                "vpc_id": "vpc-005fae72cfde4a7fd"
+            },
+            "ip-172-31-42-154.eu-central-1.compute.internal": {
+                "ami_launch_index": 0,
+                "architecture": "x86_64",
+                "block_device_mappings": [
+                    {
+                        "device_name": "/dev/sda1",
+                        "ebs": {
+                            "attach_time": "2022-03-27T15:37:36+00:00",
+                            "delete_on_termination": true,
+                            "status": "attached",
+                            "volume_id": "vol-0eff42f0dfa1b62a7"
+                        }
+                    }
+                ],
+                "capacity_reservation_specification": {
+                    "capacity_reservation_preference": "open"
+                },
+                "client_token": "3F5F964F-B702-4867-91E1-174765DE344F",
+                "cpu_options": {
+                    "core_count": 1,
+                    "threads_per_core": 1
+                },
+                "ebs_optimized": false,
+                "ena_support": true,
+                "enclave_options": {
+                    "enabled": false
+                },
+                "hibernation_options": {
+                    "configured": false
+                },
+                "hypervisor": "xen",
+                "image_id": "ami-035e017c94c3cbe9c",
+                "instance_id": "i-01c9ef1ac8aa15901",
+                "instance_type": "t2.micro",
+                "key_name": "coredns_key",
+                "launch_time": "2022-03-28T12:08:18+00:00",
+                "maintenance_options": {
+                    "auto_recovery": "default"
+                },
+                "metadata_options": {
+                    "http_endpoint": "enabled",
+                    "http_protocol_ipv6": "disabled",
+                    "http_put_response_hop_limit": 1,
+                    "http_tokens": "optional",
+                    "instance_metadata_tags": "disabled",
+                    "state": "applied"
+                },
+                "monitoring": {
+                    "state": "disabled"
+                },
+                "network_interfaces": [
+                    {
+                        "attachment": {
+                            "attach_time": "2022-03-27T15:37:35+00:00",
+                            "attachment_id": "eni-attach-0e4fab5a04614c053",
+                            "delete_on_termination": true,
+                            "device_index": 0,
+                            "network_card_index": 0,
+                            "status": "attached"
+                        },
+                        "description": "",
+                        "groups": [
+                            {
+                                "group_id": "sg-009685f752efbb925",
+                                "group_name": "coredns_sg"
+                            }
+                        ],
+                        "interface_type": "interface",
+                        "ipv6_addresses": [],
+                        "mac_address": "06:cd:fc:73:94:a8",
+                        "network_interface_id": "eni-01bac82a710ca5885",
+                        "owner_id": "504723606770",
+                        "private_dns_name": "ip-172-31-42-154.eu-central-1.compute.internal",
+                        "private_ip_address": "172.31.42.154",
+                        "private_ip_addresses": [
+                            {
+                                "primary": true,
+                                "private_dns_name": "ip-172-31-42-154.eu-central-1.compute.internal",
+                                "private_ip_address": "172.31.42.154"
+                            }
+                        ],
+                        "source_dest_check": true,
+                        "status": "in-use",
+                        "subnet_id": "subnet-08ac582e96b637bfd",
+                        "vpc_id": "vpc-005fae72cfde4a7fd"
+                    }
+                ],
+                "owner_id": "504723606770",
+                "placement": {
+                    "availability_zone": "eu-central-1b",
+                    "group_name": "",
+                    "region": "eu-central-1",
+                    "tenancy": "default"
+                },
+                "platform_details": "Linux/UNIX",
+                "private_dns_name": "ip-172-31-42-154.eu-central-1.compute.internal",
+                "private_dns_name_options": {
+                    "enable_resource_name_dns_a_record": false,
+                    "enable_resource_name_dns_aaaa_record": false,
+                    "hostname_type": "ip-name"
+                },
+                "private_ip_address": "172.31.42.154",
+                "product_codes": [],
+                "public_dns_name": "",
+                "requester_id": "",
+                "reservation_id": "r-04f4db7ed4246d462",
+                "root_device_name": "/dev/sda1",
+                "root_device_type": "ebs",
+                "security_groups": [
+                    {
+                        "group_id": "sg-009685f752efbb925",
+                        "group_name": "coredns_sg"
+                    }
+                ],
+                "source_dest_check": true,
+                "state": {
+                    "code": 80,
+                    "name": "stopped"
+                },
+                "state_reason": {
+                    "code": "Client.UserInitiatedShutdown",
+                    "message": "Client.UserInitiatedShutdown: User initiated shutdown"
+                },
+                "state_transition_reason": "User initiated (2022-03-28 12:47:54 GMT)",
+                "subnet_id": "subnet-08ac582e96b637bfd",
+                "tags": {
+                    "Name": "coredns-1",
+                    "Owner": "DNS-Class"
+                },
+                "usage_operation": "RunInstances",
+                "usage_operation_update_time": "2022-03-27T15:37:35+00:00",
+                "virtualization_type": "hvm",
+                "vpc_id": "vpc-005fae72cfde4a7fd"
+            }
+        }
+    },
+    "all": {
+        "children": [
+            "aws_ec2",
+            "ungrouped"
+        ]
+    },
+    "aws_ec2": {
+        "hosts": [
+            "ec2-3-67-88-136.eu-central-1.compute.amazonaws.com",
+            "ip-10-0-1-28.eu-central-1.compute.internal",
+            "ip-10-0-3-209.eu-central-1.compute.internal",
+            "ip-10-0-4-148.eu-central-1.compute.internal",
+            "ip-10-0-4-184.eu-central-1.compute.internal",
+            "ip-172-31-10-152.eu-central-1.compute.internal",
+            "ip-172-31-10-235.eu-central-1.compute.internal",
+            "ip-172-31-10-250.eu-central-1.compute.internal",
+            "ip-172-31-18-152.eu-central-1.compute.internal",
+            "ip-172-31-2-227.eu-central-1.compute.internal",
+            "ip-172-31-20-131.eu-central-1.compute.internal",
+            "ip-172-31-22-52.eu-central-1.compute.internal",
+            "ip-172-31-28-226.eu-central-1.compute.internal",
+            "ip-172-31-31-50.eu-central-1.compute.internal",
+            "ip-172-31-39-18.eu-central-1.compute.internal",
+            "ip-172-31-42-154.eu-central-1.compute.internal"
+        ]
+    }
+}

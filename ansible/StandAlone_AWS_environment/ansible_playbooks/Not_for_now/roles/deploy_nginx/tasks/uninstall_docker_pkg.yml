@@ -1,0 +1,7 @@
+---
+- name: Uninstall docker packages on {{ ansible_distribution }}
+  package:
+    name: "{{ item }}"
+    state: absent
+    update_cache: true
+  with_items: "{{ req_packages[ansible_distribution] }}"

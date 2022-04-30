@@ -1,0 +1,24 @@
+- name: Variables | Read specific Package variables depends on {{ ansible_distribution }}
+  include_vars: "DependPackages.yml"
+
+- name: Variables | Read Docker packages for {{ ansible_distribution }}
+  include_vars: "DockerPkg.yml"
+
+- name: Variables | Read specific user variables depends on {{ ansible_distribution }}
+  include_vars: "UserList.yml"
+
+- name: Variables | Read docker version for {{ ansible_distribution }}
+  include_vars: "DockerVersion.yml"
+
+- name: Required Packages for {{ ansible_distribution }} are...
+  debug:
+    var: req_packages[ansible_distribution]
+
+- name: Docker Packages for {{ ansible_distribution }} are...
+  debug:
+    var: docker_packages
+
+- name: User List for {{ ansible_distribution }} are...
+  debug:
+    var: user_list[ansible_distribution]
+

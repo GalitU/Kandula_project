@@ -9,3 +9,4 @@ terraform.tfstate
 *.pem
 *.ppk
 *._tf_
+EXAMPLES/

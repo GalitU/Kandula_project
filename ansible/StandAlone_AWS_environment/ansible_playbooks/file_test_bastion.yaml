@@ -1,0 +1,6 @@
+- hosts: tag_Name_Kandula_Ansible_MidPrj_WebServer_Ubuntu*
+
+  tasks:
+    - name: example
+      debug:
+        msg: This message will be printer on ec2 in private subnet at IP = {{ inventory_hostname }}!

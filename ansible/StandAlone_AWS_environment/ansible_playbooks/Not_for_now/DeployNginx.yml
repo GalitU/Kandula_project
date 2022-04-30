@@ -1,0 +1,32 @@
+---
+# This playbook will Setup and install Docker on all relevant nodes
+
+- name: Install Nginx on all relevant Ubuntu nodes
+  hosts: _OS_Ubuntu
+  become: true
+  remote_user: ubuntu
+  vars_prompt:
+    # 5:19.03.9~3-0~ubuntu-focal for example
+    - name: docker_version
+      prompt: Which version of docker you want install on Ubuntu, [5:19.03.9~3-0~ubuntu-focal] for example or [None] for latest version
+      private: no
+  roles:
+    - role: deploy_nginx
+      when: ansible_distribution == 'Ubuntu'
+      message: Ubuntu only
+
+- name: Install Nginx on all relevant RedHat nodes
+  hosts: _OS_RedHat
+  become: true
+  remote_user: ec2-user
+  vars_prompt:
+    - name: docker_version
+      prompt: Which version of docker you want install on RedHat, [3:20.10.4-3.el8] for example of [None] for latest version
+      private: no
+    - name: docker_cli_version
+      prompt: Which version of docker-cli you want install on RedHat, [1:20.10.7-3.el8] for example of [None] for latest version
+      private: no
+  roles:
+    - role: deploy_nginx
+      when: ansible_distribution == 'RedHat'
+      message: RedHat only
