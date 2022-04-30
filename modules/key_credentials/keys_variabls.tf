@@ -14,6 +14,10 @@ variable "application_name" {
 variable "root_directory" {
   description = "Root directory from which was called"
 }
+variable "key_purpose" {
+  description = "Specific purpose info of key"
+
+}
 /*
 variable "key_name" {
   description = "Private key name of ssh key to attach to hosts genereted during apply, opsschool_consul_key for example"

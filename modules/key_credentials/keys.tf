@@ -1,5 +1,5 @@
 locals {
-  pem_key_name     = "Key_${var.application_task}_${var.application_name}"
+  pem_key_name     = "Key_${var.key_purpose}_${var.application_task}_${var.application_name}"
   pem_key_filename = "${local.pem_key_name}.pem"
   pem_key_abs_path = "${var.root_directory}"
 }

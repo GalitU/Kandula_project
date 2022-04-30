@@ -32,22 +32,25 @@ module "key_credentials_consul" {
   application_task = var.application_task
   created_by       = var.created_by
   root_directory   = abspath(path.module)
+  key_purpose = "Consul"
 }
 
 module "key_credentials_bastion" {
   source           = "../../modules/key_credentials"
   application_task = var.application_task
-  application_name = "bastion"
+  application_name = var.application_name
   created_by       = var.created_by
   root_directory   = abspath(path.module)
+  key_purpose = "Bastion"
 }
 
 module "key_credentials_ansible" {
   source           = "../../modules/key_credentials"
   application_task = var.application_task
-  application_name = "ansible"
+  application_name = var.application_name
   created_by       = var.created_by
   root_directory   = abspath(path.module)
+  key_purpose = "Ansible"
 }
 
 module "iam_roles_describe" {
@@ -128,7 +131,7 @@ module "ec2_consul_servers" {
   vpc_id                      = module.vpc.vpc_id
   ec2_OS                      = "Ubuntu"
   iam_instance_profile        = module.iam_roles_describe.iam_instance_profile
-  user_data_file              = data.template_file.consul_server_setup_script.template   #file("${path.module}/scripts/consule-server.sh")
+  user_data_file              = data.template_file.consul_server_setup_script.template
   associate_public_ip_address = false
   application_name            = var.application_name
   application_task            = var.application_task
@@ -149,32 +152,43 @@ module "ec2_web_servers" {
   vpc_id                      = module.vpc.vpc_id
   ec2_OS                      = "Ubuntu"
   iam_instance_profile        = module.iam_roles_describe.iam_instance_profile
-  user_data_file              = data.template_file.consul_agent_setup_script.template    # file("${path.module}/scripts/consule-agent.sh")
+  user_data_file              = data.template_file.consul_agent_setup_script.template
   associate_public_ip_address = false
   application_name            = var.application_name
   application_task            = var.application_task
   created_by                  = var.created_by
 }
 
-module "load_balancers" {
-  source                          = "../../modules/load_balancer"
-  subnets                         = [for subnet in module.vpc.pub_subnets : subnet.id]
-  lb_consul_sec_group_array       = [module.vpc.sec_grp_http.id, module.vpc.sec_grp_https.id, module.vpc.sec_grp_consul.id]
-  lb_ec2_sec_group_array          = [module.vpc.sec_grp_http.id, module.vpc.sec_grp_https.id, module.vpc.sec_grp_consul.id]
-  application_task                = var.application_task
-  application_name                = var.application_name
-  created_by                      = var.created_by
-  vpc_id                          = module.vpc.vpc_id
-  consul_servers_for_attach_to_lb = concat(module.ec2_consul_servers.ec2_servers_id_arr)
-  ec2_servers_for_attach_to_lb    = module.ec2_web_servers.ec2_servers_id_arr
-  consul_listener_ports           = [80, 8500]
-  consul_listener_protocols       = ["HTTP", "HTTP"]
-  ec2_listener_ports              = [80]
-  ec2_listener_protocols          = ["HTTP"]
-  idle_timeout                    = 60
-  internal                        = false
-  consul_lb_purpose               = "consul"
-  consul_target_port              = 8500
-  ec2_lb_purpose                  = "web-servers"
-  ec2_target_port                 = 80
+module "consul_server_load_balancers" {
+  source                   = "../../modules/load_balancer"
+  subnets                  = [for subnet in module.vpc.pub_subnets : subnet.id]
+  lb_sec_group_array       = [module.vpc.sec_grp_http.id, module.vpc.sec_grp_https.id, module.vpc.sec_grp_consul.id]
+  application_task         = var.application_task
+  application_name         = var.application_name
+  created_by               = var.created_by
+  vpc_id                   = module.vpc.vpc_id
+  servers_for_attach_to_lb = concat(module.ec2_consul_servers.ec2_servers_id_arr)
+  listener_ports           = [80, 8500]
+  listener_protocols       = ["HTTP", "HTTP"]
+  idle_timeout             = 60
+  internal                 = false
+  lb_purpose               = "consul"
+  target_port              = 8500
+}
+
+module "consul_agent_load_balancers" {
+  source                   = "../../modules/load_balancer"
+  subnets                  = [for subnet in module.vpc.pub_subnets : subnet.id]
+  lb_sec_group_array       = [module.vpc.sec_grp_http.id, module.vpc.sec_grp_https.id, module.vpc.sec_grp_consul.id]
+  application_task         = var.application_task
+  application_name         = var.application_name
+  created_by               = var.created_by
+  vpc_id                   = module.vpc.vpc_id
+  servers_for_attach_to_lb = module.ec2_web_servers.ec2_servers_id_arr
+  listener_ports           = [80]
+  listener_protocols       = ["HTTP"]
+  idle_timeout             = 60
+  internal                 = false
+  lb_purpose               = "web-servers"
+  target_port              = 80
 }

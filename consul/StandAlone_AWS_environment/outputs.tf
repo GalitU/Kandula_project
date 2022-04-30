@@ -69,10 +69,10 @@ output "role_policy" {
 
 /* Load balancers */
 output "cosul_alb_dns" {
-  value = module.load_balancers.cosul_alb_dns
+  value = module.consul_server_load_balancers.alb_dns
 }
 output "ec2_alb_dns" {
-  value = module.load_balancers.ec2_alb_dns
+  value = module.consul_agent_load_balancers.alb_dns
 }
 
 /* Consul output */
