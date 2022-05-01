@@ -1,0 +1,7 @@
+---
+- name: Install required packages for any OS - now on {{ ansible_distribution }}
+  package:
+    name: "{{ item }}"
+    state: latest
+    update_cache: true
+  with_items: "{{ req_packages[ansible_distribution] }}"

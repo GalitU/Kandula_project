@@ -138,6 +138,27 @@ module "ec2_consul_servers" {
   created_by                  = var.created_by
 }
 
+module "ec2_consul_servers_for_ansible_test" {
+  source                      = "../../modules/ec2_servers"
+  region                      = var.region
+  ec2_instance_type           = var.ec2_instance_type
+  ami                         = var.ami
+  count_instances             = 3
+  ec2_purpose                 = "ConsulSrvAnsible"
+  type_of_subnet              = "Private"
+  subnet_association_tag      = "Consul"
+  ec2_sec_group_array         = [module.vpc.sec_grp_ssh.id, module.vpc.sec_grp_consul.id]
+  access_key_name             = module.key_credentials_consul.private_key_name
+  vpc_id                      = module.vpc.vpc_id
+  ec2_OS                      = "Ubuntu"
+  iam_instance_profile        = module.iam_roles_describe.iam_instance_profile
+  user_data_file              = file("${path.module}/../../modules/scripts/ansible.sh")
+  associate_public_ip_address = false
+  application_name            = var.application_name
+  application_task            = var.application_task
+  created_by                  = var.created_by
+}
+
 module "ec2_web_servers" {
   source                      = "../../modules/ec2_servers"
   region                      = var.region
@@ -158,6 +179,7 @@ module "ec2_web_servers" {
   application_task            = var.application_task
   created_by                  = var.created_by
 }
+
 
 module "consul_server_load_balancers" {
   source                   = "../../modules/load_balancer"

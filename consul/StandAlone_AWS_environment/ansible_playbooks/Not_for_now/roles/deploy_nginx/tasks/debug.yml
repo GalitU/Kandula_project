@@ -1,0 +1,32 @@
+---
+- name: Docker version on {{ ansible_distribution }}
+  debug:
+    var: docker_version
+- name: Docker CLI version on {{ ansible_distribution }}
+  debug:
+    var: docker_cli_version
+- name: ansible_distribution of {{ ansible_distribution }}
+  debug:
+    var: ansible_distribution
+
+- name: ansible_distribution_version on {{ ansible_distribution }}
+  debug:
+    var: ansible_distribution_version
+
+- name: ansible_os_family of {{ ansible_distribution }}
+  debug:
+    var: ansible_os_family
+
+- name: ansible_dns.nameservers on {{ ansible_distribution }}
+  debug:
+    var: ansible_dns.nameservers
+- name: ansible_python_version on {{ ansible_distribution }}
+  debug:
+    var: ansible_python_version
+- name: ansible_pkg_mgr on {{ ansible_distribution }}
+  debug:
+    var: ansible_pkg_mgr
+
+- name: Docker URL repo on {{ ansible_distribution }}
+  debug:
+    var: docker_url_repo[ansible_distribution]

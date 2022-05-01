@@ -1,0 +1,8 @@
+---
+- name: Uninstall Docker on {{ ansible_distribution }}
+  pip:
+    name: docker
+    state: absent
+  notify:
+    - Restart Docker
+    - Restart container

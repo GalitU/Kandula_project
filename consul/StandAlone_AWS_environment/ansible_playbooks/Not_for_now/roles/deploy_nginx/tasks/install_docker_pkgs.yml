@@ -1,0 +1,28 @@
+---
+- name: Setting docker installation state info
+  set_fact:
+    docker_state: '{{ "latest" if docker_version == "None" or docker_version == "" else "present" }}'
+
+- name: Install docker packages on {{ ansible_distribution }}
+  package:
+    name: "{{ item }}"
+    state: "{{ docker_state }}"
+    update_cache: true
+    force: True
+  with_items: "{{ docker_packages }}"
+  notify:
+    - Restart Docker
+    - Restart container
+  when: ansible_distribution == 'Ubuntu'
+
+- name: Install docker packages on {{ ansible_distribution }}
+  package:
+    name: "{{ item }}"
+    state: "{{ docker_state }}"
+    update_cache: true
+    allow_downgrade: True
+  with_items: "{{ docker_packages }}"
+  notify:
+    - Restart Docker
+    - Restart container
+  when: ansible_distribution == 'RedHat'

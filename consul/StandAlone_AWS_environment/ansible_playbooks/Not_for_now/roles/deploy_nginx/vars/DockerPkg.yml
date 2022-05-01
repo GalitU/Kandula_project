@@ -1,0 +1,13 @@
+---
+docker_version_delimiter:
+  Ubuntu: "="
+  RedHat: "-"
+
+docker_ver_delimiter: "{{ docker_version_delimiter[ansible_distribution]  if (docker_version != 'None' and docker_version != '') else '' }}"
+docker_version_info: "{{ docker_version if (docker_version != 'None' and docker_version != '') else '' }}"
+docker_cli_version_info: "{{ docker_cli_version if (ansible_distribution == 'RedHat' and docker_cli_version != 'None' and docker_cli_version != '') else docker_version_info }}"
+
+docker_packages:
+  - "docker-ce{{ docker_ver_delimiter }}{{ docker_version_info }}"
+  - "docker-ce-cli{{ docker_ver_delimiter }}{{ docker_cli_version_info }}"
+  - containerd.io

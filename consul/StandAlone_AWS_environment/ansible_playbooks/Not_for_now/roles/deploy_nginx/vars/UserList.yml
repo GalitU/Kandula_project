@@ -1,0 +1,10 @@
+---
+user_list:
+  RedHat:
+    - ec2-user
+    - redhat_1_user
+    - redhat_2_user
+  Ubuntu:
+    - ubuntu
+    - ubuntu_1_user
+    - ubuntu_2_user

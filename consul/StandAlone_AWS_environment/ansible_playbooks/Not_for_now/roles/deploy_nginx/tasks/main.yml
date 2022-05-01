@@ -1,0 +1,16 @@
+---
+- include_tasks: tasks/variables.yml
+- include_tasks: tasks/debug.yml
+- include_tasks: tasks/create_user.yml
+
+# tasks file for deploy_nginx
+- include_tasks: tasks/update_apt.yml
+- include_tasks: tasks/install_req_pkg.yml
+- include_tasks: tasks/docker_gpg.yml
+- include_tasks: tasks/docker_repo.yml
+- include_tasks: tasks/update_apt.yml
+
+- include_tasks: tasks/install_docker_pkgs.yml
+- include_tasks: tasks/install_docker.yml
+- include_tasks: tasks/start_docker.yml
+- include_tasks: tasks/start_container.yml

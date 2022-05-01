@@ -1,0 +1,7 @@
+---
+docker_url_repo:
+  Ubuntu: "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal {{ docker_release }}"
+  RedHat: "https://download.docker.com/linux/centos/7/x86_64/{{ docker_release }}/"
+
+docker_release : stable
+

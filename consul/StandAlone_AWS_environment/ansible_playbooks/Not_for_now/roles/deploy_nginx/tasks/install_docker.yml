@@ -1,0 +1,7 @@
+---
+- name: Install Docker on {{ ansible_distribution }}
+  pip:
+    name: docker
+  notify:
+    - Restart Docker
+    - Restart container

@@ -1,0 +1,6 @@
+- hosts: tag_ConsulTag_Consul-Consul-Alone
+
+  tasks:
+    - name: example
+      debug:
+        msg: This message will be printer on ec2 in private subnet at IP = {{ inventory_hostname }}!
