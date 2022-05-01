@@ -143,7 +143,7 @@ module "ec2_consul_servers_for_ansible_test" {
   region                      = var.region
   ec2_instance_type           = var.ec2_instance_type
   ami                         = var.ami
-  count_instances             = 3
+  count_instances             = 1
   ec2_purpose                 = "ConsulSrvAnsible"
   type_of_subnet              = "Private"
   subnet_association_tag      = "Consul"

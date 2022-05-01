@@ -9,7 +9,7 @@ filters:
   tag:Task:
     - Alone
   tag:ConsulTag:
-    - Consul-*
+    - Consul-Consul-Alone
   instance-state-name: running
 keyed_groups:
   - key: tags

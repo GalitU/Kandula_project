@@ -142,6 +142,7 @@ module "ec2_jenkins_server" {
   created_by                  = var.created_by
 }
 
+
 module "ec2_consul_servers" {
   source                      = "../modules/ec2_servers"
   region                      = var.region
