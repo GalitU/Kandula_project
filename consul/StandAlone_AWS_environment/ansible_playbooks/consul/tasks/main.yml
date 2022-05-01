@@ -1,0 +1,173 @@
+---
+- include_vars: "main.yml"
+- include_tasks: tasks/debug.yml
+- include_tasks: tasks/update_apt.yml
+
+- name: Install unzip
+  package:
+    name: "unzip"
+    state: latest
+    update_cache: true
+
+- name: Create /etc/systemd/resolved.conf.d directory
+  file:
+    path: /etc/systemd/resolved.conf.d
+    state: directory
+
+- name: Copy file /etc/systemd/resolved.conf.d/consul.conf
+  ansible.builtin.copy:
+    src: ./templates/resolved.conf.d.consul.j2
+    dest: /etc/systemd/resolved.conf.d/consul.conf
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Reload service systemd-resolved, in all cases
+  ansible.builtin.systemd:
+    name: systemd-resolved
+    state: restarted
+
+- name: Reload service systemd-resolved, in all cases
+  ansible.builtin.systemd:
+    name: systemd-resolved
+    state: started
+
+- name: Copy /etc/systemd/resolved.conf by template
+  ansible.builtin.template:
+    src: ./templates/etc.systemd.resolved.j2
+    dest: /etc/systemd/resolved.conf
+    #owner: "consul"
+    #group: "consul"
+    mode: "0644"
+
+- name: Prerouting Forward port 53 to 8600
+  ansible.builtin.iptables:
+    table: nat
+    chain: PREROUTING
+    in_interface: eth0
+    protocol: "{{ item }}"
+    match: "{{ item }}"
+    destination_port: 53
+    jump: REDIRECT
+    to_ports: 8600
+    comment: Redirect DNS traffic to port 8600 of consul
+  loop:
+    - tcp
+    - udp
+
+- name: Otput Forward port 53 to 8600
+  ansible.builtin.iptables:
+    table: nat
+    chain: OUTPUT
+    protocol: "{{ item }}"
+    match: "{{ item }}"
+    destination: localhost
+    destination_port: "53"
+    jump: REDIRECT
+    to_ports: "8600"
+  loop:
+    - tcp
+    - udp
+
+- name: Reload service systemd-resolved, in all cases
+  ansible.builtin.systemd:
+    name: systemd-resolved
+    state: restarted
+
+- name: Reload service systemd-resolved, in all cases
+  ansible.builtin.systemd:
+    name: systemd-resolved
+    state: started
+
+- name: Unarchive a consul zip file to /usr/local/bin
+  ansible.builtin.unarchive:
+    src: https://releases.hashicorp.com/consul/{{CONSUL_VERSION}}/consul_{{CONSUL_VERSION}}_linux_amd64.zip
+    dest: /usr/local/bin
+    remote_src: yes
+
+- file:
+    path: /usr/local/bin/consul
+    state: touch
+    mode: "u+x,g+x,o+x"
+
+- name: "Add group 'consul' group on remote server"
+  group:
+    name: consul
+    gid: 2011
+    state: present
+
+- name: "Add user 'consul' on remote server"
+  user:
+    name: consul
+    password: "{{ '0p$Sch00l' | password_hash('sha512') }}"
+    home: /home/consul
+    comment: "consul User"
+    group: consul
+    append: yes
+    shell: /bin/bash
+
+- name: Create a directory /opt/consul
+  ansible.builtin.file:
+    owner: consul
+    group: consul
+    path: /opt/consul
+    state: directory
+    mode: "0755"
+
+- name: Create a directory /etc/consul.d
+  ansible.builtin.file:
+    owner: consul
+    group: consul
+    path: /etc/consul.d
+    state: directory
+    mode: "0755"
+
+- name: Create a directory /run/consul
+  ansible.builtin.file:
+    owner: consul
+    group: consul
+    path: /run/consul
+    state: directory
+    mode: "0755"
+
+- name: Template a file, using symbolic modes (equivalent to 0644)
+  ansible.builtin.template:
+    src: ./templates/consul_srv.j2
+    dest: /etc/consul.d/config.json
+    #owner: "consul"
+    #group: "consul"
+    mode: "0644"
+
+- name: Just force systemd to reread configs (2.4 and above)
+  ansible.builtin.systemd:
+    daemon_reload: yes
+
+- name: Create /etc/systemd/system/consul.service file
+  ansible.builtin.template:
+    src: ./templates/etc.systemd.system.consul.service.j2
+    dest: /etc/systemd/system/consul.service
+    #owner: "consul"
+    #group: "consul"
+    mode: "0644"
+
+- name: Enable a consul service
+  ansible.builtin.systemd:
+    name: consul.service
+    state: started
+    enabled: yes
+
+- name: Get systemd-resolved service Status
+  ansible.builtin.systemd:
+    name: systemd-resolved
+  register: systemd_resolved_status
+
+- debug:
+    var: systemd_resolved_status.status.ActiveState
+
+- name: Get Consul service Status
+  ansible.builtin.systemd:
+    name: consul.service
+  register: consul_service_status
+
+- debug:
+    var: consul_service_status.status.ActiveState
