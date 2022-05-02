@@ -6,11 +6,11 @@
 
 locals {
   # Subnet purpose
-  subnet_pvt_prefix_arr = ["Consul", "Consul", "Master"]
+  subnet_pvt_prefix_arr = ["Consul", "Consul", "Master", "Master", "WebServers", "WebServers"]
   subnet_pub_prefix_arr = ["Bastion", "General"]
 
   # CIDR per purpose
-  subnet_pvt_cidr_arr = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+  subnet_pvt_cidr_arr = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24", "10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
   subnet_pub_cidr_arr = ["10.0.31.0/24", "10.0.32.0/24"]
 }
 
@@ -32,30 +32,34 @@ module "key_credentials_consul" {
   application_task = var.application_task
   created_by       = var.created_by
   root_directory   = abspath(path.module)
+  key_purpose      = "Consul"
 }
 
 module "key_credentials_bastion" {
   source           = "../modules/key_credentials"
   application_task = var.application_task
-  application_name = "bastion"
+  application_name = var.application_name
   created_by       = var.created_by
   root_directory   = abspath(path.module)
+  key_purpose      = "Bastion"
 }
 
-module "key_credentials_ansible" {
+module "key_credentials_master" {
   source           = "../modules/key_credentials"
   application_task = var.application_task
-  application_name = "ansible"
+  application_name = var.application_name
   created_by       = var.created_by
   root_directory   = abspath(path.module)
+  key_purpose      = "Master"
 }
 
-module "key_credentials_jenkins" {
+module "key_credentials_webserver" {
   source           = "../modules/key_credentials"
   application_task = var.application_task
-  application_name = "jenkins"
+  application_name = var.application_name
   created_by       = var.created_by
   root_directory   = abspath(path.module)
+  key_purpose      = "WebServers"
 }
 
 module "iam_roles_describe" {
@@ -79,6 +83,8 @@ module "s3" {
 }
 */
 
+
+/* BASTION */
 module "ec2_bastion_server" {
   source                      = "../modules/ec2_servers"
   region                      = var.region
@@ -88,7 +94,7 @@ module "ec2_bastion_server" {
   ec2_purpose                 = "Bastion"
   type_of_subnet              = "Public"
   subnet_association_tag      = "Bastion"
-  ec2_sec_group_array         = [module.vpc.sec_grp_ssh.id]
+  ec2_sec_group_array         = [module.vpc.special_sec_grp_ssh.id]
   access_key_name             = module.key_credentials_bastion.private_key_name
   vpc_id                      = module.vpc.vpc_id
   ec2_OS                      = "Ubuntu"
@@ -98,8 +104,13 @@ module "ec2_bastion_server" {
   application_name            = var.application_name
   application_task            = var.application_task
   created_by                  = var.created_by
+  consul_prefix               = ""
+  consul_app_discovery_tag    = ""
 }
 
+
+#####################################################################################################
+/* Ansible server */
 module "ec2_ansible_server" {
   source                      = "../modules/ec2_servers"
   region                      = var.region
@@ -110,7 +121,7 @@ module "ec2_ansible_server" {
   type_of_subnet              = "Private"
   subnet_association_tag      = "Master"
   ec2_sec_group_array         = [module.vpc.sec_grp_ssh.id]
-  access_key_name             = module.key_credentials_ansible.private_key_name
+  access_key_name             = module.key_credentials_master.private_key_name
   vpc_id                      = module.vpc.vpc_id
   ec2_OS                      = "Ubuntu"
   iam_instance_profile        = module.iam_roles_describe.iam_instance_profile
@@ -119,8 +130,12 @@ module "ec2_ansible_server" {
   application_name            = var.application_name
   application_task            = var.application_task
   created_by                  = var.created_by
+  consul_prefix               = "ConsulAgent"
+  consul_app_discovery_tag    = "Consul"
 }
 
+#####################################################################################################
+/* Jenkins server + 2 slaves */
 module "ec2_jenkins_server" {
   source                      = "../modules/ec2_servers"
   region                      = var.region
@@ -130,8 +145,8 @@ module "ec2_jenkins_server" {
   ec2_purpose                 = "JenkinsSrv"
   type_of_subnet              = "Private"
   subnet_association_tag      = "Master"
-  ec2_sec_group_array         = [module.vpc.sec_grp_ssh.id]
-  access_key_name             = module.key_credentials_jenkins.private_key_name
+  ec2_sec_group_array         = [module.vpc.sec_grp_ssh.id, module.vpc.jenkins_sec_grp_http.id, module.vpc.sec_grp_consul.id]
+  access_key_name             = module.key_credentials_master.private_key_name
   vpc_id                      = module.vpc.vpc_id
   ec2_OS                      = "Ubuntu"
   iam_instance_profile        = module.iam_roles_describe.iam_instance_profile
@@ -140,9 +155,30 @@ module "ec2_jenkins_server" {
   application_name            = var.application_name
   application_task            = var.application_task
   created_by                  = var.created_by
+  consul_prefix               = "ConsulAgent"
+  consul_app_discovery_tag    = "Consul"
+}
+
+module "jenkins_server_load_balancers" {
+  source                   = "../modules/load_balancer"
+  subnets                  = [for subnet in module.vpc.pub_subnets : subnet.id]
+  lb_sec_group_array       = [module.vpc.sec_grp_http.id, module.vpc.sec_grp_https.id, module.vpc.sec_grp_consul.id, module.vpc.jenkins_sec_grp_http.id]
+  application_task         = var.application_task
+  application_name         = var.application_name
+  created_by               = var.created_by
+  vpc_id                   = module.vpc.vpc_id
+  servers_for_attach_to_lb = concat(module.ec2_jenkins_server.ec2_servers_id_arr)
+  listener_ports           = [8080]
+  listener_protocols       = ["HTTP"]
+  idle_timeout             = 60
+  internal                 = false
+  lb_purpose               = "jenkins"
+  target_port              = 8080
 }
 
 
+#####################################################################################################
+/* Consul servers * 3 */
 module "ec2_consul_servers" {
   source                      = "../modules/ec2_servers"
   region                      = var.region
@@ -157,13 +193,34 @@ module "ec2_consul_servers" {
   vpc_id                      = module.vpc.vpc_id
   ec2_OS                      = "Ubuntu"
   iam_instance_profile        = module.iam_roles_describe.iam_instance_profile
-  user_data_file              = data.template_file.consul_server_setup_script.template # file("${path.module}/../modules/scripts/consule-server.sh")
+  user_data_file              = file("${path.module}/../modules/scripts/empty.sh") #data.template_file.consul_server_setup_script.template
   associate_public_ip_address = false
   application_name            = var.application_name
   application_task            = var.application_task
   created_by                  = var.created_by
+  consul_prefix               = "ConsulServer"
+  consul_app_discovery_tag    = "Consul"
 }
 
+module "consul_server_load_balancers" {
+  source                   = "../modules/load_balancer"
+  subnets                  = [for subnet in module.vpc.pub_subnets : subnet.id]
+  lb_sec_group_array       = [module.vpc.sec_grp_http.id, module.vpc.sec_grp_https.id, module.vpc.sec_grp_consul.id]
+  application_task         = var.application_task
+  application_name         = var.application_name
+  created_by               = var.created_by
+  vpc_id                   = module.vpc.vpc_id
+  servers_for_attach_to_lb = concat(module.ec2_consul_servers.ec2_servers_id_arr)
+  listener_ports           = [8500]
+  listener_protocols       = ["HTTP"]
+  idle_timeout             = 60
+  internal                 = false
+  lb_purpose               = "consul"
+  target_port              = 8500
+}
+
+#####################################################################################################
+/* Regular EC2 web servers */
 module "ec2_web_servers" {
   source                      = "../modules/ec2_servers"
   region                      = var.region
@@ -172,38 +229,34 @@ module "ec2_web_servers" {
   count_instances             = 1
   ec2_purpose                 = "WebServer"
   type_of_subnet              = "Private"
-  subnet_association_tag      = "Consul"
+  subnet_association_tag      = "WebServers"
   ec2_sec_group_array         = [module.vpc.sec_grp_http.id, module.vpc.sec_grp_ssh.id, module.vpc.sec_grp_consul.id]
-  access_key_name             = module.key_credentials_consul.private_key_name
+  access_key_name             = module.key_credentials_webserver.private_key_name
   vpc_id                      = module.vpc.vpc_id
   ec2_OS                      = "Ubuntu"
   iam_instance_profile        = module.iam_roles_describe.iam_instance_profile
-  user_data_file              = data.template_file.consul_agent_setup_script.template # file("${path.module}/../modules/scripts/consule-agent.sh")
+  user_data_file              = file("${path.module}/../modules/scripts/webserver_data.sh") # data.template_file.consul_agent_setup_script.template
   associate_public_ip_address = false
   application_name            = var.application_name
   application_task            = var.application_task
   created_by                  = var.created_by
+  consul_prefix               = "ConsulAgent"
+  consul_app_discovery_tag    = "Consul"
 }
 
-module "load_balancers" {
-  source                          = "../modules/load_balancer"
-  subnets                         = [for subnet in module.vpc.pub_subnets : subnet.id]
-  lb_consul_sec_group_array       = [module.vpc.sec_grp_http.id, module.vpc.sec_grp_https.id, module.vpc.sec_grp_consul.id]
-  lb_ec2_sec_group_array          = [module.vpc.sec_grp_http.id, module.vpc.sec_grp_https.id, module.vpc.sec_grp_consul.id]
-  application_task                = var.application_task
-  application_name                = var.application_name
-  created_by                      = var.created_by
-  vpc_id                          = module.vpc.vpc_id
-  consul_servers_for_attach_to_lb = concat(module.ec2_consul_servers.ec2_servers_id_arr)
-  ec2_servers_for_attach_to_lb    = module.ec2_web_servers.ec2_servers_id_arr
-  consul_listener_ports           = [80, 8500]
-  consul_listener_protocols       = ["HTTP", "HTTP"]
-  ec2_listener_ports              = [80]
-  ec2_listener_protocols          = ["HTTP"]
-  idle_timeout                    = 60
-  internal                        = false
-  consul_lb_purpose               = "consul"
-  consul_target_port              = 8500
-  ec2_lb_purpose                  = "web-servers"
-  ec2_target_port                 = 80
+module "webserver_workers_load_balancers" {
+  source                   = "../modules/load_balancer"
+  subnets                  = [for subnet in module.vpc.pub_subnets : subnet.id]
+  lb_sec_group_array       = [module.vpc.sec_grp_http.id, module.vpc.sec_grp_https.id, module.vpc.sec_grp_consul.id]
+  application_task         = var.application_task
+  application_name         = var.application_name
+  created_by               = var.created_by
+  vpc_id                   = module.vpc.vpc_id
+  servers_for_attach_to_lb = module.ec2_web_servers.ec2_servers_id_arr
+  listener_ports           = [80]
+  listener_protocols       = ["HTTP"]
+  idle_timeout             = 60
+  internal                 = false
+  lb_purpose               = "web-servers"
+  target_port              = 80
 }

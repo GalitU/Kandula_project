@@ -26,10 +26,10 @@ output "vpc_id" {
   value = module.vpc.vpc_id
 }
 output "vpc_pub-subnet" {
-  value = join(", ", module.vpc.pub_subnets[*].cidr_block)
+  value = join(",\n", module.vpc.pub_subnets[*].cidr_block)
 }
 output "vpc_pvt-subnet" {
-  value = join(", ", module.vpc.pvt_subnets[*].cidr_block)
+  value = join(",\n", module.vpc.pvt_subnets[*].cidr_block)
 }
 /*
 // S3
@@ -43,19 +43,21 @@ output "s3_name_arn" {
 
 /* Keys */
 output "private_key_files_with_path" {
-  value = join(", ",
+  value = join(",\n",
     [
       module.key_credentials_consul.private_key_file_with_path,
       module.key_credentials_bastion.private_key_file_with_path,
-      module.key_credentials_ansible.private_key_file_with_path
+      module.key_credentials_master.private_key_file_with_path,
+      module.key_credentials_webserver.private_key_file_with_path
   ])
 }
 output "private_key_names" {
-  value = join(", ",
+  value = join(",\n",
     [
       module.key_credentials_consul.private_key_name,
       module.key_credentials_bastion.private_key_name,
-      module.key_credentials_ansible.private_key_name
+      module.key_credentials_master.private_key_name,
+      module.key_credentials_webserver.private_key_name
   ])
 }
 
@@ -68,14 +70,17 @@ output "role_policy" {
 }
 
 /* Load balancers */
-output "cosul_alb_dns" {
-  value = module.load_balancers.cosul_alb_dns
+output "jenkins_alb_dns" {
+  value = module.jenkins_server_load_balancers.alb_dns
 }
-output "ec2_alb_dns" {
-  value = module.load_balancers.ec2_alb_dns
+output "cosul_alb_dns" {
+  value = module.consul_server_load_balancers.alb_dns
+}
+output "webservers_worker_alb_dns" {
+  value = module.webserver_workers_load_balancers.alb_dns
 }
 
-/* Consul output */
+/* Consul server output */
 output "ec2_consul_servers_arn" {
   value = module.ec2_consul_servers.ec2_servers_arn
 }
@@ -126,4 +131,17 @@ output "ec2_ansible_server_dns" {
 }
 output "ec2_ansible_server_private_ip" {
   value = module.ec2_ansible_server.ec2_servers_private_ips
+}
+/* Jenkins output */
+output "ec2_jenkins_server_arn" {
+  value = module.ec2_jenkins_server.ec2_servers_arn
+}
+output "ec2_jenkins_server_id" {
+  value = module.ec2_jenkins_server.ec2_servers_id
+}
+output "ec2_jenkins_server_dns" {
+  value = module.ec2_jenkins_server.ec2_servers_dns
+}
+output "ec2_jenkins_server_private_ip" {
+  value = module.ec2_jenkins_server.ec2_servers_private_ips
 }

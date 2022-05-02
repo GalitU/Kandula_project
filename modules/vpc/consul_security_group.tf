@@ -10,12 +10,12 @@ locals {
 
 # One security group for Consul which includes all relevant rules
 resource "aws_security_group" "consul_sg" {
-  name        = "Sec. group for relevant ports -${lower(var.application_name)}-${var.application_task}"
-  description = "Security Group for relevant ports ${lower(var.application_name)}-${var.application_task}"
+  name        = "SG_Consul-${lower(var.application_name)}-${var.application_task}"
+  description = "Consul Sec. group-${lower(var.application_name)}-${var.application_task}"
   vpc_id      = aws_vpc.vpc.id
   tags = {
     Type      = "Consul"
-    Name      = "Sec. group for relevant-${lower(var.application_name)}-${var.application_task}"
+    Name      = "SG_Consul-${lower(var.application_name)}-${var.application_task}"
     App_name  = var.application_name
     Task      = var.application_task
     Owner     = var.application_owner

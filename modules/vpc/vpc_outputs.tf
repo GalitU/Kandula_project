@@ -14,6 +14,10 @@ output "sec_grp_https" {
   value = aws_security_group.sec_grp_https
 }
 
+output "jenkins_sec_grp_http" {
+  value = aws_security_group.jenkins_sec_grp_http
+}
+
 output "sec_grp_ssh" {
   value = aws_security_group.sec_grp_ssh
 }

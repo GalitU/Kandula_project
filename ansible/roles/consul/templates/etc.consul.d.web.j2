@@ -1,0 +1,16 @@
+{
+    "service": {
+    "name": "{{SERVICE_NAME}}",
+    "tags": [
+      "{{SERVICE_TAGS}}"
+    ],
+    "port": {{HEALTH_CHECKER_PORT}},
+    "check": {
+      "args": [
+        "curl",
+        "localhost"
+      ],
+      "interval": "10s"
+    }
+  }
+}

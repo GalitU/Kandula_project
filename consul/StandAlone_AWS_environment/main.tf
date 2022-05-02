@@ -149,7 +149,7 @@ module "ec2_web_servers" {
   region                      = var.region
   ec2_instance_type           = var.ec2_instance_type
   ami                         = var.ami
-  count_instances             = 1
+  count_instances             = 2
   ec2_purpose                 = "WebServer"
   type_of_subnet              = "Private"
   subnet_association_tag      = "WebServers"
