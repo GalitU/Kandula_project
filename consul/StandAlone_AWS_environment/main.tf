@@ -32,7 +32,7 @@ module "key_credentials_consul" {
   application_task = var.application_task
   created_by       = var.created_by
   root_directory   = abspath(path.module)
-  key_purpose = "Consul"
+  key_purpose      = "Consul"
 }
 
 module "key_credentials_bastion" {
@@ -41,7 +41,7 @@ module "key_credentials_bastion" {
   application_name = var.application_name
   created_by       = var.created_by
   root_directory   = abspath(path.module)
-  key_purpose = "Bastion"
+  key_purpose      = "Bastion"
 }
 
 module "key_credentials_ansible" {
@@ -50,7 +50,7 @@ module "key_credentials_ansible" {
   application_name = var.application_name
   created_by       = var.created_by
   root_directory   = abspath(path.module)
-  key_purpose = "Ansible"
+  key_purpose      = "Ansible"
 }
 
 module "iam_roles_describe" {
@@ -93,6 +93,8 @@ module "ec2_bastion_server" {
   application_name            = var.application_name
   application_task            = var.application_task
   created_by                  = var.created_by
+  consul_prefix               = ""
+  consul_app_discovery_tag    = ""
 }
 
 module "ec2_ansible_server" {
@@ -114,6 +116,8 @@ module "ec2_ansible_server" {
   application_name            = var.application_name
   application_task            = var.application_task
   created_by                  = var.created_by
+  consul_prefix               = "ConsulAgent"
+  consul_app_discovery_tag    = "Consul"
 }
 
 
@@ -131,32 +135,13 @@ module "ec2_consul_servers" {
   vpc_id                      = module.vpc.vpc_id
   ec2_OS                      = "Ubuntu"
   iam_instance_profile        = module.iam_roles_describe.iam_instance_profile
-  user_data_file              = data.template_file.consul_server_setup_script.template
+  user_data_file              = file("${path.module}/../../modules/scripts/empty.sh") #data.template_file.consul_server_setup_script.template
   associate_public_ip_address = false
   application_name            = var.application_name
   application_task            = var.application_task
   created_by                  = var.created_by
-}
-
-module "ec2_consul_servers_for_ansible_test" {
-  source                      = "../../modules/ec2_servers"
-  region                      = var.region
-  ec2_instance_type           = var.ec2_instance_type
-  ami                         = var.ami
-  count_instances             = 1
-  ec2_purpose                 = "ConsulSrvAnsible"
-  type_of_subnet              = "Private"
-  subnet_association_tag      = "Consul"
-  ec2_sec_group_array         = [module.vpc.sec_grp_ssh.id, module.vpc.sec_grp_consul.id]
-  access_key_name             = module.key_credentials_consul.private_key_name
-  vpc_id                      = module.vpc.vpc_id
-  ec2_OS                      = "Ubuntu"
-  iam_instance_profile        = module.iam_roles_describe.iam_instance_profile
-  user_data_file              = file("${path.module}/../../modules/scripts/ansible.sh")
-  associate_public_ip_address = false
-  application_name            = var.application_name
-  application_task            = var.application_task
-  created_by                  = var.created_by
+  consul_prefix               = "ConsulServer"
+  consul_app_discovery_tag    = "Consul"
 }
 
 module "ec2_web_servers" {
@@ -173,11 +158,13 @@ module "ec2_web_servers" {
   vpc_id                      = module.vpc.vpc_id
   ec2_OS                      = "Ubuntu"
   iam_instance_profile        = module.iam_roles_describe.iam_instance_profile
-  user_data_file              = data.template_file.consul_agent_setup_script.template
+  user_data_file              = file("${path.module}/../../modules/scripts/webserver_data.sh") # data.template_file.consul_agent_setup_script.template
   associate_public_ip_address = false
   application_name            = var.application_name
   application_task            = var.application_task
   created_by                  = var.created_by
+  consul_prefix               = "ConsulAgent"
+  consul_app_discovery_tag    = "Consul"
 }
 
 

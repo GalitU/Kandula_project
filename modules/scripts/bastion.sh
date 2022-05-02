@@ -12,5 +12,5 @@ systemctl enable nginx
 systemctl start nginx
 systemctl status nginx
 
-sudo sh -c 'echo "#!/bin/bash \nsudo aws s3 cp /var/log/nginx/access.log s3://s3-ops-vpc-dev-bucket/$(hostname)/access.log" > /etc/cron.hourly/copy_web_access_logs_to_s3.sh'
-sudo chmod +x /etc/cron.hourly/copy_web_access_logs_to_s3.sh
+#sudo sh -c 'echo "#!/bin/bash \nsudo aws s3 cp /var/log/nginx/access.log s3://s3-ops-vpc-dev-bucket/$(hostname)/access.log" > /etc/cron.hourly/copy_web_access_logs_to_s3.sh'
+#sudo chmod +x /etc/cron.hourly/copy_web_access_logs_to_s3.sh

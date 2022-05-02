@@ -1,0 +1,21 @@
+---
+# This playbook will Setup and install consul for server * 3 and all relevant Consul agents
+
+- name: Install Consul Servers
+  hosts: tag_ConsulPrefixForAnsible_ConsulServer_*
+  become: true
+  remote_user: ubuntu
+  vars:
+    CONSUL_TEMPLATE_FILE_TYPE: "consul_server"
+  roles:
+    - role: consul
+
+
+- name: Install Consul Agents
+  hosts: tag_ConsulPrefixForAnsible_ConsulAgent_*
+  become: true
+  remote_user: ubuntu
+  vars:
+    CONSUL_TEMPLATE_FILE_TYPE: "consul_agent"
+  roles:
+    - role: consul

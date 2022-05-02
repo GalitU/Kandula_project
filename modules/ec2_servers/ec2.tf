@@ -50,14 +50,15 @@ resource "aws_instance" "ec2_server" {
   }
 
   tags = {
-    Name      = "${var.application_task} ${var.application_name} ${var.ec2_purpose} ${var.ec2_OS}_${count.index}"
-    Purpose   = var.ec2_purpose
-    App_name  = var.application_name
-    Task      = var.application_task
-    Owner     = var.application_owner
-    OS        = var.ec2_OS
-    ConsulTag = "Consul-${var.application_name}-${var.application_task}"
-    CreatedBy = var.created_by
+    Name                   = "${var.application_task} ${var.application_name} ${var.ec2_purpose} ${var.ec2_OS}_${count.index}"
+    Purpose                = var.ec2_purpose
+    App_name               = var.application_name
+    Task                   = var.application_task
+    Owner                  = var.application_owner
+    OS                     = var.ec2_OS
+    ConsulPrefixForAnsible = "${var.consul_prefix}" == "" ? "none" : "${var.consul_prefix}-${var.application_name}-${var.application_task}"
+    ConsulAppDiscoveryTag  = "${var.consul_app_discovery_tag}" == "" ? "none" : "${var.consul_app_discovery_tag}"
+    CreatedBy              = var.created_by
   }
 }
 output "ec2_servers_id_arr" {

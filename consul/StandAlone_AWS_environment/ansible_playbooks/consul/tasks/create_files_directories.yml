@@ -44,9 +44,16 @@
 
 - name: Create /etc/consul.d/config.json file by template
   ansible.builtin.template:
-    src: ./templates/consul_srv.j2
+    src: "{{TEMPLATE_FILE_NAME}}"
     dest: /etc/consul.d/config.json
     mode: "0644"
+
+- name: Create /etc/consul.d/web.json file by template
+  ansible.builtin.template:
+    src: ./templates/etc.consul.d.web.j2
+    dest: /etc/consul.d/web.json
+    mode: "0644"
+  when: CONSUL_TEMPLATE_FILE_TYPE == "consul_agent"
 
 - name: Create /etc/systemd/system/consul.service file by template
   ansible.builtin.template:

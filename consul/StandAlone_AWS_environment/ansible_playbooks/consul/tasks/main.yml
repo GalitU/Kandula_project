@@ -2,12 +2,12 @@
 - include_vars: "main.yml"
 - include_tasks: debug.yml
 - include_tasks: update_apt.yml
+- include_tasks: create_consul_user.yml
 - include_tasks: create_files_directories.yml
 - include_tasks: install_unzip.yml
 - include_tasks: service_resolve_start.yml
 - include_tasks: iptable_configuration.yml
 - include_tasks: service_resolve_start.yml
-- include_tasks: create_consul_user.yml
 - include_tasks: install_consul.yml
 - include_tasks: daemon_reload.yml
 - include_tasks: enable_consul_service.yml

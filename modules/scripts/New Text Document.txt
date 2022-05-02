@@ -1,0 +1,14 @@
+  "service": {
+    "name": "webserver",
+    "tags": [
+      "webserver"
+    ],
+    "port": 80,
+    "check": {
+      "args": [
+        "curl",
+        "localhost"
+      ],
+      "interval": "10s"
+    }
+  }
