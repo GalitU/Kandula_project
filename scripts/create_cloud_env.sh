@@ -16,12 +16,12 @@ echo "Start execute ansible scripts"
 cd $MID_PRJ_DIR_PATH/../ansible/roles
 echo $MID_PRJ_DIR_PATH/../ansible/roles
 
-ansible-inventory -i $MID_PRJ_DIR_PATH/../ansible/roles/aws_ec2.yaml --list
-ansible all -i $MID_PRJ_DIR_PATH/../ansible/roles/aws_ec2.yaml -m ping
-file_test_bastion
+#ansible-inventory -i $MID_PRJ_DIR_PATH/../ansible/roles/aws_ec2.yaml --list
+#ansible all -i $MID_PRJ_DIR_PATH/../ansible/roles/aws_ec2.yaml -m ping
+#ansible-playbook -i $MID_PRJ_DIR_PATH/../ansible/roles/aws_ec2.yaml $MID_PRJ_DIR_PATH/../ansible/roles/file_test_bastion.yml
 
 #-----------------------------------------------------
 
-ansible-inventory -i $MID_PRJ_DIR_PATH/../ansible/roles/aws_ec2.yaml --list
+#ansible-inventory -i $MID_PRJ_DIR_PATH/../ansible/roles/aws_ec2.yaml --list
 ansible all -i $MID_PRJ_DIR_PATH/../ansible/roles/aws_ec2.yaml -m ping
 ansible-playbook -i $MID_PRJ_DIR_PATH/../ansible/roles/aws_ec2.yaml $MID_PRJ_DIR_PATH/../ansible/roles/consul_install.yml

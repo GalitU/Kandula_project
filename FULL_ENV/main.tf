@@ -211,8 +211,8 @@ module "consul_server_load_balancers" {
   created_by               = var.created_by
   vpc_id                   = module.vpc.vpc_id
   servers_for_attach_to_lb = concat(module.ec2_consul_servers.ec2_servers_id_arr)
-  listener_ports           = [8500]
-  listener_protocols       = ["HTTP"]
+  listener_ports           = [80, 8500]
+  listener_protocols       = ["HTTP", "HTTP"]
   idle_timeout             = 60
   internal                 = false
   lb_purpose               = "consul"
