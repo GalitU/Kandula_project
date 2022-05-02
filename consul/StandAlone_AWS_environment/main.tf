@@ -6,11 +6,11 @@
 
 locals {
   # Subnet purpose
-  subnet_pvt_prefix_arr = ["Consul", "Consul", "Master"]
+  subnet_pvt_prefix_arr = ["Consul", "Consul", "Master", "WebServers", "WebServers"]
   subnet_pub_prefix_arr = ["Bastion", "General"]
 
   # CIDR per purpose
-  subnet_pvt_cidr_arr = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+  subnet_pvt_cidr_arr = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24", "10.0.4.0/24", "10.0.5.0/24"]
   subnet_pub_cidr_arr = ["10.0.31.0/24", "10.0.32.0/24"]
 }
 
@@ -152,7 +152,7 @@ module "ec2_web_servers" {
   count_instances             = 1
   ec2_purpose                 = "WebServer"
   type_of_subnet              = "Private"
-  subnet_association_tag      = "Consul"
+  subnet_association_tag      = "WebServers"
   ec2_sec_group_array         = [module.vpc.sec_grp_http.id, module.vpc.sec_grp_ssh.id, module.vpc.sec_grp_consul.id]
   access_key_name             = module.key_credentials_consul.private_key_name
   vpc_id                      = module.vpc.vpc_id
