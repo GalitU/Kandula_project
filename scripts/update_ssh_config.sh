@@ -26,9 +26,9 @@ echo y | ssh-config add "10.0.5.*" IdentityFile="~/.ssh/SSH_KEYS_FOR_Amazon/Key_
 
 echo y | ssh-config add "10.0.6.*" IdentityFile="~/.ssh/SSH_KEYS_FOR_Amazon/Key_WebServers_Kandula_MPrj.pem"
 
-echo y | ssh-config add "10.0.31.*" IdentityFile="~/.ssh/SSH_KEYS_FOR_Amazon/Key_Bastion_Kandula_MPrj.pem" StrictHostKeyChecking=no User=ubuntu ForwardAgent=yes UserKnownHostsFile=/dev/null Port=22
+echo y | ssh-config add "10.0.31.*" IdentityFile="~/.ssh/SSH_KEYS_FOR_Amazon/Key_Bastion_Kandula_MPrj.pem" ProxyJump=Bastion_host StrictHostKeyChecking=no User=ubuntu ForwardAgent=yes UserKnownHostsFile=/dev/null Port=22
 
-for i in {0..6}
+for i in {1..7}
   do
      echo y | ssh-config update -p  "10.0.$i.*" StrictHostKeyChecking=no
      echo y | ssh-config update -p  "10.0.$i.*" User=ubuntu
