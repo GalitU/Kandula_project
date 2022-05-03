@@ -24,10 +24,10 @@ output "sec_grp_ssh" {
 output "sec_grp_consul" {
   value = aws_security_group.consul_sg
 }
-output "special_sec_grp_ssh" {
-  value = aws_security_group.special_sec_grp_ssh
-}
-
+#### output "bastion_sec_grp_ssh" {
+####   value = aws_security_group.bastion_sec_grp_ssh
+#### }
+#### 
 output "vpc_id" {
   value = aws_vpc.vpc.id
 }

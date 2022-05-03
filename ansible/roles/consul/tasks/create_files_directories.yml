@@ -42,18 +42,29 @@
     state: directory
     mode: "0755"
 
-- name: Create /etc/consul.d/config.json file by template
+- name: Create /etc/consul.d/config.json file by template for servers and agents
   ansible.builtin.template:
     src: "{{TEMPLATE_FILE_NAME}}"
     dest: /etc/consul.d/config.json
     mode: "0644"
 
-- name: Create /etc/consul.d/web.json file by template
+- name: Create /etc/consul.d/web.json file by template for web servers only
   ansible.builtin.template:
-    src: ./templates/etc.consul.d.web.j2
+    src: ./templates/etc.consul.d.service.j2
     dest: /etc/consul.d/web.json
     mode: "0644"
-  when: CONSUL_TEMPLATE_FILE_TYPE == "consul_agent"
+  when:
+    - CONSUL_TEMPLATE_FILE_TYPE == "consul_agent"
+    - SERVICE_NAME == "webserver"
+
+- name: Create /etc/consul.d/jenkins.json file by template for jenkins only
+  ansible.builtin.template:
+    src: ./templates/etc.consul.d.service.j2
+    dest: /etc/consul.d/jenkins.json
+    mode: "0644"
+  when:
+    - CONSUL_TEMPLATE_FILE_TYPE == "consul_agent"
+    - SERVICE_NAME == "jenkins"
 
 - name: Create /etc/systemd/system/consul.service file by template
   ansible.builtin.template:

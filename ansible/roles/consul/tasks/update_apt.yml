@@ -1,4 +1,4 @@
 ---
-- name: Update the OS on any OS - now is on {{ ansible_distribution }}
+- name: Update OS
   package:
     update_cache: yes

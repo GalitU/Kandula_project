@@ -6,6 +6,12 @@ path=`readlink -f "${BASH_SOURCE:-$0}"`
 MID_PRJ_DIR_PATH=`dirname $path`
 echo $MID_PRJ_DIR_PATH
 
+# Execute update bastion server
+
+cd $MID_PRJ_DIR_PATH/../bastion_standalone
+#terraform apply -auto-approve
+#exit 0
+
 cp $MID_PRJ_DIR_PATH/../FULL_ENV/Key*.pem ~/.ssh/SSH_KEYS_FOR_Amazon/ -f
 chmod 400 ~/.ssh/SSH_KEYS_FOR_Amazon/*.pem
 ls -l ~/.ssh/SSH_KEYS_FOR_Amazon/Key*.pem

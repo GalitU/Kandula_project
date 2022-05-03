@@ -1,16 +1,15 @@
 ---
-- name: "Add group 'consul' group on remote server"
+- name: Add group 'consul' group on remote server
   group:
     name: consul
     gid: 2011
     state: present
 
-- name: "Add user 'consul' on remote server"
+- name: Add user 'consul' on remote server
   user:
     name: consul
     password: "{{ '0p$Sch00l' | password_hash('sha512') }}"
     home: /home/consul
     comment: "consul User"
     group: consul
-    #append: yes
     shell: /bin/bash

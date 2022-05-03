@@ -76,6 +76,9 @@ output "ec2_servers_dns" {
 output "ec2_servers_private_ips" {
   value = join(", ", aws_instance.ec2_server[*].private_ip)
 }
+output "ec2_servers_public_ips" {
+  value = join(", ", aws_instance.ec2_server[*].public_ip)
+}
 output "user_data_file" {
   value = var.user_data_file
 }

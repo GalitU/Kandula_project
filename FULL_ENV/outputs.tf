@@ -69,6 +69,9 @@ output "role_policy" {
   value = module.iam_roles_describe.role_policy
 }
 
+output "iam_role_join_name" {
+  value = module.iam_roles_describe.iam_role_join_name
+}
 /* Load balancers */
 output "jenkins_alb_dns" {
   value = module.jenkins_server_load_balancers.alb_dns
@@ -106,19 +109,23 @@ output "ec2_web_servers_dns" {
 output "ec2_web_servers_private_ip" {
   value = module.ec2_web_servers.ec2_servers_private_ips
 }
-/* Bastion output */
-output "ec2_bastion_server_arn" {
-  value = module.ec2_bastion_server.ec2_servers_arn
-}
-output "ec2_bastion_server_id" {
-  value = module.ec2_bastion_server.ec2_servers_id
-}
-output "ec2_bastion_server_dns" {
-  value = module.ec2_bastion_server.ec2_servers_dns
-}
-output "ec2_bastion_server_private_ip" {
-  value = module.ec2_bastion_server.ec2_servers_private_ips
-}
+##### /* Bastion output */
+##### output "ec2_bastion_server_arn" {
+#####   value = module.ec2_bastion_server.ec2_servers_arn
+##### }
+##### output "ec2_bastion_server_id" {
+#####   value = module.ec2_bastion_server.ec2_servers_id
+##### }
+##### output "ec2_bastion_server_dns" {
+#####   value = module.ec2_bastion_server.ec2_servers_dns
+##### }
+##### output "ec2_bastion_server_private_ip" {
+#####   value = module.ec2_bastion_server.ec2_servers_private_ips
+##### }
+##### output "ec2_bastion_server_public_ip" {
+#####   value = module.ec2_bastion_server.ec2_servers_public_ips
+##### }
+
 /* Ansible output */
 output "ec2_ansible_server_arn" {
   value = module.ec2_ansible_server.ec2_servers_arn

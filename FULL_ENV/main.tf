@@ -67,6 +67,7 @@ module "iam_roles_describe" {
   access_policy_description = "Describe"
   role_policy_type          = "sts:AssumeRole"
   access_policy_type        = "ec2:DescribeInstances"
+  purpose                   = "Consul"
   application_name          = var.application_name
   application_task          = var.application_task
   created_by                = var.created_by
@@ -84,30 +85,30 @@ module "s3" {
 */
 
 
-/* BASTION */
-module "ec2_bastion_server" {
-  source                      = "../modules/ec2_servers"
-  region                      = var.region
-  ec2_instance_type           = var.ec2_instance_type
-  ami                         = var.ami
-  count_instances             = 1
-  ec2_purpose                 = "Bastion"
-  type_of_subnet              = "Public"
-  subnet_association_tag      = "Bastion"
-  ec2_sec_group_array         = [module.vpc.special_sec_grp_ssh.id]
-  access_key_name             = module.key_credentials_bastion.private_key_name
-  vpc_id                      = module.vpc.vpc_id
-  ec2_OS                      = "Ubuntu"
-  iam_instance_profile        = module.iam_roles_describe.iam_instance_profile
-  user_data_file              = file("${path.module}/../modules/scripts/bastion.sh")
-  associate_public_ip_address = true
-  application_name            = var.application_name
-  application_task            = var.application_task
-  created_by                  = var.created_by
-  consul_prefix               = ""
-  consul_app_discovery_tag    = ""
-}
-
+#####  /* BASTION */
+#####  module "ec2_bastion_server" {
+#####    source                      = "../modules/ec2_servers"
+#####    region                      = var.region
+#####    ec2_instance_type           = var.ec2_instance_type
+#####    ami                         = var.ami
+#####    count_instances             = 1
+#####    ec2_purpose                 = "Bastion"
+#####    type_of_subnet              = "Public"
+#####    subnet_association_tag      = "Bastion"
+#####    ec2_sec_group_array         = [module.vpc.bastion_sec_grp_ssh.id]
+#####    access_key_name             = module.key_credentials_bastion.private_key_name
+#####    vpc_id                      = module.vpc.vpc_id
+#####    ec2_OS                      = "Ubuntu"
+#####    iam_instance_profile        = module.iam_roles_describe.iam_instance_profile
+#####    user_data_file              = file("${path.module}/../modules/scripts/bastion.sh")
+#####    associate_public_ip_address = true
+#####    application_name            = var.application_name
+#####    application_task            = var.application_task
+#####    created_by                  = var.created_by
+#####    consul_prefix               = ""
+#####    consul_app_discovery_tag    = ""
+#####  }
+#####
 
 #####################################################################################################
 /* Ansible server */

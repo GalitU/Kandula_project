@@ -20,7 +20,7 @@ resource "aws_security_group" "jenkins_sec_grp_http" {
     cidr_blocks = ["0.0.0.0/0"]
   }
   tags = {
-    Type      = "HTTP"
+    Type      = "Jenkins"
     Name      = "SG_Jenkins-${lower(var.application_name)}-${var.application_task}"
     App_name  = var.application_name
     Task      = var.application_task
@@ -39,4 +39,3 @@ resource "aws_security_group_rule" "jenkins_ingress_http" {
 
   security_group_id = aws_security_group.jenkins_sec_grp_http.id
 }
-

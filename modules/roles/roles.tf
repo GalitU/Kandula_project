@@ -1,5 +1,5 @@
 locals {
-  role_info = "${var.access_policy_description}_${var.application_task}_${var.application_name}"
+  role_info = "${var.purpose}_${var.access_policy_description}_${var.application_task}_${var.application_name}"
 }
 
 
@@ -25,6 +25,7 @@ resource "aws_iam_role" "role_join" {
     App_name  = var.application_name
     Task      = var.application_task
     Owner     = var.application_owner
+    Purpose   = var.purpose
     CreatedBy = var.created_by
   }
 }
@@ -48,6 +49,7 @@ resource "aws_iam_policy" "role_join" {
     App_name  = var.application_name
     Task      = var.application_task
     Owner     = var.application_owner
+    Purpose   = var.purpose
     CreatedBy = var.created_by
   }
 }
@@ -74,4 +76,7 @@ output "role_policy" {
 
 output "iam_instance_profile" {
   value = aws_iam_instance_profile.role_join.name
+}
+output "iam_role_join_name" {
+  value = aws_iam_role.role_join.name
 }

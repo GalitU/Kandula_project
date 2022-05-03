@@ -10,12 +10,26 @@
   roles:
     - role: consul
 
-
-- name: Install Consul Agents
-  hosts: tag_ConsulPrefixForAnsible_ConsulAgent_*
+- name: Install Consul Web Agents
+  hosts: tag_Purpose_WebServer
   become: true
   remote_user: ubuntu
   vars:
     CONSUL_TEMPLATE_FILE_TYPE: "consul_agent"
+    SERVICE_NAME: "webserver"
+    SERVICE_TAGS: "webserver"
+    HEALTH_CHECKER_PORT: 80
+  roles:
+    - role: consul
+
+- name: Install Consul for Jenkins server
+  hosts: tag_Purpose_JenkinsSrv
+  become: true
+  remote_user: ubuntu
+  vars:
+    CONSUL_TEMPLATE_FILE_TYPE: "consul_agent"
+    SERVICE_NAME: "jenkins"
+    SERVICE_TAGS: "jenkins"
+    HEALTH_CHECKER_PORT: 8080
   roles:
     - role: consul

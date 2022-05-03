@@ -20,7 +20,6 @@
 - name: ansible_pkg_mgr on {{CONSUL_TEMPLATE_FILE_TYPE}}
   debug:
     var: ansible_pkg_mgr
-
 - name: CONSUL_VERSION {{CONSUL_TEMPLATE_FILE_TYPE}}
   debug:
     var: CONSUL_VERSION
