@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block content %}
+<style>
+h1 {text-align: center;}
+p {text-align: center;}
+div {text-align: center;}
+
+</style>
+<h1>Welcome to Kandula!</h1>
+<table>
+     <tr>
+          <td>
+               <img style='width:100%;max-width:500px;height: 600px;' class='w3-border w3-padding' src="{{ url_for('static', filename='shelly_big.jpg')  }}">
+
+          </td>
+          <td>
+               <table>
+               <tr>
+                    <td><img style='width:100%;max-width:310px' class='w3-border w3-padding' src="{{ url_for('static', filename='kandula.jpg')  }}"></td>
+                    <td><img style='width:100%;max-width:400px;height: 300px;' class='w3-border w3-padding' src="{{ url_for('static', filename='KandulaShelly.jpg')  }}"></td>
+               </tr>
+               <tr>
+                    <td><img style='width:100%;max-width:320px' class='w3-border w3-padding' src="{{ url_for('static', filename='Shelly1.jpg')  }}"></td>
+                    <td><img style='width:100%;max-width:400px;height: 300px;' class='w3-border w3-padding' src="{{ url_for('static', filename='Shelly2.jpg')  }}"></td>
+               </tr>
+          </table>
+          </td>
+     </tr>
+</table>
+
+<h2>The mighty warrior elephant who saved us!</h2>
+{% endblock content %}

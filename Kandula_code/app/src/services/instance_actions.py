@@ -1,0 +1,40 @@
+from boto3 import client
+import boto3
+
+
+class InstanceActions:
+    def __init__(self, ec2_client: client):
+        self.ec2_client = ec2_client
+
+    def start_instance(self, instance_id):
+        responses = self.ec2_client.start_instances(InstanceIds=[instance_id])
+        return responses['ResponseMetadata']['HTTPStatusCode'] == 200
+
+    def stop_instance(self, instance_id):
+        responses = self.ec2_client.stop_instances(InstanceIds=[instance_id])
+        return responses['ResponseMetadata']['HTTPStatusCode'] == 200
+
+    def terminate_instance(self, instance_id):
+        responses = self.ec2_client.terminate_instances(
+            InstanceIds=[instance_id], DryRun=True)
+        return responses['ResponseMetadata']['HTTPStatusCode'] == 200
+
+    def action_selector(self, instance_action):
+        return {
+            'start': self.start_instance,
+            'stop': self.stop_instance,
+            'terminate': self.terminate_instance
+        }.get(instance_action, lambda x: self.action_not_found(instance_action))
+
+    @staticmethod
+    def action_not_found(instance_action):
+        raise RuntimeError(
+            "Unknown instance action selected: {}".format(instance_action))
+
+
+#######################################################
+# GALITU - For debug only
+#kuku = InstanceActions(client('ec2'))
+#response = kuku.start_instance('i-0afbec3ef7365af3f')
+#response = kuku.stop_instance('i-0afbec3ef7365af3f')
+# print(response)
