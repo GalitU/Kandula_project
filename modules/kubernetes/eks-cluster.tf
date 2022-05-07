@@ -77,11 +77,7 @@ module "eks" {
     Task                   = var.application_task
     Owner                  = var.application_owner
     CreatedBy              = var.created_by
-    /*GithubRepo  = "terraform-aws-eks"*/
-    /*GithubOrg   = "terraform-aws-modules"*/
   }
-
-
 }
 
 data "aws_eks_cluster" "eks" {
