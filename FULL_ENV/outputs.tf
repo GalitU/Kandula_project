@@ -73,16 +73,16 @@ output "iam_role_join_name" {
   value = module.iam_roles_describe.iam_role_join_name
 }
 /* Load balancers */
-output "jenkins_alb_dns" {
-  value = module.jenkins_server_load_balancers.alb_dns
-}
-output "cosul_alb_dns" {
-  value = module.consul_server_load_balancers.alb_dns
-}
-output "webservers_worker_alb_dns" {
-  value = module.webserver_workers_load_balancers.alb_dns
-}
-
+#output "jenkins_alb_dns" {
+#  value = module.jenkins_server_load_balancers.alb_dns
+#}
+#output "cosul_alb_dns" {
+#  value = module.consul_server_load_balancers.alb_dns
+#}
+#output "webservers_worker_alb_dns" {
+#  value = module.webserver_workers_load_balancers.alb_dns
+#}
+#
 /* Consul server output */
 output "ec2_consul_servers_arn" {
   value = module.ec2_consul_servers.ec2_servers_arn
@@ -151,4 +151,23 @@ output "ec2_jenkins_server_dns" {
 }
 output "ec2_jenkins_server_private_ip" {
   value = module.ec2_jenkins_server.ec2_servers_private_ips
+}
+/* Kubernetes */
+output "kube_cluster_id" {
+  description = "EKS cluster ID."
+  value       = module.kubernetes.cluster_id
+}
+output "kube_cluster_endpoint" {
+  description = "Endpoint for EKS control plane."
+  value       =  module.kubernetes.cluster_endpoint
+}
+output "kube_cluster_security_group_id" {
+  description = "Security group ids attached to the cluster control plane."
+  value       = module.kubernetes.cluster_security_group_id
+}
+output "cluster_name" {
+  value       = module.kubernetes.cluster_name
+}
+output "oidc_provider_arn" {
+  value =module.kubernetes.oidc_provider_arn
 }

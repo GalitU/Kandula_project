@@ -68,6 +68,18 @@ data "aws_subnets" "master_subnets" {
     App_name = var.application_name
   }
 }
+data "aws_subnets" "workers_pvt_subnets" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.selected.id]
+  }
+  tags = {
+    Purpose = "WebServers"
+    Tier = "Private"
+    Task =	var.application_task
+    App_name = var.application_name
+  }
+}
 
 /*
 data "aws_iam_instance_profile" "describe_kandula_mid_role" {

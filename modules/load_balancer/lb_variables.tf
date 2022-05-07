@@ -9,8 +9,8 @@ variable "subnets" {
   type        = list(string)
 }
 variable "lb_sec_group_array" {
-  description = "Security groups for regular servers of LB only"
   type        = list(string)
+  description = "Security groups for regular servers of LB only"
 }
 
 variable "vpc_id" {

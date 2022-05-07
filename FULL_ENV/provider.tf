@@ -11,7 +11,11 @@ terraform {
   required_providers {
     aws        = "4.12.1"
     kubernetes = "2.11.0"
-    local = "2.2.2"
+    local      = "2.2.2"
+    null       = "~> 3.1.0"
+    template   = "~> 2.2.0"
+    random = "~> 3.1.0"
+
   }
 }
 
@@ -27,3 +31,5 @@ provider "aws" {
     }
   }
 }
+
+

@@ -85,6 +85,16 @@ module "s3" {
 */
 
 
+module "reguest_data" {
+  source           = "../modules/data"
+  region           = var.region
+  application_name = var.application_name
+  application_task = var.application_task
+  created_by       = var.created_by
+  vpc_name         = join("-", ["VPC", lower(var.application_name), var.application_task])
+  depends_on       = [module.vpc]
+}
+
 #####  /* BASTION */
 #####  module "ec2_bastion_server" {
 #####    source                      = "../modules/ec2_servers"
@@ -203,6 +213,7 @@ module "ec2_consul_servers" {
   consul_app_discovery_tag    = "Consul"
 }
 
+
 module "consul_server_load_balancers" {
   source                   = "../modules/load_balancer"
   subnets                  = [for subnet in module.vpc.pub_subnets : subnet.id]
@@ -219,6 +230,7 @@ module "consul_server_load_balancers" {
   lb_purpose               = "consul"
   target_port              = 8500
 }
+
 
 #####################################################################################################
 /* Regular EC2 web servers */
@@ -260,4 +272,18 @@ module "webserver_workers_load_balancers" {
   internal                 = false
   lb_purpose               = "web-servers"
   target_port              = 80
+}
+
+#########################################################################################
+/* EKS environment */
+module "kubernetes" {
+  source               = "../modules/kubernetes"
+  vpc_id               = module.vpc.vpc_id
+  application_task     = var.application_task
+  application_name     = var.application_name
+  created_by           = var.created_by
+  cluster_name         = "kandula-mid-kube"
+  kube_node_sec_groups = [module.vpc.sec_grp_kube.id] #, module.vpc.sec_grp_consul.id]
+  kube_pub_subnets_ids = module.reguest_data.pub_subnets_ids
+  kube_pvt_subnets_ids = module.reguest_data.workers_pvt_subnets_ids
 }

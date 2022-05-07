@@ -15,14 +15,17 @@ output "bastion_subnets_ids" {
 output "master_subnets_ids" {
   value = [for id in data.aws_subnets.master_subnets.ids : id]
 }
-output "describe_kandula_mid_iam_instance_profile" {
-  value = join("_", ["Role_Describe", var.application_task, var.application_name, "join"])
+output "workers_pvt_subnets_ids" {
+  value = [for id in data.aws_subnets.workers_pvt_subnets.ids : id]
 }
 output "pub_subnets_ids" {
   value = [for id in data.aws_subnets.public.ids : id]
 }
 output "pvt_subnets_ids" {
   value = [for id in data.aws_subnets.private.ids : id]
+}
+output "describe_kandula_mid_iam_instance_profile" {
+  value = join("_", ["Role_Describe", var.application_task, var.application_name, "join"])
 }
 output "sec_grp_http_ids" {
   value = [for id in data.aws_security_groups.http.ids : id]
@@ -40,6 +43,9 @@ output "sec_grp_jenkins_ids" {
   value = [for id in data.aws_security_groups.jenkins.ids : id]
 }
 output "sec_grp_bastion_ids" {
+  value = [for id in data.aws_security_groups.bastion.ids : id]
+}
+output "kube_security_group_ids" {
   value = [for id in data.aws_security_groups.bastion.ids : id]
 }
 output "data_aws_security_groups_bastion" {
