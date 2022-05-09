@@ -1,0 +1,59 @@
+---
+- name: ansible_distribution of {{CONSUL_TEMPLATE_FILE_TYPE}}
+  debug:
+    var: ansible_distribution
+
+- name: ansible_distribution_version on {{CONSUL_TEMPLATE_FILE_TYPE}}
+  debug:
+    var: ansible_distribution_version
+
+- name: ansible_os_family of {{CONSUL_TEMPLATE_FILE_TYPE}}
+  debug:
+    var: ansible_os_family
+
+- name: ansible_dns.nameservers on {{CONSUL_TEMPLATE_FILE_TYPE}}
+  debug:
+    var: ansible_dns.nameservers
+- name: ansible_python_version on {{CONSUL_TEMPLATE_FILE_TYPE}}
+  debug:
+    var: ansible_python_version
+- name: ansible_pkg_mgr on {{CONSUL_TEMPLATE_FILE_TYPE}}
+  debug:
+    var: ansible_pkg_mgr
+- name: CONSUL_VERSION {{CONSUL_TEMPLATE_FILE_TYPE}}
+  debug:
+    var: CONSUL_VERSION
+- name: CONSUL_TAG_NAME {{CONSUL_TEMPLATE_FILE_TYPE}}
+  debug:
+    var: CONSUL_TAG_NAME
+- name: CONSUL_VERSION {{CONSUL_TEMPLATE_FILE_TYPE}}
+  debug:
+    var: CONSUL_VERSION
+- name: CONSUL_TAG_VALUE {{CONSUL_TEMPLATE_FILE_TYPE}}
+  debug:
+    var: CONSUL_TAG_VALUE
+- name: DATA_DIRECTORY {{CONSUL_TEMPLATE_FILE_TYPE}}
+  debug:
+    var: DATA_DIRECTORY
+- name: DATA_CENTER_NAME {{CONSUL_TEMPLATE_FILE_TYPE}}
+  debug:
+    var: DATA_CENTER_NAME
+- name: SERVICE_NAME {{CONSUL_TEMPLATE_FILE_TYPE}}
+  debug:
+    var: SERVICE_NAME
+- name: SERVICE_TAGS {{CONSUL_TEMPLATE_FILE_TYPE}}
+  debug:
+    var: SERVICE_TAGS
+- name: HEALTH_CHECKER_PORT {{CONSUL_TEMPLATE_FILE_TYPE}}
+  debug:
+    var: HEALTH_CHECKER_PORT
+- name: BOOT_STRAPPER_SERVER_NUMBERS {{CONSUL_TEMPLATE_FILE_TYPE}}
+  debug:
+    var: BOOT_STRAPPER_SERVER_NUMBERS
+- name: CLIENT_ADDRESS {{CONSUL_TEMPLATE_FILE_TYPE}}
+  debug:
+    var: CLIENT_ADDRESS
+
+- name: TEMPLATE_FILE_NAME {{CONSUL_TEMPLATE_FILE_TYPE}}
+  debug:
+    var: TEMPLATE_FILE_NAME

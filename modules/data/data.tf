@@ -12,8 +12,8 @@ data "aws_region" "current" {}
 data "template_file" "consul_server_setup_script" {
   template = templatefile("${path.module}/../../modules/scripts/consule-server.sh",
     {
-      CONSUL_VERSION = "1.8.5"
-      CONSUL_TAG_NAME = "ConsulTag",
+      CONSUL_VERSION   = "1.8.5"
+      CONSUL_TAG_NAME  = "ConsulTag",
       CONSUL_TAG_VALUE = "Consul-${var.application_name}-${var.application_task}"
     }
   )
@@ -22,8 +22,8 @@ data "template_file" "consul_server_setup_script" {
 data "template_file" "consul_agent_setup_script" {
   template = templatefile("${path.module}/../../modules/scripts/consule-agent.sh",
     {
-      CONSUL_VERSION = "1.8.5"
-      CONSUL_TAG_NAME = "ConsulTag",
+      CONSUL_VERSION   = "1.8.5"
+      CONSUL_TAG_NAME  = "ConsulTag",
       CONSUL_TAG_VALUE = "Consul-${var.application_name}-${var.application_task}"
     }
   )
@@ -49,9 +49,9 @@ data "aws_subnets" "bastion_subnets" {
     values = [data.aws_vpc.selected.id]
   }
   tags = {
-    Purpose = "Bastion"
-    Tier = "Public"
-    Task =	var.application_task
+    Purpose  = "Bastion"
+    Tier     = "Public"
+    Task     = var.application_task
     App_name = var.application_name
   }
 }
@@ -62,9 +62,9 @@ data "aws_subnets" "master_subnets" {
     values = [data.aws_vpc.selected.id]
   }
   tags = {
-    Purpose = "Master"
-    Tier = "Private"
-    Task =	var.application_task
+    Purpose  = "Master"
+    Tier     = "Private"
+    Task     = var.application_task
     App_name = var.application_name
   }
 }
@@ -74,9 +74,9 @@ data "aws_subnets" "workers_pvt_subnets" {
     values = [data.aws_vpc.selected.id]
   }
   tags = {
-    Purpose = "WebServers"
-    Tier = "Private"
-    Task =	var.application_task
+    Purpose  = "WebServers"
+    Tier     = "Private"
+    Task     = var.application_task
     App_name = var.application_name
   }
 }
@@ -96,8 +96,8 @@ data "aws_subnets" "public" {
     values = [data.aws_vpc.selected.id]
   }
   tags = {
-    Tier = "Public"
-    Task =	var.application_task
+    Tier     = "Public"
+    Task     = var.application_task
     App_name = var.application_name
   }
 }
@@ -108,16 +108,16 @@ data "aws_subnets" "private" {
     values = [data.aws_vpc.selected.id]
   }
   tags = {
-    Tier = "Private"
-    Task =	"Kandula"
+    Tier     = "Private"
+    Task     = "Kandula"
     App_name = "MPrj"
   }
 }
 
 data "aws_security_groups" "http" {
   tags = {
-    Type = "HTTP"
-    Task =	var.application_task
+    Type     = "HTTP"
+    Task     = var.application_task
     App_name = var.application_name
   }
 
@@ -129,8 +129,8 @@ data "aws_security_groups" "http" {
 
 data "aws_security_groups" "https" {
   tags = {
-    Type = "HTTPS"
-    Task =	var.application_task
+    Type     = "HTTPS"
+    Task     = var.application_task
     App_name = var.application_name
   }
 
@@ -147,8 +147,9 @@ data "aws_security_groups" "ssh" {
   }
 
   tags = {
-    Type = "SSH"
-    Task =	var.application_task
+    Type     = "SSH"
+    Name     = "SG_SSH-${lower(var.application_name)}-${var.application_task}"
+    Task     = var.application_task
     App_name = var.application_name
   }
 }
@@ -160,9 +161,23 @@ data "aws_security_groups" "jenkins" {
   }
 
   tags = {
-    Type = "Jenkins"
-    Name = "SG_Jenkins-mprj-${var.application_task}"
-    Task =	var.application_task
+    Type     = "Jenkins"
+    Name     = "SG_Jenkins-${lower(var.application_name)}-${var.application_task}"
+    Task     = var.application_task
+    App_name = var.application_name
+  }
+}
+
+data "aws_security_groups" "consul_ui" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.selected.id]
+  }
+
+  tags = {
+    Type     = "Consul"
+    Name     = "SG_Consul-UI-${lower(var.application_name)}-${var.application_task}"
+    Task     = var.application_task
     App_name = var.application_name
   }
 }
@@ -174,8 +189,9 @@ data "aws_security_groups" "consul" {
   }
 
   tags = {
-    Type = "Consul"
-    Task =	var.application_task
+    Type     = "Consul"
+    Name     = "SG_Consul-${lower(var.application_name)}-${var.application_task}"
+    Task     = var.application_task
     App_name = var.application_name
   }
 }
@@ -187,9 +203,24 @@ data "aws_security_groups" "bastion" {
   }
 
   tags = {
-    Type = "Bastion"
-    Name = "SG_BastionSSH-mprj-${var.application_task}"
-    Task =	var.application_task
+    Type     = "SSH"
+    Name     = "SG_Bastion_SSH-${lower(var.application_name)}-${var.application_task}"
+    Task     = var.application_task
+    App_name = var.application_name
+  }
+}
+
+
+data "aws_security_groups" "sec_grp_kube" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.selected.id]
+  }
+
+  tags = {
+    Type     = "Kubernetes"
+    Name     = "SG_Kube_worker-${lower(var.application_name)}-${var.application_task}"
+    Task     = var.application_task
     App_name = var.application_name
   }
 }

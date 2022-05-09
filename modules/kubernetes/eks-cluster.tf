@@ -46,7 +46,7 @@ module "eks" {
   subnet_ids      = var.kube_pvt_subnets_ids
 
   enable_irsa = true
-  vpc_id = var.vpc_id
+  vpc_id      = var.vpc_id
   eks_managed_node_group_defaults = {
     ami_type               = "AL2_x86_64"
     instance_types         = ["t3.medium"]
@@ -67,7 +67,6 @@ module "eks" {
       max_size       = 6
       desired_size   = 2
       instance_types = ["t3.large"]
-
     }
   }
   tags = {
@@ -77,6 +76,8 @@ module "eks" {
     Task                   = var.application_task
     Owner                  = var.application_owner
     CreatedBy              = var.created_by
+    ConsulPrefixForAnsible = "ConsulAgent-${var.application_name}-${var.application_task}"
+    ConsulAppDiscoveryTag  = "Consul"
   }
 }
 

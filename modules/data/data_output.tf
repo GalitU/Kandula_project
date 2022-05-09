@@ -39,6 +39,9 @@ output "sec_grp_ssh_ids" {
 output "sec_grp_consul_ids" {
   value = [for id in data.aws_security_groups.consul.ids : id]
 }
+output "sec_grp_consul_ui_ids" {
+  value = [for id in data.aws_security_groups.consul_ui.ids : id]
+}
 output "sec_grp_jenkins_ids" {
   value = [for id in data.aws_security_groups.jenkins.ids : id]
 }
@@ -46,7 +49,7 @@ output "sec_grp_bastion_ids" {
   value = [for id in data.aws_security_groups.bastion.ids : id]
 }
 output "kube_security_group_ids" {
-  value = [for id in data.aws_security_groups.bastion.ids : id]
+  value = [for id in data.aws_security_groups.sec_grp_kube.ids : id]
 }
 output "data_aws_security_groups_bastion" {
   value = data.aws_security_groups.bastion

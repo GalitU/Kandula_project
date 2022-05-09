@@ -19,13 +19,13 @@ output "sec_grp_ssh" {
 output "sec_grp_consul" {
   value = aws_security_group.consul_sg
 }
+output "sec_grp_consul_ui" {
+  value = aws_security_group.consul_sg_server_ui
+}
 output "sec_grp_kube" {
   value = aws_security_group.kubernetes_sec_grp_http
 }
-#### output "bastion_sec_grp_ssh" {
-####   value = aws_security_group.bastion_sec_grp_ssh
-#### }
-####
+
 output "vpc_id" {
   value = aws_vpc.vpc.id
 }

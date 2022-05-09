@@ -1,0 +1,82 @@
+---
+- name: Create a dyrectory /etc/systemd/resolved.conf.d
+  file:
+    path: /etc/systemd/resolved.conf.d
+    state: directory
+
+- name: Copy /etc/systemd/resolved.conf.d/consul.conf file by template
+  ansible.builtin.copy:
+    src: ./templates/resolved.conf.d.consul.j2
+    dest: /etc/systemd/resolved.conf.d/consul.conf
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Copy /etc/systemd/resolved.conf file by template
+  ansible.builtin.template:
+    src: ./templates/etc.systemd.resolved.j2
+    dest: /etc/systemd/resolved.conf
+    mode: "0644"
+
+- name: Create a directory /opt/consul
+  ansible.builtin.file:
+    owner: consul
+    group: consul
+    path: /opt/consul
+    state: directory
+    mode: "0755"
+
+- name: Create a directory /etc/consul.d
+  ansible.builtin.file:
+    owner: consul
+    group: consul
+    path: /etc/consul.d
+    state: directory
+    mode: "0755"
+
+- name: Create a directory /run/consul
+  ansible.builtin.file:
+    owner: consul
+    group: consul
+    path: /run/consul
+    state: directory
+    mode: "0755"
+
+- name: Create /etc/consul.d/config.json file by template for servers and agents
+  ansible.builtin.template:
+    src: "{{TEMPLATE_FILE_NAME}}"
+    dest: /etc/consul.d/config.json
+    mode: "0644"
+
+- name: Create /etc/consul.d/web.json file by template for web servers only
+  ansible.builtin.template:
+    src: ./templates/etc.consul.d.service.j2
+    dest: /etc/consul.d/web.json
+    mode: "0644"
+  when:
+    - CONSUL_TEMPLATE_FILE_TYPE == "consul_agent"
+    - SERVICE_NAME == "webserver"
+
+- name: Create /etc/consul.d/jenkins.json file by template for jenkins only
+  ansible.builtin.template:
+    src: ./templates/etc.consul.d.service.jenkins.j2
+    dest: /etc/consul.d/jenkins.json
+    mode: "0644"
+  when:
+    - CONSUL_TEMPLATE_FILE_TYPE == "consul_agent"
+    - SERVICE_TAGS == "jenkins"
+
+- name: Create /etc/consul.d/bastion.json file by template for jenkins only
+  ansible.builtin.template:
+    src: ./templates/etc.consul.d.service.jenkins.j2
+    dest: /etc/consul.d/bastion.json
+    mode: "0644"
+  when:
+    - CONSUL_TEMPLATE_FILE_TYPE == "consul_agent"
+    - SERVICE_NAME == "Bastion"
+
+- name: Create /etc/systemd/system/consul.service file by template
+  ansible.builtin.template:
+    src: ./templates/etc.systemd.system.consul.service.j2
+    dest: /etc/systemd/system/consul.service
+    mode: "0644"
