@@ -75,3 +75,6 @@ for i in range(total_number_for_cleaning):
         else:
             print("Jenkins node JenkinsAgent_", str(i),
                   " with ip = ", jenkins_agent_ip, " is exist", end="\n")
+
+    print("\n\n=-=-=-=-=-=", "Finished you can open your jenkins server now by click on ",
+          jenkins_lb_url_for_register, end="\n\n")
