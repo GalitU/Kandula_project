@@ -13,3 +13,6 @@ EXAMPLES/
 start_kandula_local_docker.sh
 create_kandula_new_docker_image.sh
 usefull_commands.txt
+JENKINS_DOCKER_TEST/
+jenkins-cli.jar
+pod_kandula_secrets.yaml

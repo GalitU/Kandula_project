@@ -2,7 +2,7 @@
 # This playbook will Setup and install consul for server * 3 and all relevant Consul agents
 
 - name: Install Jenkins Servers
-  hosts: tag_Purpose_JenkinsSrv_*
+  hosts: tag_Purpose_JenkinsSrv
   become: true
   remote_user: ubuntu
   vars:
@@ -12,7 +12,7 @@
 
 
 - name: Install Jenkins Slaves
-  hosts: tag_Purpose_JenkinsSlave_*
+  hosts: tag_Purpose_JenkinsSlave
   become: true
   remote_user: ubuntu
   vars:

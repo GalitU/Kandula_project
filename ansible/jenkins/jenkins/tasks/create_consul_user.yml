@@ -1,5 +1,5 @@
 ---
-- name: Add group 'consul' group on remote server
+- name: Add group 'jenkins' group on remote server
   group:
     name: consul
     gid: 2011

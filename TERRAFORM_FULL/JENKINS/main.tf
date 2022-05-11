@@ -38,18 +38,18 @@ data "aws_instance" "bastion" {
 }
 
 locals {
-  abs_path_to_keys = abspath(path.module)
-  master_key = module.reguest_data.key_pair_master
-  bastion_key = module.reguest_data.key_pair_bastion
-  path_to_keys = "${local.abs_path_to_keys}/../KEYS/"
-  path_to_master_key = "${local.abs_path_to_keys}/../KEYS/${local.master_key}.pem"
+  abs_path_to_keys    = abspath(path.module)
+  master_key          = module.reguest_data.key_pair_master
+  bastion_key         = module.reguest_data.key_pair_bastion
+  path_to_keys        = "${local.abs_path_to_keys}/../KEYS/"
+  path_to_master_key  = "${local.abs_path_to_keys}/../KEYS/${local.master_key}.pem"
   path_to_bastion_key = "${local.abs_path_to_keys}/../KEYS/${local.bastion_key}.pem"
 }
 
 #####################################################################################################
 /* Jenkins server */
 module "jenkins_server" {
-  source                      = "../../modules/jenkins"
+  source                      = "../../modules/jenkins_srv"
   region                      = var.region
   jenkins_purpose             = "JenkinsSrv"
   type_of_subnet              = "Private"
@@ -71,30 +71,7 @@ module "jenkins_server" {
 }
 
 
-/* Regular Jenkins slaves */
-module "jenkins_slaves" {
-  source                      = "../../modules/ec2_servers"
-  region                      = var.region
-  ec2_instance_type           = var.ec2_instance_type
-  ami                         = var.ami
-  count_instances             = 2
-  ec2_purpose                 = "JenkinsSlave"
-  type_of_subnet              = "Private"
-  subnet_association_tag      = "Master"
-  ec2_sec_group_array         = concat(module.reguest_data.sec_grp_ssh_ids, module.reguest_data.sec_grp_consul_ids)
-  access_key_name             = module.reguest_data.key_pair_master
-  vpc_id                      = module.reguest_data.vpc_id
-  ec2_OS                      = "Ubuntu"
-  iam_instance_profile        = module.iam_roles_describe.iam_instance_profile
-  user_data_file              = file("${path.module}/../../modules/scripts/webserver_data.sh") # data.template_file.consul_agent_setup_script.template
-  associate_public_ip_address = false
-  application_name            = var.application_name
-  application_task            = var.application_task
-  created_by                  = var.created_by
-  consul_prefix               = "ConsulAgent"
-  consul_app_discovery_tag    = "Consul"
-}
-
+/* Jenkins server LB */
 module "jenkins_server_load_balancers" {
   source                   = "../../modules/load_balancer"
   subnets                  = module.reguest_data.pub_subnets_ids
@@ -110,4 +87,29 @@ module "jenkins_server_load_balancers" {
   internal                 = false
   lb_purpose               = "jenkins"
   target_port              = 8080
+}
+
+######################################################################################
+/* Jenkins agent */
+module "jenkins_agent" {
+  source                      = "../../modules/jenkins_agent"
+  region                      = var.region
+  jenkins_purpose             = "JenkinsSlave"
+  type_of_subnet              = "Private"
+  subnet_association_tag      = "Master"
+  count_instances             = 2
+  jenkins_sec_group_array     = concat(module.reguest_data.sec_grp_ssh_ids, module.reguest_data.sec_grp_consul_ids)
+  access_key_name             = module.reguest_data.key_pair_master
+  access_key_file             = file(local.path_to_master_key)
+  bastion_public_ip           = data.aws_instance.bastion.public_ip
+  bastion_access_key          = file(local.path_to_bastion_key)
+  vpc_id                      = module.reguest_data.vpc_id
+  jenkins_OS                  = "Ubuntu"
+  iam_instance_profile        = module.iam_roles_describe.iam_instance_profile
+  associate_public_ip_address = false
+  application_name            = var.application_name
+  application_task            = var.application_task
+  created_by                  = var.created_by
+  consul_prefix               = "ConsulAgent"
+  consul_app_discovery_tag    = "Consul"
 }

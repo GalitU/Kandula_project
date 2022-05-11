@@ -54,6 +54,10 @@ cd ..
 cd ./JENKINS
 echo -e "\n\n" ==== Creates Jenkins ==== [basename $(pwd)]
 terraform apply -auto-approve
+
+echo ==== Update Jenkins nodes at Jenkins server ====
+python add_jenkins_node.py
+
 cd ..
 # read -p "Press any key to continue...    " -n1 -s
 

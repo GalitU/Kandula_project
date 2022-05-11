@@ -44,16 +44,16 @@ output "jenkins_alb_dns" {
 /* Jenkins
  agent output */
 output "jenkins_slaves_arn" {
-  value = module.jenkins_slaves.ec2_servers_arn
+  value = module.jenkins_agent.jenkins_agent_arn
 }
 output "jenkins_slaves_id" {
-  value = module.jenkins_slaves.ec2_servers_id
+  value = module.jenkins_agent.jenkins_agent_id
 }
 output "jenkins_slaves_dns" {
-  value = module.jenkins_slaves.ec2_servers_dns
+  value = module.jenkins_agent.jenkins_agent_dns
 }
 output "jenkins_slaves_private_ip" {
-  value = module.jenkins_slaves.ec2_servers_private_ips
+  value = module.jenkins_agent.jenkins_agent_private_ips
 }
 /* Jenkins output */
 output "jenkins_server_arn" {

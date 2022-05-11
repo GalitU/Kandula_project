@@ -59,12 +59,21 @@
 
 - name: Create /etc/consul.d/jenkins.json file by template for jenkins only
   ansible.builtin.template:
-    src: ./templates/etc.consul.d.service.j2
+    src: ./templates/etc.consul.d.service.jenkins.j2
     dest: /etc/consul.d/jenkins.json
     mode: "0644"
   when:
     - CONSUL_TEMPLATE_FILE_TYPE == "consul_agent"
-    - SERVICE_NAME == "jenkins"
+    - SERVICE_TAGS == "jenkins"
+
+- name: Create /etc/consul.d/bastion.json file by template for jenkins only
+  ansible.builtin.template:
+    src: ./templates/etc.consul.d.service.jenkins.j2
+    dest: /etc/consul.d/bastion.json
+    mode: "0644"
+  when:
+    - CONSUL_TEMPLATE_FILE_TYPE == "consul_agent"
+    - SERVICE_NAME == "Bastion"
 
 - name: Create /etc/systemd/system/consul.service file by template
   ansible.builtin.template:

@@ -27,6 +27,10 @@ cd ..
 read -p "Press any key to continue...    " -n1 -s
 
 cd ./JENKINS
+
+echo ==== Delete Jenkins nodes at Jenkins server ====
+python delete_jenkins_node.py.py
+
 echo -e "\n\n" ==== Destroy Jenkins ==== [basename $(pwd)]
 terraform destroy
 cd ..

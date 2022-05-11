@@ -5,7 +5,11 @@ regions:
   - eu-central-1
 filters:
   tag:Purpose:
-    - Jenkins*
+    - JenkinsSlave
+  tag:Task:
+    - Kandula*
+  tag:App_name:
+    - MPrj
   instance-state-name: running
 keyed_groups:
   - key: tags 
