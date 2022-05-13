@@ -18,11 +18,15 @@ variable "jenkins_instance_type" {
 }
 variable "ami" {
   description = "Image type of instance"
-  default     = "ami-0d527b8c289b4af7f"
+  default     = "ami-0575d4d9d5f0f8d32"
+  # "ami-00b90dac46bce4b7a"
+  #"ami-04884824bab8563b8"
+  #"ami-02aaedf8e0af1c0c3" Vers #1
+  # Uses my Jenkins inatalled AMI, next is AMI of regular UBUNTU 21.04 "ami-0d527b8c289b4af7f"
 }
 variable "count_instances" {
   description = "Count of instances"
-  default = 1
+  default     = 1
 }
 variable "subnet_association_tag" {
   description = "For filter relevant subnets"

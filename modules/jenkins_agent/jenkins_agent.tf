@@ -55,6 +55,16 @@ resource "aws_instance" "jenkins_agent" {
       "sudo add-apt-repository ppa:openjdk-r/ppa -y",
       "sudo apt install openjdk-8-jdk -y",
       "sudo apt install docker.io -y",
+      "sudo usermod -a -G docker ubuntu",
+      "sudo apt-get install awscli -y"
+    ]
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "aws configure set default.region ${var.aws_default_region}",
+      "aws configure set aws_access_key_id ${var.aws_default_acss_key}",
+      "aws configure set aws_secret_access_key ${var.aws_default_secret_key}"
     ]
   }
 
@@ -62,7 +72,7 @@ resource "aws_instance" "jenkins_agent" {
     inline = [
       "sudo apt-get update -y",
       "sudo curl -o /bin/kubectl https://s3.us-west-2.amazonaws.com/amazon-eks/1.21.2/2021-07-05/bin/linux/amd64/kubectl",
-      "sudo  chmod +x /bin/kubectl",
+      "sudo  chmod +x /bin/kubectl"
     ]
   }
 
@@ -71,7 +81,7 @@ resource "aws_instance" "jenkins_agent" {
       "sudo apt-get update -y",
       "sudo apt install software-properties-common",
       "sudo add-apt-repository --yes --update ppa:ansible/ansible",
-      "sudo apt install ansible -y",
+      "sudo apt install ansible -y"
     ]
   }
 

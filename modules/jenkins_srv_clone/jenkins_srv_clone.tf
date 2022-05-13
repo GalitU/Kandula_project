@@ -31,7 +31,7 @@ locals {
 
 
 resource "aws_instance" "jenkins_server" {
-  ami                         = var.ami
+  ami                         = var.ami #  ami-02aaedf8e0af1c0c3 - My AMI with all jenkins server installed based on 21.04 ubuntu
   instance_type               = var.jenkins_instance_type
   vpc_security_group_ids      = var.jenkins_sec_group_array
   key_name                    = var.access_key_name
@@ -47,23 +47,43 @@ resource "aws_instance" "jenkins_server" {
     bastion_private_key = var.bastion_access_key
   }
 
-  provisioner "remote-exec" {
-    inline = [
-      "sudo apt-get update -y",
-      "sudo apt install docker.io -y",
-      "sudo systemctl start docker",
-      "sudo systemctl enable docker",
-      "sudo usermod -aG docker ubuntu",
-      "mkdir -p ${local.jenkins_home}",
-      "sudo chown -R 1000:1000 ${local.jenkins_home}"
-    ]
-  }
+  #######  provisioner "remote-exec" {
+  #######    inline = [
+  #######      "sudo apt-get update -y",
+  #######      "sudo apt install docker.io -y",
+  #######      "sudo systemctl start docker",
+  #######      "sudo systemctl enable docker",
+  #######      "sudo usermod -aG docker ubuntu",
+  #######      "mkdir -p ${local.jenkins_home}",
+  #######      "sudo chown -R 1000:1000 ${local.jenkins_home}"
+  #######    ]
+  #######  }
+  #######
+  ######## provisioner "remote-exec" {
+  ########  inline = [
+  ########    "aws configure set default.region ${var.aws_default_region}"
+  ########  ]
+  ######## }
 
-  provisioner "remote-exec" {
-    inline = [
-      "sudo docker run -d --restart=always -p 8080:8080 -p 50000:50000 -v ${local.jenkins_home_mount} -v ${local.docker_sock_mount} --env ${local.java_opts} jenkins/jenkins"
-    ]
-  }
+  #######  provisioner "remote-exec" {
+  #######    inline = [
+  #######      "sudo docker run -d --restart=always -p 8080:8080 -p 50000:50000 -v ${local.jenkins_home_mount} -v ${local.docker_sock_mount} --env ${local.java_opts} jenkins/jenkins"
+  #######    ]
+  #######  }
+  #######
+  #######  provisioner "remote-exec" {
+  #######    inline = [
+  #######      "sudo apt install awscli"
+  #######    ]
+  #######  }
+  #######
+  #######  provisioner "remote-exec" {
+  #######    inline = [
+  #######      "sudo apt-get update -y",
+  #######      "sudo curl -o /bin/kubectl https://s3.us-west-2.amazonaws.com/amazon-eks/1.21.2/2021-07-05/bin/linux/amd64/kubectl",
+  #######      "sudo  chmod +x /bin/kubectl"
+  #######    ]
+  #######  }
 
   # Root decrypted disk
   root_block_device {

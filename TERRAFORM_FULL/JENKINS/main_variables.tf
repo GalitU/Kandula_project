@@ -54,3 +54,12 @@ variable "cidr_block_pvt" {
   type        = list(string)
   default     = ["10.0.11.0/24", "10.0.12.0/24"]
 }
+variable "aws_default_acss_key" {
+  description = "Default AWS access key"
+}
+variable "aws_default_secret_key" {
+  description = "Default AWS secret"
+}
+variable "aws_default_region" {
+  description = "Default AWS region"
+}

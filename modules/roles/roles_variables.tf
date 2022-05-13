@@ -26,3 +26,9 @@ variable "access_policy_type" {
 variable "purpose" {
   description = "This will be prefix for name"
 }
+
+
+
+
+
+

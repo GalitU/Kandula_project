@@ -26,17 +26,28 @@ output "vpc_id" {
   value = module.reguest_data.vpc_id
 }
 
-/* Roles */
-output "role" {
-  value = module.iam_roles_describe.role
+/* Roles of jenkins server */
+output "role_jenkins_server" {
+  value = module.iam_roles_describe_jenkins_server.role
 }
-output "role_policy" {
-  value = module.iam_roles_describe.role_policy
+output "role_policy_jenkins_server" {
+  value = module.iam_roles_describe_jenkins_server.role_policy
+}
+output "iam_role_join_name_jenkins_server" {
+  value = module.iam_roles_describe_jenkins_server.iam_role_join_name
 }
 
-output "iam_role_join_name" {
-  value = module.iam_roles_describe.iam_role_join_name
+/* Roles jenkins agent */
+output "role_jenkins_agent" {
+  value = module.iam_roles_describe_jenkins_agent.role
 }
+output "role_policy_jenkins_agent" {
+  value = module.iam_roles_describe_jenkins_agent.role_policy
+}
+output "iam_role_join_name_jenkins_agent" {
+  value = module.iam_roles_describe_jenkins_agent.iam_role_join_name
+}
+
 /* Load balancers */
 output "jenkins_alb_dns" {
   value = module.jenkins_server_load_balancers.alb_dns

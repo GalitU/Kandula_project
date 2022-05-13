@@ -7,8 +7,8 @@
 module "iam_roles_describe" {
   source                    = "../../modules/roles"
   access_policy_description = "Describe"
-  role_policy_type          = "sts:AssumeRole"
-  access_policy_type        = "ec2:DescribeInstances"
+  role_policy_type          = file("${path.module}/../roles/policies/assume_role.json")
+  access_policy_type        = file("${path.module}/../roles/policies/describe_instances.json")
   purpose                   = "Consul"
   application_name          = var.application_name
   application_task          = var.application_task

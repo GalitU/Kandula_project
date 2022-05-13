@@ -2,23 +2,10 @@ locals {
   role_info = "${var.purpose}_${var.access_policy_description}_${var.application_task}_${var.application_name}"
 }
 
-
 # Create an IAM role for the auto-join
 resource "aws_iam_role" "role_join" {
   name = "Role_${local.role_info}_join"
-  assume_role_policy = jsonencode({
-    "Version" : "2012-10-17",
-    "Statement" : [
-      {
-        "Action" : "${var.role_policy_type}",
-        "Principal" : {
-          "Service" : "ec2.amazonaws.com"
-        },
-        "Effect" : "Allow",
-        "Sid" : ""
-      }
-    ]
-  })
+  assume_role_policy = var.role_policy_type
 
   tags = {
     Name      = "Role_Assume_${local.role_info}_join"
@@ -34,16 +21,8 @@ resource "aws_iam_role" "role_join" {
 resource "aws_iam_policy" "role_join" {
   name        = "Policy_${local.role_info}_join"
   description = "Allows Relevant nodes to describe instances for joining."
-  policy = jsonencode({
-    "Version" : "2012-10-17",
-    "Statement" : [
-      {
-        "Effect" : "Allow",
-        "Action" : "${var.access_policy_type}",
-        "Resource" : "*"
-      }
-    ]
-  })
+  policy = var.access_policy_type
+
   tags = {
     Name      = "Policy_${local.role_info}_join"
     App_name  = var.application_name

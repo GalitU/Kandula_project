@@ -41,7 +41,6 @@ variable "disk_type" {
   description = "Type of storage disk of instances"
   default     = "gp2"
 }
-
 variable "application_name" {
   description = "Application name"
 }
@@ -91,4 +90,13 @@ variable "bastion_access_key" {
 variable "bastion_public_ip" {
   description = "Public Ip of Bastion host for perform action"
 
+}
+variable "aws_default_acss_key" {
+  description = "Default AWS access key"
+}
+variable "aws_default_secret_key" {
+  description = "Default AWS secret"
+}
+variable "aws_default_region" {
+  description = "Default AWS region"
 }

@@ -12,6 +12,8 @@ cd $SCRIPT_DIR/..
 cd ./KUBE
 echo -e "\n\n" ==== Creates KUBERNETES cluster==== [basename $(pwd)]
 terraform apply -auto-approve
+echo -e "\n\n" ==== Execute second time due to bug of Hashicorp - try create KUBERNETES cluster==== [basename $(pwd)]
+terraform apply -auto-approve
 KUBE_CLUSTER_NAME=`terraform output kube_cluster_name`
 KUBE_CLUSTER_NAME_TRIM="${KUBE_CLUSTER_NAME%\"}"
 KUBE_CLUSTER_NAME_TRIM="${KUBE_CLUSTER_NAME_TRIM#\"}"
