@@ -25,3 +25,6 @@ JenkinsfileDudu
 JenkinsFileAna
 create_full_env - Copy.sh
 config
+FULL_CREATE_LOG.log
+FULL_DESTROY_LOG.log
+jenkins_agent_credentials.xml

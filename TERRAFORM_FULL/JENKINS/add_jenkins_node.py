@@ -20,7 +20,7 @@ def validate_jenkins_server_is_up_and_running():
     if response.status_code == 200 or response.status_code == 403 and 'Authentication required' in response.content.decode('utf-8'):
         return True
     while True:
-        time.sleep(1.5)
+        time.sleep(0.5)
         response = requests.get(jenkins_lb_url)
         #print(response.content, end="\n\n")
         if response.status_code == 200 or response.status_code == 403 and 'Authentication required' in response.content.decode('utf-8'):

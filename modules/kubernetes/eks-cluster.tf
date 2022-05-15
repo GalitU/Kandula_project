@@ -5,7 +5,7 @@ resource "random_string" "suffix" {
 
 locals {
   #cluster_name = "${var.cluster_name}-${random_string.suffix.result}"
-  cluster_name = "${var.cluster_name}"
+  cluster_name = var.cluster_name
 }
 
 data "aws_subnets" "associate_pub_subnets_by_name_filter" {
@@ -71,14 +71,14 @@ module "eks" {
     }
   }
   tags = {
-    Name                   = "${var.application_task} ${var.application_name} kube"
-    Purpose                = "Kubernetes"
-    App_name               = var.application_name
-    Task                   = var.application_task
-    Owner                  = var.application_owner
-    CreatedBy              = var.created_by
-    ConsulPrefixForAnsible = "ConsulAgent-${var.application_name}-${var.application_task}"
-    ConsulAppDiscoveryTag  = "Consul"
+    Name      = "${var.application_task} ${var.application_name} kube"
+    Purpose   = "Kubernetes"
+    App_name  = var.application_name
+    Task      = var.application_task
+    Owner     = var.application_owner
+    CreatedBy = var.created_by
+    #ConsulPrefixForAnsible = "ConsulAgent-${var.application_name}-${var.application_task}"
+    #ConsulAppDiscoveryTag  = "Consul"
   }
 }
 

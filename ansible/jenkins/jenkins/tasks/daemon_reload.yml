@@ -1,4 +1,0 @@
----
-- name: Just force systemd to reread configs
-  ansible.builtin.systemd:
-    daemon_reload: yes
