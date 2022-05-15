@@ -4,7 +4,8 @@ resource "random_string" "suffix" {
 }
 
 locals {
-  cluster_name = "${var.cluster_name}-${random_string.suffix.result}"
+  #cluster_name = "${var.cluster_name}-${random_string.suffix.result}"
+  cluster_name = "${var.cluster_name}"
 }
 
 data "aws_subnets" "associate_pub_subnets_by_name_filter" {

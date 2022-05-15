@@ -1,22 +1,21 @@
-  # Create a pod and expose port 8080
-  apiVersion: v1
-  kind: Pod
-  metadata:
-    name: kandula-pod
-    labels:
-      app: backend
-  spec:
-    containers:
-      - image: galitu/kandula-repo:kandula-mid-prj-v44.0.0
-        name: kandula
-        ports:
-          - containerPort: 5000
-            name: http
-            protocol: TCP
-        env:
-          - name: FLASK_ENV
-            value: development
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kandula-pod
+  labels:
+    app: backend
+spec:
+  containers:
+    - image: ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0
+      name: kandula
+      ports:
+        - containerPort: 5000
+          name: http
+          protocol: TCP
+      env:
+        - name: FLASK_ENV
+          value: development
 
-        envFrom:
-          - secretRef:
-              name: kandula-secrets
+      envFrom:
+        - secretRef:
+            name: kandula-secrets

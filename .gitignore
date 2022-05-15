@@ -23,3 +23,5 @@ kandula.log*
 *.terraform.tfstate.lock.info
 JenkinsfileDudu
 JenkinsFileAna
+create_full_env - Copy.sh
+config

@@ -1,6 +1,0 @@
----
-- name: Enable a consul service
-  ansible.builtin.systemd:
-    name: consul.service
-    state: started
-    enabled: yes

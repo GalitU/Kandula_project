@@ -1,196 +1,225 @@
-    pipeline {
-        agent
+
+pipeline {
+    agent
+    {
+        label 'Slave'
+    }
+
+    environment
+    {
+        user_name = 'Galit U.'
+        project = 'Kandula-MidPrj'
+        purpose = 'OpsSchool course'
+        git_hub_repo_path = 'git@github.com:GalitU/Mid_project_kandula-app-8_pvt.git'
+        kandula_mid_docker_image_name_prefix = 'kandula-mid-prj'
+        docker_repo_path = 'galitu/kandula-repo'
+        git_hub_credentials = 'jenkins-mid-kandula-git-ssh'
+        git_hub_branch_name = 'BranchMidProject'
+        dicker_repo_path = 'galitu/kandula-repo'
+        git_hub_repo_path_eks = 'git@github.com:GalitU/Mid_project_Kandula_eks.git'
+        git_hub_branch_name_eks = 'main'
+    }
+    stages
+    {
+
+        stage("Start Message")
         {
-            label 'Slave'
+            steps
+            {
+                slackSend color: "good", message: "GalitU. Start build of new docker version of Kandula  ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0 #${env.BUILD_NUMBER}"
+            }
         }
 
-        environment
+        stage("Git Clone")
         {
-            user_name = 'Galit U.'
-            project = 'Kandula-MidPrj'
-            purpose = 'OpsSchool course'
-            git_hub_repo_path = 'git@github.com:GalitU/Mid_project_kandula-app-8_pvt.git'
-            kandula_mid_docker_image_name_prefix = 'kandula-mid-prj'
-            docker_repo_path = 'galitu/kandula-repo'
-            git_hub_credentials = 'jenkins-mid-kandula-git-ssh'
-            git_hub_branch_name = 'BranchMidProject'
-            dicker_repo_path = 'galitu/kandula-repo'
-            git_hub_repo_path_eks = 'git@github.com:GalitU/Mid_project_Kandula_eks.git'
-            git_hub_branch_name_eks = 'main'
+            steps
+            {
+                echo "===>> Git Clone from $git_hub_repo_path"
+                git branch: "${git_hub_branch_name}", credentialsId: "${git_hub_credentials}", url: "${git_hub_repo_path}"
+                sh "ls -lart ./*"
+                sh "git branch -a"
+            }
         }
-        stages
+        stage("Docker build and Tag")
         {
-
-            stage("Start Message")
+            steps
             {
-                steps
+                echo "===>> Docker image ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0 will be build"
+                sh 'docker version'
+                sh 'docker build -t ${kandula_mid_docker_image_name_prefix} .'
+                sh 'docker image list'
+                sh 'docker tag ${kandula_mid_docker_image_name_prefix} ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0'
+            }
+        }
+
+        stage("Push docker to private registry")
+        {
+            environment
+            {
+                docker_hub_credentials = "docker.hub.credentials"
+            }
+            steps
+            {
+                echo "===>> Push docker image ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0 to $docker_repo_path"
+                withDockerRegistry([ credentialsId: "${docker_hub_credentials}", url: "" ])
                 {
-                    slackSend color: "good", message: "GalitU. Start build of new docker version of Kandula  ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0 #${env.BUILD_NUMBER}"
+                    sh 'docker push ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0'
                 }
             }
+        }
 
-            stage("Git Clone")
+        stage("Docker is ready Message")
+        {
+            steps
             {
-                steps
-                {
-                    echo "===>> Git Clone from $git_hub_repo_path"
-                    git branch: "${git_hub_branch_name}", credentialsId: "${git_hub_credentials}", url: "${git_hub_repo_path}"
-                    sh "ls -lart ./*"
-                    sh "git branch -a"
-                }
+                slackSend color: "good", message: "GalitU. New docker image ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0 #${env.BUILD_NUMBER} is ready for deployment"
             }
-            stage("Docker build and Tag")
+        }
+
+        stage("Clean docker image from disk of Node")
+        {
+            steps
             {
-                steps
-                {
-                    echo "===>> Docker image ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0 will be build"
-                    sh 'docker version'
-                    sh 'docker build -t ${kandula_mid_docker_image_name_prefix} .'
-                    sh 'docker image list'
-                    sh 'docker tag ${kandula_mid_docker_image_name_prefix} ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0'
-                }
+                echo "===>> Delete docker image ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0 from Node ${env.NODE_NAME}"
+                sh 'docker images'
+                sh 'docker rmi ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0'
+                sh 'docker images'
+                sh 'docker rmi ${kandula_mid_docker_image_name_prefix}:latest'
             }
+        }
 
-            stage("Push docker to private registry")
+        stage("Get Kandula pod manifests")
+        {
+            steps
             {
-                environment
-                {
-                    docker_hub_credentials = "docker.hub.credentials"
-                }
-                steps
-                {
-                    echo "===>> Push docker image ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0 to $docker_repo_path"
-                    withDockerRegistry([ credentialsId: "${docker_hub_credentials}", url: "" ])
-                    {
-                        sh 'docker push ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0'
-                    }
-                }
+                echo "===>> Git Clone from $git_hub_repo_path"
+                git branch: "${git_hub_branch_name_eks}", credentialsId: "${git_hub_credentials}", url: "${git_hub_repo_path_eks}"
+                sh "ls -lart ./*"
+                sh "git branch -a"
             }
+        }
 
-            stage("Docker is ready Message")
-            {
-                steps
-                {
-                    slackSend color: "good", message: "GalitU. New docker image ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0 #${env.BUILD_NUMBER} is ready for deployment"
-                }
-            }
-
-            stage("Clean docker image from disk of Node")
-            {
-                steps
-                {
-                    echo "===>> Delete docker image ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0 from Node ${env.NODE_NAME}"
-                    sh 'docker images'
-                    sh 'docker rmi ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0'
-                    sh 'docker images'
-                    sh 'docker rmi ${kandula_mid_docker_image_name_prefix}:latest'
-                }
-            }
-
-            stage("Get Kandula pod manifests")
-            {
-                steps
-                {
-                    echo "===>> Git Clone from $git_hub_repo_path"
-                    git branch: "${git_hub_branch_name_eks}", credentialsId: "${git_hub_credentials}", url: "${git_hub_repo_path_eks}"
-                    sh "ls -lart ./*"
-                    sh "git branch -a"
-                }
-            }
-
-            stage("Update Kandula version inside the pod manifest")
-            {
-	    	steps
-		{
-                    sh """
-tee ~/Jenkins/workspace/GetKandulaPod/pod-kandula.yaml > /dev/null <<'EOF'
-  # Create a pod and expose port 8080
-  apiVersion: v1
-  kind: Pod
-  metadata:
-    name: kandula-pod
-    labels:
-      app: backend
-  spec:
-    containers:
-      - image: ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0
-        name: kandula
-        ports:
-          - containerPort: 5000
-            name: http
-            protocol: TCP
-        env:
-          - name: FLASK_ENV
-            value: development
-
-        envFrom:
-          - secretRef:
-              name: kandula-secrets
+        stage("Update Kandula secrets")
+        {
+    	    steps
+	        {
+                sh """
+tee ${WORKSPACE}/pod_kandula_secrets.yaml > /dev/null <<'EOF'
+apiVersion: v1
+kind: Secret
+metadata:
+  name: kandula-secrets
+type: Opaque
+data:
+  AWS_ACCESS_KEY_ID : QUtJQVhMQTY3QlRaT0NURlhJTjU=
+  AWS_SECRET_ACCESS_KEY : d0lqZklteEpTVlZJWXk5NGNDR2twc3FzVHliVWlCbTlleE92Y2o3RQ==
+  AWS_DEFAULT_REGION : ZXUtY2VudHJhbC0x
 EOF
-                    """
-                }
+                """
             }
+        }
 
-            stage("Get all kubernetes environemtn info")
-            {
-                steps
-                {
-                    script
-                    {
-                        sh '''
-                        kubectl get secrets
-                        kubectl get svc
-                        kubectl get pods
-                        kubectl get events
-                        '''
-                    }
-                }
-            }
 
-            stage("Before start Kanundula Message")
+        stage("Update Kandula version inside the pod manifest")
+        {
+            steps
             {
-                steps
-                {
-                    slackSend color: "good", message: "GalitU. Kandula will be started with new version ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0 #${env.BUILD_NUMBER}"
-                }
-            }
+                sh """
+tee ${WORKSPACE}/pod-kandula.yaml > /dev/null <<'EOF'
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kandula-pod
+  labels:
+    app: backend
+spec:
+  containers:
+    - image: ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0
+      name: kandula
+      ports:
+        - containerPort: 5000
+          name: http
+          protocol: TCP
+      env:
+        - name: FLASK_ENV
+          value: development
 
-            stage("Start Kandula with new version")
-            {
-                steps
-                {
-                    script
-                    {
-                        sh '''
-                        kubectl apply -f ~/Jenkins/workspace/GetKandulaPod/pod_kandula_secrets.yaml
-                        kubectl apply -f ~/Jenkins/workspace/GetKandulaPod/pod-svc-kandula_LB.yaml
-                        kubectl apply -f ~/Jenkins/workspace/GetKandulaPod/pod-kandula.yaml
-                        '''
-                    }
-                }
+      envFrom:
+        - secretRef:
+            name: kandula-secrets
+EOF
+                """
             }
+        }
 
-            stage("Validate of startin of Kandula")
-            {
-                steps
+        stage("Update eks cluster configuration")
+        {
+            steps{
+                script
                 {
-                    script
-                    {
-                        sh '''
-                        kubectl get secrets
-                        kubectl get svc
-                        kubectl get pods
-                        kubectl get events
-                        '''
-                    }
+                    sh '''
+                    aws eks --region=eu-central-1  update-kubeconfig --name kandula-mid-kube
+                    '''
                 }
             }
-            stage("End Message")
+        }
+
+        stage("Validate current kube info")
+        {
+            steps
             {
-                steps
+                script
                 {
-                    slackSend color: "good", message: "GalitU. Kandula is up and ready with new version  ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0 #${env.BUILD_NUMBER}"
+                    sh '''
+                    kubectl get secrets
+                    kubectl get svc
+                    kubectl get pods
+                    kubectl get events
+                    '''
                 }
+            }
+        }
+
+        stage("Start Kandula with new version")
+        {
+            steps
+            {
+                slackSend color: "good", message: "GalitU. Kandula on EKS will be started #${env.BUILD_NUMBER}"
+                script
+                {
+                    sh '''
+                    kubectl apply -f ${WORKSPACE}/pod_kandula_secrets.yaml
+                    kubectl apply -f ${WORKSPACE}/pod-svc-kandula_LB.yaml
+                    kubectl apply -f ${WORKSPACE}/pod-kandula.yaml
+                    echo Secret file [${WORKSPACE}/pod_kandula_secrets.yaml] will be deleted
+                    rm ${WORKSPACE}/pod_kandula_secrets.yaml
+                    '''
+                }
+            }
+        }
+
+        stage("Validate of startin of Kandula")
+        {
+            steps
+            {
+                script
+                {
+                    sh '''
+                    kubectl get secrets
+                    kubectl get svc
+                    kubectl get pods
+                    kubectl get events
+                    '''
+                }
+            }
+        }
+
+        stage("End Kandula Message")
+        {
+            steps
+            {
+                slackSend color: "good", message: "GalitU. Kandula is up and running with new version  ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0 #${env.BUILD_NUMBER}"
             }
         }
     }
+}
