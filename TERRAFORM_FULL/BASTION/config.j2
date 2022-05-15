@@ -15,7 +15,8 @@ Host 10.0.2.*
     User ubuntu
     Port 22
     IdentityFile ~/.ssh/SSH_KEYS_FOR_Amazon/Key_Consul_Kandula_MPrj.pem
-    ProxyJump Bastion_hostStrictHostKeyChecking no
+    ProxyJump Bastion_host
+    StrictHostKeyChecking no
     UserKnownHostsFile /dev/null
 Host 10.0.3.*
     ForwardAgent yes

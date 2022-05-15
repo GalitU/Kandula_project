@@ -4,11 +4,17 @@
   Main file
 */
 
+locals {
+  root_path                          = abspath(path.module)
+  assume_policy_file_path            = "${local.root_path}/../../modules/roles/policies/assume_role.json"
+  describe_server_access_policy_file = "${local.root_path}/../../modules/roles/policies/describe_instances.json"
+}
+
 module "iam_roles_describe" {
   source                    = "../../modules/roles"
   access_policy_description = "Describe"
-  role_policy_type          = file("${path.module}/../roles/policies/assume_role.json")
-  access_policy_type        = file("${path.module}/../roles/policies/describe_instances.json")
+  role_policy_type          = file(local.assume_policy_file_path)
+  access_policy_type        = file(local.describe_server_access_policy_file)
   purpose                   = "Consul"
   application_name          = var.application_name
   application_task          = var.application_task

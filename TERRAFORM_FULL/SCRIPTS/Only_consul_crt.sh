@@ -20,7 +20,7 @@ cd ..
 ANSIBLE_CONSUL_PATH=$SCRIPT_DIR/../../ansible/consul
 cd $ANSIBLE_CONSUL_PATH
 echo -e "\n\n"==== Install Consul server and agent on all relevant instaces ==== [basename $(pwd)]
-ansible all -i $ANSIBLE_CONSUL_PATHl/aws_ec2.yaml -m ping
+ansible all -i $ANSIBLE_CONSUL_PATH/aws_ec2.yaml -m ping
 ansible-playbook -i $ANSIBLE_CONSUL_PATH/aws_ec2.yaml $ANSIBLE_CONSUL_PATH/consul_install.yml
 # read -p "Press any key to continue...    " -n1 -s
 
