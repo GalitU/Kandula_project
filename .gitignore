@@ -28,4 +28,3 @@ config
 FULL_CREATE_LOG.log
 FULL_DESTROY_LOG.log
 jenkins_agent_credentials.xml
-

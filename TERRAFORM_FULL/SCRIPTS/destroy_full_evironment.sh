@@ -13,8 +13,10 @@ rm "${SCRIPT_DIR}/FULL_DESTROY_LOG.log"
 {
     echo -e "\n\n" ==== Delete Kandula application and all relevant parts ====
     kubectl delete pod kandula-pod
-    kubectl delete svc kandula-load-balancer
     kubectl delete secret kandula-secrets
+    kubectl delete svc kandula-load-balancer
+    kubectl delete deployment deployment-kandula-app
+    kubectl delete svc kandula-deploy-load-balancer
     EXITCODE=$?
     test $EXITCODE -eq 0 && echo "====> Stop Kandula finished OK" || echo "====> Failed stop Kandula";
     #test $EXITCODE -ne 0 && exit $EXITCODE

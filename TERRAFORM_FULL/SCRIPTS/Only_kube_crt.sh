@@ -27,13 +27,14 @@ echo -e "\n\n" ==== Start Kandula on EKS ==== [basename $(pwd)]
 aws eks --region=eu-central-1 update-kubeconfig --name $KUBE_CLUSTER_NAME_TRIM
 kubectl get nodes -o wide
 kubectl apply -f $KUBERNETIS_CTL_PATH/pod_kandula_secrets.yaml
-kubectl create -f $KUBERNETIS_CTL_PATH/pod-svc-kandula_LB.yaml
-kubectl create -f $KUBERNETIS_CTL_PATH/pod-kandula.yaml
+kubectl create -f $KUBERNETIS_CTL_PATH/pod-svc-deploy-kandula-LB.yaml
+kubectl create -f $KUBERNETIS_CTL_PATH/deploy-kandula.yaml
 
 kubectl get secrets
-kubectl get svc
-kubectl get pods
+kubectl get svc --show-labels
+kubectl get pods --show-labels
 kubectl get events
+kubectl get deployments --show-labels
 kubectl logs kandula-pod
 
 echo =================================================

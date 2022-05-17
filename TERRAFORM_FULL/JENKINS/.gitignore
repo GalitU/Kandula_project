@@ -9,3 +9,4 @@ terraform.tfstate
 *.pem
 *.ppk
 *._tf_
+pod_kandula_secrets.yaml
