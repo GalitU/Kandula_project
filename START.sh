@@ -258,10 +258,11 @@ echo "      - Stop instance"
 echo "      - Terminate instance"
 
 
-./create_full_env.sh
 echo -e "\n\n"
 echo "Are you sure you want to proceed ?"
 read -p "Press ENTER for continue, othervise [CTRL + C] . . . . . ." -n1 -s
+
+./create_full_env.sh
 
 echo "=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+"
 echo "|    Congratulations : You can go and look for your Kandula "
