@@ -79,6 +79,15 @@ rm "${SCRIPT_DIR}/FULL_DESTROY_LOG.log"
     test $EXITCODE -ne 0 && exit $EXITCODE
     #read -p "Press any key to continue...    " -n1 -s
 
+    cd ./S3_BUCKET
+    echo -e "\n\n" ==== Destroy S3 ==== [basename $(pwd)]
+    echo yes | terraform destroy
+    cd ..
+    EXITCODE=$?
+    test $EXITCODE -eq 0 && echo "====> Destroy S3 environment finished OK" || echo "====> Failed destroy S3 environment";
+    test $EXITCODE -ne 0 && exit $EXITCODE
+    #read -p "Press any key to continue...    " -n1 -s
+
     echo =================================================
     echo -e "\n\n" "====>>>>  DESTROY ENTIRE ENVIRONMENT FINISHED WITH SUCCESS"
 } | tee "${SCRIPT_DIR}/FULL_DESTROY_LOG.log"

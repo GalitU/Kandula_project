@@ -7,6 +7,11 @@ SCRIPT_DIR=`dirname $path`
 echo -e "\n\n" $SCRIPT_DIR
 rm "${SCRIPT_DIR}/FULL_CREATE_LOG.log"
 {
+    ./Only_s3.sh
+    EXITCODE=$?
+    test $EXITCODE -eq 0 && echo "====> VPC created OK" || echo "====> Failed create VPC";
+    test $EXITCODE -ne 0 && exit $EXITCODE
+
     ./Only_vpc_crt.sh
     EXITCODE=$?
     test $EXITCODE -eq 0 && echo "====> VPC created OK" || echo "====> Failed create VPC";
