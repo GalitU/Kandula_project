@@ -20,36 +20,36 @@ Remark: All process of creating, updating, assigning, installation, fine tuning 
 
  AWS ENVIRONMENT
 1. Will be created S3 for keep all TF states. All TF states are saved in to relevant directories, depends of purpose
-   1.1. Name of S3 bucket is s3-mprj-kandula-bucket
-   1.2. This bucket is private
-   1.3. Inside structure:
-   1.3.1. bastion/
-   1.3.2. consul/
-   1.3.3. jenkins/
-   1.3.4. keys/
-   1.3.5. kube/
-   1.3.6. vpc/
+   - Name of S3 bucket is s3-mprj-kandula-bucket
+   - This bucket is private
+   - Inside structure:
+    - bastion/
+    - consul/
+    - jenkins/
+    - keys/
+    - kube/
+    - vpc/
 
  2. Will be created VPC and all relevant NAT, IG, subnets, route tables
-   2.1. Will be created 2 public subnets for:
-      2.1.1. 1 Bastion(Jump) host
-      2.1.2. 1 Load balancer for Consul servers
-      2.1.3. 1 Load balancer for Jenkins server
-   2.2. Will be created 6 private subnets according the purpose (3 groups, each group has 2 subnets one by one per AZ
-      2.2.1 2. private subnets for 3 consul servers
-      2.2.2 2. private subnets for Master servers:
-          2.2.2.1. 1 Jenkins Server
-          2.2.2.2. 2 Jenkins Slaves/Agents/Nodes... never mind how call them :)
-      2.2.3. 2 private subnets for 4 Kubernetes worker nodes
+   - Will be created 2 public subnets for:
+      - 1 Bastion(Jump) host
+      - 1 Load balancer for Consul servers
+      - 1 Load balancer for Jenkins server
+   - Will be created 6 private subnets according the purpose (3 groups, each group has 2 subnets one by one per AZ
+      - private subnets for 3 consul servers
+      - private subnets for Master servers:
+           1 Jenkins Server
+           2 Jenkins Slaves/Agents/Nodes... never mind how call them :)
+      - 2 private subnets for 4 Kubernetes worker nodes
 
  3. Will be created private keys for all servers according to purpose - one per subnet pair.
    - There will be updated automatically permissions of PEM files according SSH requirenment to 400
    - After all keys are created they are copied dynamically into ~/.ssh/SSH_KEYS_FOR_Amazon directory
      where ~/.ssh/config file of my PC takes the configuration and connect to servers via SSH
-   3.1. Bastion servers key
-   3.2. Consul servers key
-   3.3. Master servers key for Jenkins server and slave
-   3.4. Web servers key - now it not in use, due to creating EKS nodes with out key
+   - Bastion servers key
+   - Consul servers key
+   - Master servers key for Jenkins server and slave
+   - Web servers key - now it not in use, due to creating EKS nodes with out key
 
  4. Creating Bastion host in publilc subnet.
    - New public IP address of bastion host will be taken automatically from terraform output and used inside update of ~/.ssh/config file, see below...
@@ -64,35 +64,35 @@ Remark: All process of creating, updating, assigning, installation, fine tuning 
 
  5. Creating kubernetes cluster
   - There will be created :
-      5.1. EKS cluster with name kandula-mid-kube
-      5.2. It will be placed on private subnets for Kubernetes worker, see 2.2.3.2.
-      5.3. There will be created :
-          5.3.1. 2 Kandula_worker_m medium workers
-          5.3.2. 2 Kandula_worker_m large workers
-      5.4. There will be assigned next Security Groups
-          5.4.1. Consul SG
-          5.4.1. SSH SG
-      5.5. Will be created relevant roles
-      5.6. After entire cluster environment will be created its info will be updated automatically in local PC at ~/.kube/config file
-      5.7. Next steps will start Kandula deployment application based kubernetes cluster
-          5.6.1.There prepared separated github repo for Kandula deployment process at https://github.com/GalitU/Mid_project_Kandula_deployment.git
+      - EKS cluster with name kandula-mid-kube
+      - It will be placed on private subnets for Kubernetes worker, see 2.2.-
+      - There will be created :
+          - 2 Kandula_worker_m medium workers
+          - 2 Kandula_worker_m large workers
+      - There will be assigned next Security Groups
+          - Consul SG
+          - SSH SG
+      - Will be created relevant roles
+      - After entire cluster environment will be created its info will be updated automatically in local PC at ~/.kube/config file
+      - Next steps will start Kandula deployment application based kubernetes cluster
+          - There prepared separated github repo for Kandula deployment process at https://github.com/GalitU/Mid_project_Kandula_deployment.git
                 - Each commit there with updated new docker image version will cause to Jenkins trigger for start deploy
                 - For first creating environment it will be executed automatically as part of this script
-          5.6.2. All releant credential keys for Kandula application (AWS_KEY... will be encripted by base64
+          - All releant credential keys for Kandula application (AWS_KEY... will be encripted by base64
                  algorithm and inserted to kubernetes secret file which will be started by kubectl tool
                  - This yaml file will be local on my PC and not commited to GIT.
                  - For Jenkins Kandula start execution this yaml file will be created dynamically based on Jenkins secret environment text
                  - Created secret file will be deleted immidiatelly after it will be started by kubectl tool
-          5.6.3. Elements which will be started:
-              5.6.3.1. Secret file started by kubectl
-              5.6.3.2. Kandula deployment for 2 replicas based on last docker image version
-              5.6.3.3. Load balancer kube service
-              5.6.3.4. 4 worker nodes which are adssigned to kube cluster
+          - Elements which will be started:
+              - Secret file started by kubectl
+              - Kandula deployment for 2 replicas based on last docker image version
+              - Load balancer kube service
+              - 4 worker nodes which are adssigned to kube cluster
       Remark: script which create kube env. will be executed twice due to lot of Terraform bugs  and network performance issues
 
  6. Creating CI environment based on Jenkins server technology
   - There will be created :
-      6.1. Jenkins server
+     - Jenkins server
           - It was installed once by TF and configured for start manually
           - It was saved in private AMI snapshot from which Jenkins server is created by Terraform any time after that
           - Jenkins server itself placed on private subnet with purpose 'Master'
@@ -106,7 +106,7 @@ Remark: All process of creating, updating, assigning, installation, fine tuning 
           - There added public Load Balancer to Jenkins server for access to its UI with exposed port 80
           - Jenkins server is connected to GitHub for receive webhooks as trigger for start automatic CI/Cd process
           - There will be istalled consul service on Jenkins server, including heatlh checker of it by port 22, see 'Consul' below
-      6.2. 2 Jenkins slaves
+     - 2 Jenkins slaves
           - It was installed by TF
           - Jenkins slaves placed on private subnet with purpose 'Master'
           - Jenkins slaves uses Key_Master_Kandula_MPrj.pem key
@@ -134,7 +134,7 @@ Remark: All process of creating, updating, assigning, installation, fine tuning 
 
  7. Creating Consul servers and install relevant applications and relevant configuration of all environmet environment based on Jenkins server technology
   - There will be created :
-      7.1. 3 Consul servers
+      - 3 Consul servers
           - It was installed once by TF and configured after starting by Ansible playbook via SSH forwarding of Bastion host
           - Consul servers itself placed on private subnet with purpose 'Consul'
           - Consul server uses Key_Consul_Kandula_MPrj.pem
@@ -144,40 +144,40 @@ Remark: All process of creating, updating, assigning, installation, fine tuning 
               - port 8300
               - port 8600
               - port 8500
-      7.2. There will be create Load balancer for allow public access to consul UI, all 3 consul servers will attached to him
-      7.3. There will installation of consul service on all consul servers and server
-      7.4. There will installation of consul agents on
-          7.4.1. Jenkins server
-          7.4.2. 2 Jenkins slavesserver
-          7.4.3. Bastion host
+      - There will be create Load balancer for allow public access to consul UI, all 3 consul servers will attached to him
+      - There will installation of consul service on all consul servers and server
+      - There will installation of consul agents on
+          - Jenkins server
+          - 2 Jenkins slavesserver
+          - Bastion host
 
- 8. At finish of installation the script will inform about all public relevant IPs like in next example
-=========================================================================
-CONSUL UI = [http://LB-consul-mprj-Kandula-1158479661.eu-central-1.elb.amazonaws.com]
-CONSUL UI = [http://LB-jenkins-mprj-Kandula-949533713.eu-central-1.elb.amazonaws.com]
-KANDULA started at [http://ac1e8035a9cfa4edf99fa250fee5c9f9-798254734.eu-central-1.elb.amazonaws.com]
-=========================================================================
-====> All servers and services started OK
-=================================================
- ====>>>>BUILD ENTIRE ENVIRONMENT FINISHED WITH SUCCESS
+ 8. At finish of installation the script will inform about all public relevant IPs like in next example<br>
+=========================================================================<br>
+CONSUL UI = [http://LB-consul-mprj-Kandula-1158479661.eu-central-1.elb.amazonaws.com]<br>
+CONSUL UI = [http://LB-jenkins-mprj-Kandula-949533713.eu-central-1.elb.amazonaws.com]<br>
+KANDULA started at [http://ac1e8035a9cfa4edf99fa250fee5c9f9-798254734.eu-central-1.elb.amazonaws.com]<br>
+=========================================================================<br>
+====> All servers and services started OK<br>
+=================================================<br>
+ ====>>>>BUILD ENTIRE ENVIRONMENT FINISHED WITH SUCCESS<br>
 
  TOOLS and methodologies
 1. Git
-  1.1. There exist next relevant repo for implement Kandula Mid project
-      1.1.1. https://github.com/GalitU/Mid_project_Kandula_code
+ - There exist next relevant repo for implement Kandula Mid project
+      - https://github.com/GalitU/Mid_project_Kandula_code
           - It contains all Kandula application code based on python
           - It contain Jenkinsfile which will be trigger to CI Kandula process
           - Commit to this repo will be done by developer and trigger Jenkins job http://lb-jenkins-mprj-kandula-949533713.eu-central-1.elb.amazonaws.com/job/Start_Build_Docker_Kandula/
-      1.1.2. https://github.com/GalitU/Mid_project_Kandula_deployment
+      - https://github.com/GalitU/Mid_project_Kandula_deployment
           - It contains all Kandula deployment manifests and relevant Jenkinsfile
           - It contain Jenkinsfile will start Kandula CD process by Jenkins job http://lb-jenkins-mprj-kandula-949533713.eu-central-1.elb.amazonaws.com/job/Start_Deployment_Kandula/
           - Commit to this repo will be done by Jenkins job http://lb-jenkins-mprj-kandula-949533713.eu-central-1.elb.amazonaws.com/job/Start_Build_Docker_Kandula/
-      1.1.3. https://github.com/GalitU/Mid_project/tree/Candiadate_mid_Kandula branch Candiadate_mid_Kandula
+      - https://github.com/GalitU/Mid_project/tree/Candiadate_mid_Kandula branch Candiadate_mid_Kandula
           - It contains IaC which create AWS environment and which we start now
 
  2. Jenkins
-  2.1. There exist next relevant Jenkins jobs for execute all CI/CD processes
-      2.1.1. http://lb-jenkins-mprj-kandula-949533713.eu-central-1.elb.amazonaws.com/job/Start_Build_Docker_Kandula/
+  - There exist next relevant Jenkins jobs for execute all CI/CD processes
+      - http://lb-jenkins-mprj-kandula-949533713.eu-central-1.elb.amazonaws.com/job/Start_Build_Docker_Kandula/
           - This is multi-pipeline job
           - It based on Jenkisfile
           - It triggered by commit to Git repo https://github.com/GalitU/Mid_project_Kandula_code
@@ -190,7 +190,7 @@ KANDULA started at [http://ac1e8035a9cfa4edf99fa250fee5c9f9-798254734.eu-central
               - Update manifest version number in deployment yaml file
               - Commit and push manifests to Git https://github.com/GalitU/Mid_project_Kandula_deployment
               - Inform Slack channel for process results
-      2.1.2. http://lb-jenkins-mprj-kandula-949533713.eu-central-1.elb.amazonaws.com/job/Start_Deployment_Kandula/
+      - http://lb-jenkins-mprj-kandula-949533713.eu-central-1.elb.amazonaws.com/job/Start_Deployment_Kandula/
           - This is multi-pipeline job
           - It triggered by commit to Git repo https://github.com/GalitU/Mid_project_Kandula_deployment
           - It based on Jenkisfile
@@ -202,7 +202,7 @@ KANDULA started at [http://ac1e8035a9cfa4edf99fa250fee5c9f9-798254734.eu-central
               - Start Kandula deployment with new version
               - Validate of starting of Kandula
               - Inform Slack channel for process results
-      2.1.3. http://lb-jenkins-mprj-kandula-949533713.eu-central-1.elb.amazonaws.com/job/Start_manual_Kandula_deployment/
+      - http://lb-jenkins-mprj-kandula-949533713.eu-central-1.elb.amazonaws.com/job/Start_manual_Kandula_deployment/
           - This is multi-pipeline job
           - It based on Jenkisfile
           - It manual execution job
@@ -214,7 +214,7 @@ KANDULA started at [http://ac1e8035a9cfa4edf99fa250fee5c9f9-798254734.eu-central
               - Start Kandula deployment with new version
               - Validate of starting of Kandula
               - Inform Slack channel for process results
-      2.1.3. http://lb-jenkins-mprj-kandula-949533713.eu-central-1.elb.amazonaws.com/job/Stop_Kandula/
+      - http://lb-jenkins-mprj-kandula-949533713.eu-central-1.elb.amazonaws.com/job/Stop_Kandula/
           - It manual execution job
           - which stops all kubernetes software elements (deployments, services, secret)
 
