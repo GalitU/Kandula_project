@@ -30,7 +30,7 @@ resource "aws_security_group" "kubernetes_sec_grp_http" {
   }
 }
 
-resource "aws_security_group_rule" "kube_ingress_http" {
+resource "aws_security_group_rule" "kube_ingress_ssh" {
   type        = "ingress"
   description = "Inbound HTTP access"
   from_port   = 22

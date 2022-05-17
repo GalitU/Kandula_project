@@ -9,7 +9,7 @@ echo -e "\n\n" $SCRIPT_DIR
 # Create from vpc to end
 cd $SCRIPT_DIR/..
 
-rm "${SCRIPT_DIR}/FULL_DESTROY_LOG.log"
+rm "${SCRIPT_DIR}/../../FULL_DESTROY_LOG.log"
 {
     echo -e "\n\n" ==== Delete Kandula application and all relevant parts ====
     kubectl delete pod kandula-pod
@@ -90,4 +90,4 @@ rm "${SCRIPT_DIR}/FULL_DESTROY_LOG.log"
 
     echo =================================================
     echo -e "\n\n" "====>>>>  DESTROY ENTIRE ENVIRONMENT FINISHED WITH SUCCESS"
-} | tee "${SCRIPT_DIR}/FULL_DESTROY_LOG.log"
+} | tee "${SCRIPT_DIR}/../../FULL_DESTROY_LOG.log"

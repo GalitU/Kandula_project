@@ -4,49 +4,50 @@
 path=`readlink -f "${BASH_SOURCE:-$0}"`
 
 SCRIPT_DIR=`dirname $path`
-echo -e "\n\n" $SCRIPT_DIR
-rm "${SCRIPT_DIR}/FULL_CREATE_LOG.log"
+#echo -e "\n\n" $SCRIPT_DIR
+rm "${SCRIPT_DIR}/../../FULL_CREATE_LOG.log"
 {
     ./Only_s3.sh
     EXITCODE=$?
-    test $EXITCODE -eq 0 && echo "====> VPC created OK" || echo "====> Failed create VPC";
+    test $EXITCODE -eq 0 && echo -e "\n" "====> VPC created OK" || echo "====> Failed create VPC";
     test $EXITCODE -ne 0 && exit $EXITCODE
 
     ./Only_vpc_crt.sh
     EXITCODE=$?
-    test $EXITCODE -eq 0 && echo "====> VPC created OK" || echo "====> Failed create VPC";
+    test $EXITCODE -eq 0 && echo -e "\n" "====> VPC created OK" || echo "====> Failed create VPC";
     test $EXITCODE -ne 0 && exit $EXITCODE
 
     ./Only_keys_crt.sh
     EXITCODE=$?
-    test $EXITCODE -eq 0 && echo "====> KEYs were created OK" || echo "====> Failed creating KEYs";
+    test $EXITCODE -eq 0 && echo -e "\n" "====> KEYs were created OK" || echo "====> Failed creating KEYs";
     test $EXITCODE -ne 0 && exit $EXITCODE
 
     ./Only_bastion_crt.sh
     EXITCODE=$?
-    test $EXITCODE -eq 0 && echo "====> Bastion host created and configured OK" || echo "====> Failed create Bastion host";
+    test $EXITCODE -eq 0 && echo -e "\n" "====> Bastion host created and configured OK" || echo "====> Failed create Bastion host";
     test $EXITCODE -ne 0 && exit $EXITCODE
 
     ./Only_kube_crt.sh
     EXITCODE=$?
-    test $EXITCODE -eq 0 && echo "====> KUBE created OK" || echo "====> Failed create KUBE";
+    test $EXITCODE -eq 0 && echo -e "\n" "====> KUBE created OK" || echo "====> Failed create KUBE";
     test $EXITCODE -ne 0 && exit $EXITCODE
 
     ./Only_jenkins_crt.sh
     EXITCODE=$?
-    test $EXITCODE -eq 0 && echo "====> Jenkins environment created OK" || echo "====> Failed create Jenkins environment";
+    test $EXITCODE -eq 0 && echo -e "\n" "====> Jenkins environment created OK" || echo "====> Failed create Jenkins environment";
     test $EXITCODE -ne 0 && exit $EXITCODE
 
     ./Only_consul_crt.sh
     EXITCODE=$?
-    test $EXITCODE -eq 0 && echo "====> Consul environment created OK" || echo "====> Failed create Consul environment";
+    test $EXITCODE -eq 0 && echo -e "\n" "====> Consul environment created OK" || echo "====> Failed create Consul environment";
     test $EXITCODE -ne 0 && exit $EXITCODE
 
     ./Only_global_outputs.sh
     EXITCODE=$?
-    test $EXITCODE -eq 0 && echo "====> All servers and services started OK" || echo "====> Failed start main services";
+    test $EXITCODE -eq 0 && echo -e "\n" "====> All servers and services started OK" || echo "====> Failed start main services";
     test $EXITCODE -ne 0 && exit $EXITCODE
 
-    echo =================================================
+    echo "================================================="
     echo -e "\n\n" "====>>>>BUILD ENTIRE ENVIRONMENT FINISHED WITH SUCCESS"
-} | tee "${SCRIPT_DIR}/FULL_CREATE_LOG.log"
+    echo "================================================="
+} | tee "${SCRIPT_DIR}/../../FULL_CREATE_LOG.log"

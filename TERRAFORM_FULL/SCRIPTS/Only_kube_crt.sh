@@ -37,5 +37,10 @@ kubectl get events
 kubectl get deployments --show-labels
 kubectl logs kandula-pod
 
+pod_1=`kubectl get pods | awk 'FNR == 2 {print $1}'`
+pod_2=`kubectl get pods | awk 'FNR == 3 {print $1}'`
+kubectl logs $pod_1
+kubectl logs $pod_2
+
 echo =================================================
 echo -e "\n\n" "BUILD KUBE FINISHED"
