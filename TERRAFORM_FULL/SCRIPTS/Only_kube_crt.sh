@@ -20,7 +20,7 @@ KUBE_CLUSTER_NAME_TRIM="${KUBE_CLUSTER_NAME_TRIM#\"}"
 echo -e "\n\n" K8S Cluster name = $KUBE_CLUSTER_NAME_TRIM
 cd ..
 
-KUBERNETIS_CTL_PATH=$SCRIPT_DIR/../../kubernetes
+KUBERNETIS_CTL_PATH=$SCRIPT_DIR/../../KANDULA_DEPLOYMENT
 cd $KUBERNETIS_CTL_PATH
 echo -e "\n\n" ==== Start Kandula on EKS ==== [basename $(pwd)]
 

@@ -16,24 +16,16 @@ pipeline {
         git_hub_credentials = 'jenkins-mid-kandula-git-ssh'
         git_hub_branch_name = 'BranchMidProject'
         dicker_repo_path = 'galitu/kandula-repo'
-        git_hub_repo_path_eks = 'git@github.com:GalitU/Mid_project_Kandula_eks.git'
+        git_hub_repo_path_eks = 'git@github.com:GalitU/Mid_project_Kandula_deployment.git'
         git_hub_branch_name_eks = 'main'
     }
     stages
     {
-
-        stage("Start Message")
-        {
-            steps
-            {
-                slackSend color: "good", message: "GalitU. Start build of new docker version of Kandula  ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0 #${env.BUILD_NUMBER}"
-            }
-        }
-
         stage("Git Clone")
         {
             steps
             {
+                slackSend color: 'GREEN', message: "GalitU. Start build of new docker version of Kandula  ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0 #${env.BUILD_NUMBER}"
                 echo "===>> Git Clone from $git_hub_repo_path"
                 git branch: "${git_hub_branch_name}", credentialsId: "${git_hub_credentials}", url: "${git_hub_repo_path}"
                 sh "ls -lart ./*"
@@ -51,7 +43,6 @@ pipeline {
                 sh 'docker tag ${kandula_mid_docker_image_name_prefix} ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0'
             }
         }
-
         stage("Push docker to private registry")
         {
             environment
@@ -65,17 +56,9 @@ pipeline {
                 {
                     sh 'docker push ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0'
                 }
+                slackSend color: 'GREEN', message: "GalitU. New docker image ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0 #${env.BUILD_NUMBER} is ready for deployment"
             }
         }
-
-        stage("Docker is ready Message")
-        {
-            steps
-            {
-                slackSend color: "good", message: "GalitU. New docker image ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0 #${env.BUILD_NUMBER} is ready for deployment"
-            }
-        }
-
         stage("Clean docker image from disk of Node")
         {
             steps
@@ -87,8 +70,7 @@ pipeline {
                 sh 'docker rmi ${kandula_mid_docker_image_name_prefix}:latest'
             }
         }
-
-        stage("Get Kandula pod manifests")
+        stage("Get Kandula pod manifests from Git")
         {
             steps
             {
@@ -98,7 +80,6 @@ pipeline {
                 sh "git branch -a"
             }
         }
-
         stage("Update Kandula secrets")
         {
     	    steps
@@ -118,9 +99,7 @@ EOF
                 """
             }
         }
-
-
-        stage("Update Kandula version inside the pod manifest")
+        stage("Update manifest version number")
         {
             steps
             {
@@ -151,74 +130,18 @@ EOF
                 """
             }
         }
-
-        stage("Update eks cluster configuration")
-        {
-            steps{
-                script
-                {
-                    sh '''
-                    aws eks --region=eu-central-1  update-kubeconfig --name kandula-mid-kube
-                    '''
-                }
-            }
-        }
-
-        stage("Validate current kube info")
+        stage("Commit and push manifests to Git with new version number")
         {
             steps
             {
-                script
-                {
-                    sh '''
-                    kubectl get secrets
-                    kubectl get svc
-                    kubectl get pods
-                    kubectl get events
-                    '''
+                echo "===>> Commit and push to $git_hub_repo_path_eks"
+                sshagent(['jenkins-mid-kandula-git-ssh']) {
+                    sh 'git add pod-kandula.yaml'
+                    sh 'git commit -m "Automatic commit from Jenkins, build version ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0"'
+                    sh "git push origin main"
                 }
-            }
-        }
-
-        stage("Start Kandula with new version")
-        {
-            steps
-            {
-                slackSend color: "good", message: "GalitU. Kandula on EKS will be started #${env.BUILD_NUMBER}"
-                script
-                {
-                    sh '''
-                    kubectl apply -f ${WORKSPACE}/pod_kandula_secrets.yaml
-                    kubectl apply -f ${WORKSPACE}/pod-svc-kandula_LB.yaml
-                    kubectl apply -f ${WORKSPACE}/pod-kandula.yaml
-                    echo Secret file [${WORKSPACE}/pod_kandula_secrets.yaml] will be deleted
-                    rm ${WORKSPACE}/pod_kandula_secrets.yaml
-                    '''
-                }
-            }
-        }
-
-        stage("Validate of startin of Kandula")
-        {
-            steps
-            {
-                script
-                {
-                    sh '''
-                    kubectl get secrets
-                    kubectl get svc
-                    kubectl get pods
-                    kubectl get events
-                    '''
-                }
-            }
-        }
-
-        stage("End Kandula Message")
-        {
-            steps
-            {
-                slackSend color: "good", message: "GalitU. Kandula is up and running with new version  ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0 #${env.BUILD_NUMBER}"
+                slackSend color: 'GREEN', message: "GalitU. Kandula pod manifest was commited automatically from Jenkins with new version number ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0 #${env.BUILD_NUMBER}"
+                slackSend color: 'GREEN', message: "GalitU. Kandula docker is ready with new version ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0 #${env.BUILD_NUMBER}"
             }
         }
     }

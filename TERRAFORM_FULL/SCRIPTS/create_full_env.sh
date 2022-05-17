@@ -37,6 +37,11 @@ rm "${SCRIPT_DIR}/FULL_CREATE_LOG.log"
     test $EXITCODE -eq 0 && echo "====> Consul environment created OK" || echo "====> Failed create Consul environment";
     test $EXITCODE -ne 0 && exit $EXITCODE
 
+    ./Only_global_outputs.sh
+    EXITCODE=$?
+    test $EXITCODE -eq 0 && echo "====> All servers and services started OK" || echo "====> Failed start main services";
+    test $EXITCODE -ne 0 && exit $EXITCODE
+
     echo =================================================
     echo -e "\n\n" "====>>>>BUILD ENTIRE ENVIRONMENT FINISHED WITH SUCCESS"
 } | tee "${SCRIPT_DIR}/FULL_CREATE_LOG.log"
