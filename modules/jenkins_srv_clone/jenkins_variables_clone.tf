@@ -18,13 +18,14 @@ variable "jenkins_instance_type" {
 }
 variable "ami" {
   description = "Image type of instance"
-  default     = "ami-034b4a9c1f4410e4b"
+  default     = "ami-0a1b1df5f1c65f142"
+  #"ami-034b4a9c1f4410e4b"
   #"ami-0b849cfa9a28db221"
   #"ami-034e58071690a6a33"
   #"ami-0f5afe30fc3f654e9"
   #"ami-0afb069da06d8a56f"
   #"ami-0575d4d9d5f0f8d32"
-  # "ami-00b90dac46bce4b7a"
+  #"ami-00b90dac46bce4b7a"
   #"ami-04884824bab8563b8"
   #"ami-02aaedf8e0af1c0c3" Vers #1
   # Uses my Jenkins inatalled AMI, next is AMI of regular UBUNTU 21.04 "ami-0d527b8c289b4af7f"
