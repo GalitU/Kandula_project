@@ -21,6 +21,7 @@ pipeline {
         slack_color_good = "#00FF00"
         slack_color_failure =  "#FF0000"
         end = "success"
+        kandula_version = "v2.0.$BUILD_NUMBER"
     }
 
     stages
@@ -32,7 +33,7 @@ pipeline {
                 script
                 {
                     try {
-                        slackSend color: slack_color_good, message: ":green_heart: <@U032F82RH55>. Start build of new docker version of Kandula  ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0 #${env.BUILD_NUMBER}"
+                        slackSend color: slack_color_good, message: ":green_heart: <@U032F82RH55>. Start build of new docker version of Kandula  ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-${kandula_version}, Build #${env.BUILD_NUMBER}"
                         echo "===>> Git Clone from $git_hub_repo_path"
                         git branch: "${git_hub_branch_name}", credentialsId: "${git_hub_credentials}", url: "${git_hub_repo_path}"
                         sh "ls -lart ./*"
@@ -45,6 +46,17 @@ pipeline {
                 }
             }
         }
+        stage("Prepare version info")
+        {
+            steps
+            {
+                sh """
+tee ${WORKSPACE}/app/views/version.txt > /dev/null <<'EOF'
+Version of Kandula ${kandula_version}
+EOF
+                """
+            }
+        }
         stage("Docker build and Tag")
         {
             steps
@@ -52,14 +64,14 @@ pipeline {
                 script
                 {
                     try {
-                        echo "===>> Docker image ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0 will be build"
+                        echo "===>> Docker image ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-${kandula_version} will be build"
                         sh 'docker version'
                         sh 'docker build -t ${kandula_mid_docker_image_name_prefix} .'
                         sh 'docker image list'
-                        sh 'docker tag ${kandula_mid_docker_image_name_prefix} ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0'
+                        sh 'docker tag ${kandula_mid_docker_image_name_prefix} ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-${kandula_version}'
                     } catch (Exception e) {
                         end = "failure"
-                        slackSend color: slack_color_failure, message: ":bangbang: <@U032F82RH55>: Build docker image failed for  ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0 #${env.BUILD_NUMBER}"
+                        slackSend color: slack_color_failure, message: ":bangbang: <@U032F82RH55>: Build docker image failed for  ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-${kandula_version}, Build #${env.BUILD_NUMBER}"
                         sh 'might fail'
                     }
                 }
@@ -76,15 +88,15 @@ pipeline {
                 script
                 {
                     try {
-                        echo "===>> Push docker image ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0 to $docker_repo_path"
+                        echo "===>> Push docker image ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-${kandula_version} to $docker_repo_path"
                         withDockerRegistry([ credentialsId: "${docker_hub_credentials}", url: "" ])
                         {
-                            sh 'docker push ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0'
+                            sh 'docker push ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-${kandula_version}'
                         }
-                        slackSend color: slack_color_good, message: ":purple_heart: <@U032F82RH55>: New docker image ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0 #${env.BUILD_NUMBER} is ready for deployment"
+                        slackSend color: slack_color_good, message: ":purple_heart: <@U032F82RH55>: New docker image ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-${kandula_version}, Build #${env.BUILD_NUMBER} is ready for deployment"
                     } catch (Exception e) {
                         end = "failure"
-                        slackSend color: slack_color_failure, message: ":bangbang: <@U032F82RH55>: Failed upload docker image to docker hub for  ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0 #${env.BUILD_NUMBER}"
+                        slackSend color: slack_color_failure, message: ":bangbang: <@U032F82RH55>: Failed upload docker image to docker hub for  ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-${kandula_version} #${env.BUILD_NUMBER}"
                         sh 'might fail'
                     }
                 }
@@ -97,14 +109,14 @@ pipeline {
                 script
                 {
                     try {
-                        echo "===>> Delete docker image ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0 from Node ${env.NODE_NAME}"
+                        echo "===>> Delete docker image ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-${kandula_version} from Node ${env.NODE_NAME}"
                         sh 'docker images'
-                        sh 'docker rmi ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0'
+                        sh 'docker rmi ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-${kandula_version}'
                         sh 'docker images'
                         sh 'docker rmi ${kandula_mid_docker_image_name_prefix}:latest'
                     } catch (Exception e) {
                         end = "failure"
-                        slackSend color: slack_color_failure, message: ":bangbang: <@U032F82RH55>: Failed clean image from Jenkins agent for  ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0 #${env.BUILD_NUMBER}"
+                        slackSend color: slack_color_failure, message: ":bangbang: <@U032F82RH55>: Failed clean image from Jenkins agent for  ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-${kandula_version} #${env.BUILD_NUMBER}"
                         sh 'might fail'
                     }
                 }
@@ -123,7 +135,7 @@ pipeline {
                         sh "git branch -a"
                     } catch (Exception e) {
                         end = "failure"
-                        slackSend color: slack_color_failure, message: ":bangbang: <@U032F82RH55>: Failed checkout Kandula pod manifest from ${git_hub_repo_path_eks} for ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0 #${env.BUILD_NUMBER}"
+                        slackSend color: slack_color_failure, message: ":bangbang: <@U032F82RH55>: Failed checkout Kandula pod manifest from ${git_hub_repo_path_eks} for ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-${kandula_version} #${env.BUILD_NUMBER}"
                         sh 'might fail'
                     }
                 }
@@ -140,9 +152,9 @@ kind: Deployment
 metadata:
   name: deployment-kandula-app
   annotations:
-    kubernetes.io/change-cause: "Release Kandula:$BUILD_NUMBER.0.0"
+    kubernetes.io/change-cause: "Release Kandula:${kandula_version}"
   labels:
-    version: v$BUILD_NUMBER.0.0
+    version: ${kandula_version}
     task: Mid-Project
 spec:
   replicas: 2
@@ -152,12 +164,12 @@ spec:
   template:
     metadata:
       labels:
-        version: v$BUILD_NUMBER.0.0
+        version: ${kandula_version}
         app: kandula
     spec:
       containers:
         - name: kandula
-          image: ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0
+          image: ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-${kandula_version}
           ports:
             - containerPort: 5000
               name: http
@@ -181,7 +193,7 @@ metadata:
     app: backend
 spec:
   containers:
-    - image: ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0
+    - image: ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-${kandula_version}
       name: kandula
       ports:
         - containerPort: 5000
@@ -211,13 +223,13 @@ EOF
                         sshagent(['jenkins-mid-kandula-git-ssh']) {
                             sh 'git add pod-kandula.yaml'
                             sh 'git add deploy-kandula.yaml'
-                            sh 'git commit -m "Automatic commit from Jenkins, build version ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0"'
+                            sh 'git commit -m "Automatic commit from Jenkins, build version ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-${kandula_version}"'
                             sh "git push origin main"
                         }
-                        slackSend color: slack_color_good, message: ":blue_heart: <@U032F82RH55>: Kandula pod manifest was commited automatically from Jenkins with new version number ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0 #${env.BUILD_NUMBER}"
+                        slackSend color: slack_color_good, message: ":blue_heart: <@U032F82RH55>: Kandula pod manifest was commited automatically from Jenkins with new version number ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-${kandula_version} #${env.BUILD_NUMBER}"
                     } catch (Exception e) {
                         end = "failure"
-                        slackSend color: slack_color_failure, message: ":bangbang: <@U032F82RH55>: Failed commit new Kandula pod manifest to ${git_hub_repo_path_eks} for ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0 #${env.BUILD_NUMBER}"
+                        slackSend color: slack_color_failure, message: ":bangbang: <@U032F82RH55>: Failed commit new Kandula pod manifest to ${git_hub_repo_path_eks} for ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-${kandula_version} #${env.BUILD_NUMBER}"
                         sh 'might fail'
                     }
                 }
@@ -226,10 +238,10 @@ EOF
     }
     post {
         success {
-            slackSend color: slack_color_good, message: ":large_blue_circle: :white_check_mark: :100: :beer: :dancer: <@U032F82RH55>: Finished - Succeded build Kandula docker for version ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0 #${env.BUILD_NUMBER}"
+            slackSend color: slack_color_good, message: ":large_blue_circle: :white_check_mark: :100: :beer: :dancer: <@U032F82RH55>: Finished - Succeded build Kandula docker for version ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-${kandula_version} #${env.BUILD_NUMBER}"
         }
         failure {
-            slackSend color: slack_color_good, message: ":red_circle: :x: :sos: :-1: <@U032F82RH55>: Finished - Failed process to build and deply Kandula docker for version ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0 #${env.BUILD_NUMBER}"
+            slackSend color: slack_color_good, message: ":red_circle: :x: :sos: :-1: <@U032F82RH55>: Finished - Failed process to build and deply Kandula docker for version ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-${kandula_version} #${env.BUILD_NUMBER}"
         }
     }
 }

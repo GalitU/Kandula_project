@@ -46,27 +46,20 @@ SAMPLE_INSTANCE_DATA = {
 }
 
 
-def get_state_reason(instance):
-    instance_state = instance['State']['Name']
-    if instance_state != 'running':
-        return instance['StateReason']['Message']
-
-
 class InstanceData:
     def __init__(self, ec2_client: client):
         self.ec2_client = ec2_client
         self.formatted_response_list = {'Instances': []}
-        self.aws_original_instances = {}
 
-    def get_value(self, object, name_of_value, instance_is):
+    def get_value(self, object, name_of_value, instance_id):
         result = ""
         try:
             result = object[name_of_value]
-            logger.info("GALITU: Element %s = %s in instance %s",
-                        name_of_value, result, instance_is)
+            logger.debug("GALITU: Element %s = %s in instance %s",
+                         name_of_value, result, instance_id)
         except:
             logger.warning("GALITU: Element %s not exist in instance %s",
-                           name_of_value, instance_is)
+                           name_of_value, instance_id)
         finally:
             return result
 
@@ -74,15 +67,15 @@ class InstanceData:
         try:
             count = 0
             for reservation in response_from_boto3['Reservations']:
-                self.aws_original_instances = reservation['Instances']
-                for instance in self.aws_original_instances:
-                    logger.info(
+                for instance in reservation['Instances']:
+                    logger.debug(
                         "GALITU: Count %d, instance from boto [%s]", count, instance)
-                    logger.info("GALITU: Count %d", count)
+                    logger.info("GALITU: Count %d instance ID %s",
+                                count, instance[u'InstanceId'])
                     formatted_instance = {}
                     count = count + 1
                     formatted_instance['Cloud'] = 'aws'
-                    formatted_instance['Region'] = 'eu-central-1'
+                    formatted_instance['Region'] = self.ec2_client.meta.region_name
                     formatted_instance['Id'] = self.get_value(
                         instance, u'InstanceId', instance[u'InstanceId'])
                     formatted_instance['Type'] = self.get_value(
@@ -105,27 +98,26 @@ class InstanceData:
                         instance, u'SubnetId', instance[u'InstanceId'])
                     formatted_instance['VpcId'] = self.get_value(
                         instance, u'VpcId', instance[u'InstanceId'])
-                    for net_spec in instance[u'NetworkInterfaces']:
-                        formatted_instance['MacAddress'] = self.get_value(
-                            net_spec, u'MacAddress', instance[u'InstanceId'])
-                        formatted_instance['NetworkInterfaceId'] = self.get_value(
-                            net_spec, u'NetworkInterfaceId', instance[u'InstanceId'])
-                        formatted_instance['PrivateDnsName'] = self.get_value(
-                            net_spec, u'PrivateDnsName', instance[u'InstanceId'])
-                        formatted_instance['PrivateIpAddress'] = self.get_value(
-                            net_spec, u'PrivateIpAddress', instance[u'InstanceId'])
-                        formatted_instance['PublicDnsName'] = self.get_value(
-                            instance, u'PublicDnsName', instance[u'InstanceId'])
-                        formatted_instance['PublicIpAddress'] = self.get_value(
-                            instance, u'PublicIpAddress', instance[u'InstanceId'])
-                        formatted_instance['RootDeviceName'] = self.get_value(
-                            instance, u'RootDeviceName', instance[u'InstanceId'])
-                        formatted_instance['RootDeviceType'] = self.get_value(
-                            instance, u'RootDeviceType', instance[u'InstanceId'])
-                        formatted_instance['SecurityGroups'] = self.get_value(
-                            instance, u'SecurityGroups', instance[u'InstanceId'])
-                        formatted_instance['Tags'] = self.get_value(
-                            instance, u'Tags', instance[u'InstanceId'])
+                    formatted_instance['RootDeviceName'] = self.get_value(
+                        instance, u'RootDeviceName', instance[u'InstanceId'])
+                    formatted_instance['RootDeviceType'] = self.get_value(
+                        instance, u'RootDeviceType', instance[u'InstanceId'])
+                    formatted_instance['SecurityGroups'] = self.get_value(
+                        instance, u'SecurityGroups', instance[u'InstanceId'])
+                    formatted_instance['Tags'] = self.get_value(
+                        instance, u'Tags', instance[u'InstanceId'])
+                    formatted_instance['MacAddress'] = "" if len(instance[u'NetworkInterfaces']) == 0 else self.get_value(
+                        instance[u'NetworkInterfaces'][0], u'MacAddress', instance[u'InstanceId'])
+                    formatted_instance['NetworkInterfaceId'] = "" if len(instance[u'NetworkInterfaces']) == 0 else self.get_value(
+                        instance[u'NetworkInterfaces'][0], u'NetworkInterfaceId', instance[u'InstanceId'])
+                    formatted_instance['PrivateDnsName'] = "" if len(instance[u'NetworkInterfaces']) == 0 else self.get_value(
+                        instance[u'NetworkInterfaces'][0], u'PrivateDnsName', instance[u'InstanceId'])
+                    formatted_instance['PrivateIpAddress'] = "" if len(instance[u'NetworkInterfaces']) == 0 else self.get_value(
+                        instance[u'NetworkInterfaces'][0], u'PrivateIpAddress', instance[u'InstanceId'])
+                    formatted_instance['PublicDnsName'] = "" if len(instance[u'NetworkInterfaces']) == 0 else self.get_value(
+                        instance, u'PublicDnsName', instance[u'InstanceId'])
+                    formatted_instance['PublicIpAddress'] = "" if len(instance[u'NetworkInterfaces']) == 0 else self.get_value(
+                        instance, u'PublicIpAddress', instance[u'InstanceId'])
 
                     self.formatted_response_list['Instances'].append(
                         formatted_instance)
@@ -142,7 +134,6 @@ class InstanceData:
         self.formatted_response_list = {'Instances': []}
         try:
             response = self.ec2_client.describe_instances()
-            ret_status = True
             if response['ResponseMetadata']['HTTPStatusCode'] == 200:
                 logger.info(
                     "GALITU: Connection to AWS succeeded with status %d", response['ResponseMetadata']['HTTPStatusCode'])
@@ -161,8 +152,9 @@ class InstanceData:
 
     def get_instances(self):
         received_instances = self.get_and_format_instances_from_aws()
-        logger.info("GALITU ===>>> %s", received_instances)
+        logger.debug("GALITU ===>>> %s", received_instances)
         return received_instances
+
 
 #######################################################
 # For debug only

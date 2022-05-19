@@ -8,6 +8,7 @@ from app.src.services import app_health, instance_shutdown_scheduling
 from app.src.services.instance_actions import InstanceActions
 from app.src.services.instance_data import InstanceData
 from app.containers import Container
+import os
 
 from botocore.exceptions import ClientError
 
@@ -26,22 +27,28 @@ class InstanceAPI(MethodView):
 
     def get(self, instance_id, instance_action):
         try:
-            action_to_run = self.instance_actions.action_selector(instance_action)
+            action_to_run = self.instance_actions.action_selector(
+                instance_action)
             action_to_run(instance_id)
-            flash("Your request to {} instance {} is in progress".format(instance_action, instance_id), "info")
+            flash("Your request to {} instance {} is in progress".format(
+                instance_action, instance_id), "info")
         except (ClientError, RuntimeError) as e:
-            flash("Cannot perform action '{}' on instance: {}".format(instance_action, instance_id), "danger")
+            flash("Cannot perform action '{}' on instance: {}".format(
+                instance_action, instance_id), "danger")
             logger.exception(e)
 
         return redirect(url_for('instances'))
 
     def post(self, instance_id, instance_action):
         try:
-            action_to_run = self.instance_actions.action_selector(instance_action)
+            action_to_run = self.instance_actions.action_selector(
+                instance_action)
             action_to_run(instance_id)
-            flash("Your request to {} instance {} is in progress".format(instance_action, instance_id), "info")
+            flash("Your request to {} instance {} is in progress".format(
+                instance_action, instance_id), "info")
         except (ClientError, RuntimeError) as e:
-            flash("Cannot perform action '{}' on instance: {}".format(instance_action, instance_id), "danger")
+            flash("Cannot perform action '{}' on instance: {}".format(
+                instance_action, instance_id), "danger")
             logger.exception(e)
 
         return redirect(url_for('instances'))
@@ -49,11 +56,17 @@ class InstanceAPI(MethodView):
 
 def home():
     logger.info("Home view")
-    return render_template('home.html', title='Welcome to Kandula')
+    file_path = os.getcwd()
+    with open(file_path + '/app/views/version.txt', 'r') as file:
+        version_number = file.read().replace('\n', '')
+    return render_template('home.html', title='Welcome to Kandula', version_docker=version_number)
 
 
 def about():
-    return render_template('about.html', title='About')
+    file_path = os.getcwd()
+    with open(file_path + '/app/views/version.txt', 'r') as file:
+        version_number = file.read().replace('\n', '')
+    return render_template('about.html', title='About', version_docker=version_number)
 
 
 def health():
