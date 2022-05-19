@@ -40,6 +40,7 @@ pipeline {
                     } catch (Exception e) {
                         end = "failure"
                         slackSend color: slack_color_failure, message: ":bangbang: <@U032F82RH55>: Failed checkout ${git_hub_repo_path}"
+                        sh 'might fail'
                     }
                 }
             }
@@ -59,6 +60,7 @@ pipeline {
                     } catch (Exception e) {
                         end = "failure"
                         slackSend color: slack_color_failure, message: ":bangbang: <@U032F82RH55>: Build docker image failed for  ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0 #${env.BUILD_NUMBER}"
+                        sh 'might fail'
                     }
                 }
             }
@@ -83,6 +85,7 @@ pipeline {
                     } catch (Exception e) {
                         end = "failure"
                         slackSend color: slack_color_failure, message: ":bangbang: <@U032F82RH55>: Failed upload docker image to docker hub for  ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0 #${env.BUILD_NUMBER}"
+                        sh 'might fail'
                     }
                 }
             }
@@ -102,6 +105,7 @@ pipeline {
                     } catch (Exception e) {
                         end = "failure"
                         slackSend color: slack_color_failure, message: ":bangbang: <@U032F82RH55>: Failed clean image from Jenkins agent for  ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0 #${env.BUILD_NUMBER}"
+                        sh 'might fail'
                     }
                 }
             }
@@ -120,6 +124,7 @@ pipeline {
                     } catch (Exception e) {
                         end = "failure"
                         slackSend color: slack_color_failure, message: ":bangbang: <@U032F82RH55>: Failed checkout Kandula pod manifest from ${git_hub_repo_path_eks} for ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0 #${env.BUILD_NUMBER}"
+                        sh 'might fail'
                     }
                 }
             }
@@ -213,20 +218,18 @@ EOF
                     } catch (Exception e) {
                         end = "failure"
                         slackSend color: slack_color_failure, message: ":bangbang: <@U032F82RH55>: Failed commit new Kandula pod manifest to ${git_hub_repo_path_eks} for ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0 #${env.BUILD_NUMBER}"
+                        sh 'might fail'
                     }
                 }
             }
         }
     }
     post {
-        always {
-            script {
-                if ( end == "success" ) {
-                    slackSend color: slack_color_good, message: ":large_blue_circle: :white_check_mark: :100: :beer: :dancer: <@U032F82RH55>: Finished - Succeded build Kandula docker for version ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0 #${env.BUILD_NUMBER}"
-                } else {
-                    slackSend color: slack_color_good, message: ":red_circle: :x: :sos: :-1: <@U032F82RH55>: Finished - Failed process to build and deply Kandula docker for version ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0 #${env.BUILD_NUMBER}"
-                }
-            }
+        success {
+            slackSend color: slack_color_good, message: ":large_blue_circle: :white_check_mark: :100: :beer: :dancer: <@U032F82RH55>: Finished - Succeded build Kandula docker for version ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0 #${env.BUILD_NUMBER}"
+        }
+        failure {
+            slackSend color: slack_color_good, message: ":red_circle: :x: :sos: :-1: <@U032F82RH55>: Finished - Failed process to build and deply Kandula docker for version ${docker_repo_path}:${kandula_mid_docker_image_name_prefix}-v$BUILD_NUMBER.0.0 #${env.BUILD_NUMBER}"
         }
     }
 }
