@@ -114,7 +114,7 @@ module "jenkins_agent" {
   jenkins_purpose             = "JenkinsSlave"
   type_of_subnet              = "Private"
   subnet_association_tag      = "Master"
-  count_instances             = 1
+  count_instances             = 2
   jenkins_sec_group_array     = concat(module.reguest_data.sec_grp_ssh_ids, module.reguest_data.sec_grp_consul_ids)
   access_key_name             = module.reguest_data.key_pair_master
   access_key_file             = file(local.path_to_master_key)
