@@ -6,6 +6,7 @@ path=`readlink -f "${BASH_SOURCE:-$0}"`
 SCRIPT_DIR=`dirname $path`
 echo -e "\n\n" $SCRIPT_DIR
 
+
 cd $SCRIPT_DIR/..
 cd ./S3_BUCKET
 echo -e "\n\n" ==== Creates S3 ==== [basename $(pwd)]

@@ -21,7 +21,7 @@ pipeline {
         slack_color_good = "#00FF00"
         slack_color_failure =  "#FF0000"
         end = "success"
-        kandula_version = "v2.0.$BUILD_NUMBER"
+        kandula_version = "v2.2.$BUILD_NUMBER"
     }
 
     stages
@@ -158,6 +158,12 @@ metadata:
     task: Mid-Project
 spec:
   replicas: 2
+  minReadySeconds: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+        maxUnavailable: 1
+        maxSurge: 1
   selector:
     matchLabels:
       app: kandula

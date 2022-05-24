@@ -15,7 +15,6 @@ terraform {
     null       = "~> 3.1.0"
     template   = "~> 2.2.0"
     random = "~> 3.1.0"
-
   }
 }
 
@@ -31,5 +30,3 @@ provider "aws" {
     }
   }
 }
-
-

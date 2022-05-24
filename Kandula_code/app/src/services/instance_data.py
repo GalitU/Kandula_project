@@ -68,59 +68,66 @@ class InstanceData:
             count = 0
             for reservation in response_from_boto3['Reservations']:
                 for instance in reservation['Instances']:
-                    logger.debug(
-                        "GALITU: Count %d, instance from boto [%s]", count, instance)
-                    logger.info("GALITU: Count %d instance ID %s",
-                                count, instance[u'InstanceId'])
-                    formatted_instance = {}
-                    count = count + 1
-                    formatted_instance['Cloud'] = 'aws'
-                    formatted_instance['Region'] = self.ec2_client.meta.region_name
-                    formatted_instance['Id'] = self.get_value(
-                        instance, u'InstanceId', instance[u'InstanceId'])
-                    formatted_instance['Type'] = self.get_value(
-                        instance, u'InstanceType', instance[u'InstanceId'])
-                    formatted_instance['ImageId'] = self.get_value(
-                        instance, u'ImageId', instance[u'InstanceId'])
-                    formatted_instance['LaunchTime'] = self.get_value(
-                        instance, u'LaunchTime', instance[u'InstanceId'])
-                    state = self.get_value(instance[u'State'],
-                                           u'Name', instance[u'InstanceId'])
-                    stateReason = self.get_value(
-                        instance, u'StateReason', instance[u'InstanceId'])
-                    stateReasonMessage = None
-                    if (stateReason != ""):
-                        stateReasonMessage = self.get_value(
-                            instance[u'StateReason'], u'Message', instance[u'InstanceId'])
-                    formatted_instance['State'] = state
-                    formatted_instance['StateReason'] = stateReasonMessage if state != "running" else None
-                    formatted_instance['SubnetId'] = self.get_value(
-                        instance, u'SubnetId', instance[u'InstanceId'])
-                    formatted_instance['VpcId'] = self.get_value(
-                        instance, u'VpcId', instance[u'InstanceId'])
-                    formatted_instance['RootDeviceName'] = self.get_value(
-                        instance, u'RootDeviceName', instance[u'InstanceId'])
-                    formatted_instance['RootDeviceType'] = self.get_value(
-                        instance, u'RootDeviceType', instance[u'InstanceId'])
-                    formatted_instance['SecurityGroups'] = self.get_value(
-                        instance, u'SecurityGroups', instance[u'InstanceId'])
-                    formatted_instance['Tags'] = self.get_value(
-                        instance, u'Tags', instance[u'InstanceId'])
-                    formatted_instance['MacAddress'] = "" if len(instance[u'NetworkInterfaces']) == 0 else self.get_value(
-                        instance[u'NetworkInterfaces'][0], u'MacAddress', instance[u'InstanceId'])
-                    formatted_instance['NetworkInterfaceId'] = "" if len(instance[u'NetworkInterfaces']) == 0 else self.get_value(
-                        instance[u'NetworkInterfaces'][0], u'NetworkInterfaceId', instance[u'InstanceId'])
-                    formatted_instance['PrivateDnsName'] = "" if len(instance[u'NetworkInterfaces']) == 0 else self.get_value(
-                        instance[u'NetworkInterfaces'][0], u'PrivateDnsName', instance[u'InstanceId'])
-                    formatted_instance['PrivateIpAddress'] = "" if len(instance[u'NetworkInterfaces']) == 0 else self.get_value(
-                        instance[u'NetworkInterfaces'][0], u'PrivateIpAddress', instance[u'InstanceId'])
-                    formatted_instance['PublicDnsName'] = "" if len(instance[u'NetworkInterfaces']) == 0 else self.get_value(
-                        instance, u'PublicDnsName', instance[u'InstanceId'])
-                    formatted_instance['PublicIpAddress'] = "" if len(instance[u'NetworkInterfaces']) == 0 else self.get_value(
-                        instance, u'PublicIpAddress', instance[u'InstanceId'])
+                    result = "failure"
+                    try:
+                        instance_id = instance[u'InstanceId']
+                        formatted_instance = {}
+                        count = count + 1
+                        formatted_instance['Cloud'] = 'aws'
+                        formatted_instance['Region'] = self.ec2_client.meta.region_name
+                        formatted_instance['Id'] = self.get_value(
+                            instance, u'InstanceId', instance_id)
+                        formatted_instance['Type'] = self.get_value(
+                            instance, u'InstanceType', instance_id)
+                        formatted_instance['ImageId'] = self.get_value(
+                            instance, u'ImageId', instance_id)
+                        formatted_instance['LaunchTime'] = self.get_value(
+                            instance, u'LaunchTime', instance_id)
+                        state = self.get_value(
+                            instance[u'State'], u'Name', instance_id)
+                        stateReason = self.get_value(
+                            instance, u'StateReason', instance_id)
+                        stateReasonMessage = None
+                        if (stateReason != ""):
+                            stateReasonMessage = self.get_value(
+                                instance[u'StateReason'], u'Message', instance_id)
+                        formatted_instance['State'] = state
+                        formatted_instance['StateReason'] = stateReasonMessage if state != "running" else None
+                        formatted_instance['SubnetId'] = self.get_value(
+                            instance, u'SubnetId', instance_id)
+                        formatted_instance['VpcId'] = self.get_value(
+                            instance, u'VpcId', instance_id)
+                        formatted_instance['RootDeviceName'] = self.get_value(
+                            instance, u'RootDeviceName', instance_id)
+                        formatted_instance['RootDeviceType'] = self.get_value(
+                            instance, u'RootDeviceType', instance_id)
+                        formatted_instance['SecurityGroups'] = self.get_value(
+                            instance, u'SecurityGroups', instance_id)
+                        formatted_instance['Tags'] = self.get_value(
+                            instance, u'Tags', instance_id)
+                        formatted_instance['PublicDnsName'] = self.get_value(
+                            instance, 'PublicDnsName', instance_id)
+                        formatted_instance['PublicIpAddress'] = self.get_value(
+                            instance, 'PublicIpAddress', instance_id)
 
-                    self.formatted_response_list['Instances'].append(
-                        formatted_instance)
+                        net_spec = instance[u'NetworkInterfaces']
+                        net_spec_keys = ['MacAddress', 'NetworkInterfaceId', 'PrivateDnsName',
+                                         'PrivateIpAddress']
+                        for key in net_spec_keys:
+                            formatted_instance[key] = "" if len(net_spec) == 0 else self.get_value(net_spec[0], key, instance_id)
+
+                        self.formatted_response_list['Instances'].append(
+                            formatted_instance)
+                        result = "success"
+                    except Exception as error:
+                        error_string = str(error)
+                        logger.fatal(
+                            "GALITU: parse_response_to_relevant_format() - error is %s", error_string)
+                    finally:
+                        logger.debug(
+                            "GALITU: Count %d, instance from boto [%s]", count, instance)
+                        logger.info(
+                            "GALITU: Instance #%d ID = [%s] investigated with %s.", count, instance_id, result)
 
         except Exception as error:
             error_string = str(error)
@@ -158,6 +165,6 @@ class InstanceData:
 
 #######################################################
 # For debug only
-#kuku = InstanceData(client('ec2'))
-#response = kuku.get_instances()
-# print(response)
+kuku = InstanceData(client('ec2'))
+response = kuku.get_instances()
+print(response)

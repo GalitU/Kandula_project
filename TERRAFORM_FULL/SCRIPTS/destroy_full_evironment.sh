@@ -12,9 +12,9 @@ cd $SCRIPT_DIR/..
 rm "${SCRIPT_DIR}/../../FULL_DESTROY_LOG.log"
 {
     echo -e "\n\n" ==== Delete Kandula application and all relevant parts ====
-    kubectl delete pod kandula-pod
+    #kubectl delete pod kandula-pod
+    #kubectl delete svc kandula-load-balancer
     kubectl delete secret kandula-secrets
-    kubectl delete svc kandula-load-balancer
     kubectl delete deployment deployment-kandula-app
     kubectl delete svc kandula-deploy-load-balancer
     EXITCODE=$?
@@ -80,6 +80,9 @@ rm "${SCRIPT_DIR}/../../FULL_DESTROY_LOG.log"
     #read -p "Press any key to continue...    " -n1 -s
 
     cd ./S3_BUCKET
+    echo -e "\n\n" ==== Delete all directories from s3://s3-mprj-kandula-bucket/ ====
+    aws s3 rm s3://s3-mprj-kandula-bucket/ --recursive --include "*/*"
+
     echo -e "\n\n" ==== Destroy S3 ==== [basename $(pwd)]
     echo yes | terraform destroy
     cd ..

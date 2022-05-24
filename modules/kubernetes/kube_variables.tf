@@ -40,6 +40,10 @@ variable "kube_pub_subnets_ids" {
   description = "Public subnets"
   type        = list(string)
 }
+variable "kube_additional_role_names" {
+  description = "List of roles which should make actions on Kube"
+  type        = list(string)
+}
 locals {
   k8s_service_account_namespace = "default"
   k8s_service_account_name      = "kandula-mid-account-name"

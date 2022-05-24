@@ -60,13 +60,13 @@ resource "aws_instance" "jenkins_agent" {
     ]
   }
 
-  provisioner "remote-exec" {
-    inline = [
-      "aws configure set default.region ${var.aws_default_region}",
-      "aws configure set aws_access_key_id ${var.aws_default_acss_key}",
-      "aws configure set aws_secret_access_key ${var.aws_default_secret_key}"
-    ]
-  }
+  ### provisioner "remote-exec" {
+  ###   inline = [
+  ###     "aws configure set default.region ${var.aws_default_region}",
+  ###     "aws configure set aws_access_key_id ${var.aws_default_acss_key}",
+  ###     "aws configure set aws_secret_access_key ${var.aws_default_secret_key}"
+  ###   ]
+  ### }
 
   provisioner "remote-exec" {
     inline = [

@@ -27,4 +27,5 @@ module "kubernetes" {
   kube_node_sec_groups = concat(module.reguest_data.kube_security_group_ids, module.reguest_data.sec_grp_consul_ids)
   kube_pub_subnets_ids = module.reguest_data.pub_subnets_ids
   kube_pvt_subnets_ids = module.reguest_data.workers_pvt_subnets_ids
+  kube_additional_role_names = ["JenkinsSrv_Describe", "JenkinsAgent_Describe"]
  }
