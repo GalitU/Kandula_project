@@ -1,0 +1,18 @@
+{
+    "Comment": "Update record to reflect new IP address of home router",
+    "Changes": [
+        {
+            "Action": "UPSERT",
+            "ResourceRecordSet": {
+                "Name": "{{HOSTED_ZONE_NAME}}.{{SITE_NAME}}.",
+                "Type": "CNAME",
+                "TTL": 300,
+                "ResourceRecords": [
+                    {
+                        "Value": "{{LB_ADDRESS}}"
+                    }
+                ]
+            }
+        }
+    ]
+}

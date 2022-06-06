@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: kandula
+  name: kandula-deploy-load-balancer
+  labels:
+    task: Mid-Project
+    purpose: Load_balancer
+    app: Kandula
+spec:
+  selector:
+    app: kandula
+  type: LoadBalancer
+  ports:
+    - name: http
+      port: 80
+      targetPort: 5000
+      nodePort: 30037
+      protocol: TCP

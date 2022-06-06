@@ -1,0 +1,16 @@
+usefull_commands.txt
+pod_kandula_secrets.yaml
+_kandula_cluster_ip.yaml
+_kandula_deploy.yaml
+_kandula_ingress.yaml
+_kandula_ingress_alb.yaml
+_kandula_ingress_ngnix.yaml
+_kandula_secrets.yaml
+alb.yaml
+plura_ingress.yaml
+route_record.json
+2048_full_galit.yaml
+2048_full_original.yaml
+EXAMPLES/
+ElasticSearch/
+kandula_secret.yaml
