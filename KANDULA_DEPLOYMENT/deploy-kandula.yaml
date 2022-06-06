@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-kandula-app
+  annotations:
+    kubernetes.io/change-cause: "Release Kandula:v3.0.21.786d20ff"
+  labels:
+    version: v3.0.21.786d20ff
+    task: Mid-Project
+spec:
+  replicas: 2
+  minReadySeconds: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+        maxUnavailable: 1
+        maxSurge: 1
+  selector:
+    matchLabels:
+      app: kandula
+  template:
+    metadata:
+      labels:
+        version: v3.0.21.786d20ff
+        app: kandula
+    spec:
+      containers:
+        - name: kandula
+          image: galitu/kandula-repo:kandula-mid-prj-v3.0.21.786d20ff
+          ports:
+            - containerPort: 5000
+              name: http
+              protocol: TCP
+          env:
+            - name: FLASK_ENV
+              value: development
+          envFrom:
+            - secretRef:
+                name: kandula-secrets

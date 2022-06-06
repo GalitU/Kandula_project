@@ -1,0 +1,167 @@
+pipeline {
+    agent
+    {
+        label 'Slave'
+    }
+
+    environment
+    {
+        user_name = 'Galit U.'
+        git_hub_credentials = 'jenkins-mid-kandula-git-ssh'
+        git_hub_repo_path_eks = 'git@github.com:GalitU/Mid_project_Kandula_deployment.git'
+        git_hub_branch_name_eks = 'main'
+        slack_color_good = 'GREEN'
+        slack_color_failure = 'RED'
+        end = "success"
+        kube_cluster_name = 'kandula-mid-kube'
+    }
+    stages
+    {
+        stage("Get last Kandula pod manifests from GIT")
+        {
+            steps
+            {
+                script
+                {
+                    try {
+                        slackSend channel: 'opsschool_jenkins_notification', teamDomain: 'PvtDevops', tokenCredentialId: 'PvtDevopsSlack', color: slack_color_good, message: ":blue_heart: <@U03HH1727NK>: Start deploy Kandula #${env.BUILD_NUMBER}  on EKS"
+                        echo "===>> Git Clone from ${git_hub_branch_name_eks}"
+                        git branch: "${git_hub_branch_name_eks}", credentialsId: "${git_hub_credentials}", url: "${git_hub_repo_path_eks}"
+                        sh "ls -lart ./*"
+                        sh "git branch -a"
+                    } catch (Exception e) {
+                        end = "failure"
+                        slackSend channel: 'opsschool_jenkins_notification', teamDomain: 'PvtDevops', tokenCredentialId: 'PvtDevopsSlack', color: slack_color_failure, message: ":bangbang: <@U03HH1727NK>:  Failed checkout ${git_hub_repo_path_eks}"
+                        sh 'might fail'
+                    }
+                }
+            }
+        }
+
+        stage("Update Kandula secrets")
+        {
+            steps
+            {
+                sh """
+tee ${WORKSPACE}/kandula_secret.yaml > /dev/null <<'EOF'
+apiVersion: v1
+kind: Secret
+metadata:
+  namespace: kandula
+  name: kandula-secrets
+type: Opaque
+data:
+  AWS_ACCESS_KEY_ID :  ${env.AWS_ACCESS_KEY_ID_64}
+  AWS_SECRET_ACCESS_KEY : ${env.AWS_SECRET_ACCESS_KEY_64}
+  AWS_DEFAULT_REGION : ZXUtY2VudHJhbC0x
+  USER_NAME :  ${env.KANDULA_USER_NAME}
+  USER_PASSWORD :  ${env.KANDULA_USER_PASSWORD}
+  TERMINATION_DRY_RUN : ${env.KANDULA_DRY_TERMINATION}
+EOF
+            """
+            }
+        }
+
+        stage("Update eks cluster configuration")
+        {
+            steps{
+                script
+                {
+                    try {
+                        sh '''
+                        aws eks --region=eu-central-1  update-kubeconfig --name ${kube_cluster_name}
+                        '''
+                    } catch (Exception e) {
+                        end = "failure"
+                        slackSend channel: 'opsschool_jenkins_notification', teamDomain: 'PvtDevops', tokenCredentialId: 'PvtDevopsSlack', color: slack_color_failure, message: ":exclamation: <@U03HH1727NK>: Update kube info failed."
+                        sh 'might fail'
+                    }
+                }
+            }
+        }
+
+        stage("Validate Kandula current status")
+        {
+            steps
+            {
+                script
+                {
+                    try {
+                        sh '''
+                        kubectl get secrets -n kandula
+                        kubectl get svc --show-labels -n kandula
+                        kubectl get pods --show-labels -n kandula
+                        kubectl get deployments --show-labels -n kandula
+                        kubectl get ingress --show-labels -n kandula
+                        kubectl get events -n kandula
+                        '''
+                    } catch (Exception e) {
+                        end = "failure"
+                        slackSend channel: 'opsschool_jenkins_notification', teamDomain: 'PvtDevops', tokenCredentialId: 'PvtDevopsSlack', color: slack_color_failure, message: ":bangbang: <@U03HH1727NK>: Kandula EKS is not active"
+                        sh 'might fail'
+                    }
+                }
+            }
+        }
+
+        stage("Start Kandula with new version")
+        {
+            steps
+            {
+                script
+                {
+                    try {
+                        sh '''
+                        cat ${WORKSPACE}/kandula_secret.yaml
+                        kubectl apply -f ${WORKSPACE}/kandula_secret.yaml
+                        kubectl apply -f ${WORKSPACE}/kandula_on_kube.yaml
+                        rm ${WORKSPACE}/kandula_secret.yaml
+                        '''
+                    } catch (Exception e) {
+                        end = "failure"
+                        slackSend channel: 'opsschool_jenkins_notification', teamDomain: 'PvtDevops', tokenCredentialId: 'PvtDevopsSlack', color: slack_color_failure, message: ":bangbang: <@U03HH1727NK>: Failed apply kandula on kubernetes"
+                        sh 'might fail'
+                    }
+                }
+            }
+        }
+
+        stage("Validate of starting of Kandula")
+        {
+            steps
+            {
+                script
+                {
+                    try {
+
+                        sh '''
+                        sleep 30s
+                        kubectl get secrets -n kandula
+                        kubectl get svc --show-labels -n kandula
+                        kubectl get pods --show-labels -n kandula
+                        kubectl get deployments --show-labels -n kandula
+                        kubectl get ingress --show-labels -n kandula
+                        kubectl get events -n kandula
+                        echo "Kandula started at [http://`kubectl get svc | awk 'FNR == 2 {print $4}'`]"
+                        '''
+                    } catch (Exception e) {
+                        end = "failure"
+                        slackSend channel: 'opsschool_jenkins_notification', teamDomain: 'PvtDevops', tokenCredentialId: 'PvtDevopsSlack', color: slack_color_failure, message: ":bangbang: <@U03HH1727NK>: Failed start kandula on kubernetes"
+                        sh 'might fail'
+                    }
+                }
+            }
+        }
+    }
+    post {
+        success {
+            sh '''
+            echo "Kandula started at [http://`kubectl get svc | awk 'FNR == 2 {print $4}'`]"
+            '''
+            slackSend channel: 'opsschool_jenkins_notification', teamDomain: 'PvtDevops', tokenCredentialId: 'PvtDevopsSlack', color: slack_color_good, message: ":large_blue_circle: :white_check_mark: :100: :beer: :dancer: <@U03HH1727NK>: Finished - Kandula on EKS started and running"
+        }
+        failure {
+            slackSend channel: 'opsschool_jenkins_notification', teamDomain: 'PvtDevops', tokenCredentialId: 'PvtDevopsSlack', color: slack_color_failure, message: ":red_circle: :x: :sos: :-1: <@U03HH1727NK>: Error - Deployment of Kandula FAILED"
+        }
+    }
+}
