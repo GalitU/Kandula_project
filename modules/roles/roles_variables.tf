@@ -23,3 +23,12 @@ variable "access_policy_description" {
 variable "access_policy_type" {
   description = "Policy type"
 }
+variable "purpose" {
+  description = "This will be prefix for name"
+}
+
+
+
+
+
+

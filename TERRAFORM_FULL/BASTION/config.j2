@@ -1,0 +1,111 @@
+Host github.com
+    HostName github.com
+    User galitu
+    IdentityFile ~/.ssh/PrivateKeys/GitHub/id_rsa_galitu
+Host *.eu-central-1.compute.amazonaws.com
+    ForwardAgent yes
+    User ubuntu
+    IdentityFile ~/.ssh/SSH_KEYS_FOR_Amazon/ansible_key_8.pem
+Host 10.0.1.*
+    ForwardAgent yes
+    User ubuntu
+    Port 22
+    IdentityFile ~/.ssh/SSH_KEYS_FOR_Amazon/Key_Consul_Kandula_MPrj.pem
+    ProxyJump Bastion_host
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+Host 10.0.2.*
+    ForwardAgent yes
+    User ubuntu
+    Port 22
+    IdentityFile ~/.ssh/SSH_KEYS_FOR_Amazon/Key_Consul_Kandula_MPrj.pem
+    ProxyJump Bastion_host
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+Host 10.0.3.*
+    ForwardAgent yes
+    User ubuntu
+    Port 22
+    IdentityFile ~/.ssh/SSH_KEYS_FOR_Amazon/Key_Master_Kandula_MPrj.pem
+    ProxyJump Bastion_host
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+Host 10.0.31.*
+    ForwardAgent yes
+    User ubuntu
+    Port 22
+    IdentityFile ~/.ssh/SSH_KEYS_FOR_Amazon/Key_Bastion_Kandula_MPrj.pem
+    ProxyJump Bastion_host
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+Host 10.0.4.*
+    ForwardAgent yes
+    User ubuntu
+    Port 22
+    IdentityFile ~/.ssh/SSH_KEYS_FOR_Amazon/Key_Master_Kandula_MPrj.pem
+    ProxyJump Bastion_host
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+Host 10.0.5.*
+    ForwardAgent yes
+    User ubuntu
+    Port 22
+    IdentityFile ~/.ssh/SSH_KEYS_FOR_Amazon/Key_WebServers_Kandula_MPrj.pem
+    ProxyJump Bastion_host
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+Host 10.0.6.*
+    ForwardAgent yes
+    User ubuntu
+    Port 22
+    IdentityFile ~/.ssh/SSH_KEYS_FOR_Amazon/Key_WebServers_Kandula_MPrj.pem
+    ProxyJump Bastion_host
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+Host Bastion_host
+    ForwardAgent yes
+    HostName {{BASTION_PUBLIC_IP}}
+    User ubuntu
+    Port 22
+    IdentityFile ~/.ssh/SSH_KEYS_FOR_Amazon/Key_Bastion_Kandula_MPrj.pem
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
+Host 3.123.232.172
+    ForwardAgent yes
+    User ubuntu
+    IdentityFile ~/.ssh/SSH_KEYS_FOR_Amazon/opsschool_consul_key.pem
+Host 3.66.89.200
+    ForwardAgent yes
+    User ubuntu
+    IdentityFile ~/.ssh/SSH_KEYS_FOR_Amazon/ansible_key_8.pem
+Host 3.68.101.242
+    ForwardAgent yes
+    User ubuntu
+    IdentityFile ~/.ssh/SSH_KEYS_FOR_Amazon/opsschool_consul_key.pem
+Host 3.70.208.217
+    ForwardAgent yes
+    User ubuntu
+    IdentityFile ~/.ssh/SSH_KEYS_FOR_Amazon/opsschool_consul_key.pem
+Host 3.71.46.124
+    ForwardAgent yes
+    User ubuntu
+    IdentityFile ~/.ssh/SSH_KEYS_FOR_Amazon/opsschool_consul_key.pem
+Host 3.72.79.134
+    ForwardAgent yes
+    User ubuntu
+    IdentityFile ~/.ssh/SSH_KEYS_FOR_Amazon/opsschool_consul_key.pem
+Host ec2-18-192-26-124.eu-central-1.compute.amazonaws.com
+    ForwardAgent yes
+    HostName ec2-18-192-26-124.eu-central-1.compute.amazonaws.com
+    User ubuntu
+    IdentityFile ~/.ssh/SSH_KEYS_FOR_Amazon/coredns_key.pem
+Host ec2-18-193-7-176.eu-central-1.compute.amazonaws.com
+    ForwardAgent yes
+    HostName ec2-18-193-7-176.eu-central-1.compute.amazonaws.com
+    User ubuntu
+    IdentityFile ~/.ssh/SSH_KEYS_FOR_Amazon/jenkins_ec2_key
+Host ec2-3-127-214-45.eu-central-1.compute.amazonaws.com
+    ForwardAgent yes
+    HostName ec2-3-127-214-45.eu-central-1.compute.amazonaws.com
+    User ubuntu
+    IdentityFile ~/.ssh/SSH_KEYS_FOR_Amazon/coredns_key.pem

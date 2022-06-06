@@ -58,6 +58,12 @@ variable "application_name" {
 variable "application_task" {
   description = "Name of envinronment"
 }
+variable "consul_prefix" {
+  description = "Consul prefix for ansible, will be relevant for any consul service(ConsulSrv, ConsulAgent)"
+}
+variable "consul_app_discovery_tag" {
+  description = "Discovery tag for consul application"
+}
 variable "created_by" {
   description = "Create manually or by terraform"
 }

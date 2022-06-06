@@ -1,6 +1,0 @@
-/*
-  Galit Udovik
-
-  OpsSchool DevOps cource
-  Move current state to cloud
-*/

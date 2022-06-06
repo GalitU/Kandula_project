@@ -1,0 +1,12 @@
+.svn/
+.vscode/
+.git/
+PrivateKeys/
+.terraform/
+terraform.tfstate.*
+terraform.tfstate
+.terraform.lock.hcl
+*.pem
+*.ppk
+*._tf_
+pod_kandula_secrets.yaml

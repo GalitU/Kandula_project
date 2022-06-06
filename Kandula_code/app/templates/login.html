@@ -1,0 +1,30 @@
+{% extends "layout_login.html" %}
+{% block content %}
+<style>
+h1 {text-align: center;}
+p {text-align: center;}
+div {text-align: center;}
+
+</style>
+<h1>Welcome to Kandula!</h1>
+<section class="hero is-info is-fullheight">
+     <div class="hero-body">
+          <div class="container">
+          <div class="columns is-centered">
+          <div class="column is-half">
+               <form method="POST">
+               <div class="container">
+                    <input type="text" placeholder="Enter Username" name="user_name" required>
+                    <input type="password" placeholder="Enter Password" name="user_password" required>
+                    <button type="submit">Login</button>
+                    <p>Hint : you started Kandula with this user and password</p>
+               </div>
+               </form>
+          </div>
+          </div>
+          </div>
+     </div>
+     <h6> <font color="brown">{{ version_docker }}</font></h6>
+     <h7> <font color="green">by Galit Udovik</font></h7><br>
+  </section>
+{% endblock content %}

@@ -27,11 +27,36 @@ resource "aws_lb" "alb" {
   }
 }
 
-resource "aws_lb_listener" "alb-listener" {
+resource "aws_lb_listener" "alb-listener-http" {
+  count             = length(var.listener_ports)
+  load_balancer_arn = aws_lb.alb.arn
+  port              = "80"
+  protocol          = "HTTP"
+  default_action {
+    type = "redirect"
+
+    redirect {
+      port        = var.listener_ports[count.index]
+      protocol    = var.listener_protocols[count.index]
+      status_code = "HTTP_301"
+    }
+  }
+  tags = {
+    Name      = "LB_listener_${var.lb_purpose}_${var.listener_ports[count.index]}_${var.listener_protocols[count.index]}_${local.alb_type}"
+    App_name  = var.application_name
+    Task      = var.application_task
+    Owner     = var.application_owner
+    CreatedBy = var.created_by
+  }
+}
+
+resource "aws_lb_listener" "alb-listener-https" {
   count             = length(var.listener_ports)
   load_balancer_arn = aws_lb.alb.arn
   port              = var.listener_ports[count.index]
   protocol          = var.listener_protocols[count.index]
+  ssl_policy        = "ELBSecurityPolicy-2016-08"
+  certificate_arn   = var.aws_acm_certificate_id
 
   default_action {
     type             = "forward"
@@ -55,6 +80,10 @@ resource "aws_lb_target_group" "alb-target" {
   health_check {
     enabled = true
     path    = "/"
+  }
+  stickiness {
+    type            = "lb_cookie"
+    cookie_duration = 60
   }
 
   tags = {

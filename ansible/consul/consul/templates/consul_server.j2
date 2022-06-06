@@ -1,0 +1,14 @@
+{
+  "advertise_addr": "{{private_ip_address}}",
+  "data_dir": "{{DATA_DIRECTORY}}",
+  "datacenter": "{{DATA_CENTER_NAME}}",
+  "encrypt": "uDBV4e+LbFW3019YKPxIrg==",
+  "disable_remote_exec": true,
+  "disable_update_check": true,
+  "leave_on_terminate": true,
+  "retry_join": ["provider=aws tag_key={{CONSUL_TAG_NAME}} tag_value={{CONSUL_TAG_VALUE}}"],
+  "server": true,
+  "bootstrap_expect": {{BOOT_STRAPPER_SERVER_NUMBERS}},
+  "ui": true,
+  "client_addr": "{{CLIENT_ADDRESS}}"
+}

@@ -1,0 +1,35 @@
+{% extends "layout_main.html" %}
+{% block content %}
+<style>
+h1 {text-align: center;}
+p {text-align: center;}
+div {text-align: center;}
+
+</style>
+<h1>Welcome to Kandula!</h1>
+<center>
+<table>
+     <tr>
+          <td>
+               <img style='width:100%;max-width:500px;height: 400px;' class='w3-border w3-padding' src="{{ url_for('static', filename='shelly_big.jpg')  }}">
+
+          </td>
+          <td>
+               <table>
+                    <tr>
+                         <td><img style='width:100%;max-width:159px;max-height:250px' class='w3-border w3-padding' src="{{ url_for('static', filename='kandula.jpg')  }}"></td>
+                         <td><img style='width:100%;max-width:400px;height: 200px;' class='w3-border w3-padding' src="{{ url_for('static', filename='KandulaShelly.jpg')  }}"></td>
+                    </tr>
+                    <tr>
+                         <td><img style='width:100%;max-width:180px;max-height:250px' class='w3-border w3-padding' src="{{ url_for('static', filename='Shelly1.jpg')  }}"></td>
+                         <td><img style='width:100%;max-width:400px;height: 200px;' class='w3-border w3-padding' src="{{ url_for('static', filename='Shelly2.jpg')  }}"></td>
+                    </tr>
+               </table>
+          </td>
+     </tr>
+</table>
+</center>
+<h6> <font color="brown">{{ version_docker }}</font></h6>
+<h7> <font color="green">by Galit Udovik</font></h7><br>
+<h2>The mighty warrior elephant who saved us!</h2>
+{% endblock content %}
