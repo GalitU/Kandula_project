@@ -8,6 +8,8 @@ filters:
     - Kandula*
   tag:App_name:
     - MPrj
+  tag:ConsulAppDiscoveryTag:
+    - Consul
   instance-state-name: running
 
 keyed_groups:

@@ -1,0 +1,23 @@
+{% extends "layout_main.html" %}
+{% block content %}
+<style>
+h1 {text-align: center;}
+p {text-align: center;}
+div {text-align: center;}
+
+</style>
+<h1>Goodbuy Kandula!</h1>
+<section class="hero is-info is-fullheight">
+     <div class="hero-body">
+          <div class="container">
+          <div class="columns is-centered">
+          <div class="column is-half">
+               <h4> <font color="red">Thank you for be with Kandula</font></h4>
+          </div>
+          </div>
+          </div>
+     </div>
+     <h6> <font color="brown">{{ version_docker }}</font></h6>
+     <h7> <font color="green">by Galit Udovik</font></h7><br>
+  </section>
+{% endblock content %}

@@ -30,7 +30,7 @@
     CONSUL_TEMPLATE_FILE_TYPE: "consul_agent"
     SERVICE_NAME: "Jenkins server"
     SERVICE_TAGS: "jenkins"
-    HEALTH_CHECKER_PORT: 22
+    HEALTH_CHECKER_PORT: 8080
   roles:
     - role: consul
 

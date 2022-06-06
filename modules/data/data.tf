@@ -210,6 +210,11 @@ data "aws_security_groups" "bastion" {
   }
 }
 
+data "aws_route53_zone" "hosted_zone_53" {
+  name         = var.route53_host_zone_name
+  private_zone = false
+}
+
 
 data "aws_security_groups" "sec_grp_kube" {
   filter {
@@ -224,3 +229,27 @@ data "aws_security_groups" "sec_grp_kube" {
     App_name = var.application_name
   }
 }
+
+data "aws_acm_certificate" "compoze_acm" {
+  domain   = "*.galitu.site"
+  statuses = ["ISSUED"]
+}
+
+
+
+/*
+
+data "aws_alb" "alb" {
+
+}
+
+locals {
+  lb_name = split("-", split(".", kubernetes_service_v1.kandula-srv.status.0.load_balancer.0.ingress.0.hostname).0).0
+}
+
+
+# Read information about the load balancer using the AWS provider.
+data "aws_elb" "k8s_elb" {
+  name = local.lb_name
+}
+*/

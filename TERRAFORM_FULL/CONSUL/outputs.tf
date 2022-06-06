@@ -41,7 +41,9 @@ output "vpc_id" {
 output "cosul_alb_dns" {
   value = module.consul_server_load_balancers.alb_dns
 }
-
+output "consul_http_address" {
+  value = "https://${module.route53.hosted_zone_record_fqdn}"
+}
 /* Consul server output */
 output "ec2_consul_servers_arn" {
   value = module.ec2_consul_servers.ec2_servers_arn

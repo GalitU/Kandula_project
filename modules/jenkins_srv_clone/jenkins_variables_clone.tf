@@ -18,7 +18,10 @@ variable "jenkins_instance_type" {
 }
 variable "ami" {
   description = "Image type of instance"
-  default     = "ami-0a1b1df5f1c65f142"
+  default     = "ami-0125ff874400eff56"
+  #"ami-054bdd10d6b146b25"
+  #"ami-0971deea0ac0124ba"
+  #"ami-0a1b1df5f1c65f142"
   #"ami-034b4a9c1f4410e4b"
   #"ami-0b849cfa9a28db221"
   #"ami-034e58071690a6a33"

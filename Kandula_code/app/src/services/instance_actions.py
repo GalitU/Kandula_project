@@ -1,5 +1,6 @@
 from boto3 import client
 import boto3
+import os
 
 import logging
 logger = logging.getLogger()
@@ -36,7 +37,8 @@ class InstanceActions:
     def terminate_instance(self, instance_id):
         result = False
         try:
-            responses = self.ec2_client.terminate_instances(InstanceIds=[instance_id], DryRun=False)
+            termination_dry_run = os.environ.get('TERMINATION_DRY_RUN')
+            responses = self.ec2_client.terminate_instances(InstanceIds=[instance_id], DryRun=True if termination_dry_run == "True" else False)
             result = responses['ResponseMetadata']['HTTPStatusCode'] == 200
         except Exception as error:
             error_string = str(error)

@@ -83,3 +83,85 @@ a.article-title:hover {
 .error {
     color: red
 }
+
+/* Galitu - insert style of me */
+/*form {
+  border: 3px solid #f1f1f1;
+}
+*/
+
+input[type=text],
+input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+button {
+  background-color: #EE752D;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+button:hover {
+  opacity: 0.5;
+}
+.cancelbtn {
+  width: auto;
+  padding: 10px 18px;
+  background-color: #f44336;
+}
+.button_green {
+  background-color: #0cc954;
+}
+.button_red {
+  background-color: #ec1212;
+}
+.button_blue {
+  background-color: #0e70e0;
+}
+.imgcontainer {
+  text-align: center;
+  margin: 24px 0 12px 0;
+}
+
+img.avatar {
+  width: 40%;
+  border-radius: 50%;
+}
+
+.container {
+  padding: 16px;
+}
+
+span.psw {
+  float: right;
+  padding-top: 16px;
+  width: 40%;
+}
+
+th {
+  text-align: left;
+}
+
+td {
+  height: 20px;
+  vertical-align: bottom;
+}
+table,
+td,
+th {
+  border: 0px solid black;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  border: none
+}

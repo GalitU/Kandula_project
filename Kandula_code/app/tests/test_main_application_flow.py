@@ -34,7 +34,8 @@ def run_docker():
                               stdout=True,
                               ports={'5000': 5000},
                               environment={'FLASK_ENV': 'development', 'AWS_ACCESS_KEY_ID': "test",
-                                           'AWS_SECRET_ACCESS_KEY': 'test'})
+                                           'AWS_SECRET_ACCESS_KEY': 'test', 'USER_NAME': 'admin', 'USER_PASSWORD' : 'password',
+										   'TERMINATION_DRY_RUN' : 'True'})
 
         yield
     except Exception as e:

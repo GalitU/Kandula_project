@@ -4,6 +4,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- <meta http-equiv="refresh" content="15" > -->
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -24,10 +25,9 @@
       <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
         <div class="container">
           <div class="navbar-nav mr-4">
-           <a href="/"> 
-           <img style='width:100%;max-width:150px' class='w3-border w3-padding' src="{{ url_for('static', filename='opsschool_white_logo.webp')  }}" 
-         </a>
-        </div>          
+           <a href="/">
+           <img style='width:100%;max-width:150px' class='w3-border w3-padding' src="{{ url_for('static', filename='opsschool_white_logo.webp')  }}"
+           </div>
           <div class="collapse navbar-collapse" id="navbarToggle" style="font-size: 1.4rem;">
             <div class="navbar-nav mr-auto">
               <a class="nav-item nav-link" href="{{ url_for('home') }}">Home</a>
@@ -35,16 +35,26 @@
               <a class="nav-item nav-link" href="{{ url_for('scheduler') }}">Scheduling</a>
               <a class="nav-item nav-link" href="{{ url_for('metrics') }}">Metrics</a>
               <a class="nav-item nav-link" href="{{ url_for('health') }}">Health</a>
+              <a class="nav-item nav-link" href="{{ url_for('about') }}">About</a>
+              <table>
+                <tr><td style='width:65px'></td><td></td></tr>
+              </table>
+              <a class="nav-item nav-link" href="{{ url_for('logout') }}">Logout <br>{{ session['user_name'] }}</a>
             </div>
             <!-- Navbar Right Side -->
             <div class="navbar-nav">
-                <a class="nav-item nav-link" href="{{ url_for('about') }}">About</a>
+              <table>
+                <tr><td style='width:15px'></td><td></td></tr>
+              </table>
+
             </div>
           </div>
         </div>
       </nav>
     </header>
+    <center>
     <main role="main" class="container">
+
       <div class="row">
         <div class="col-md-8 mt-5">
           {% with messages = get_flashed_messages(with_categories=true) %}
@@ -65,6 +75,7 @@
 
       </div>
     </main>
+    </center>
 
 
 

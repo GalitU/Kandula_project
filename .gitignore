@@ -29,3 +29,6 @@ FULL_CREATE_LOG.log
 FULL_DESTROY_LOG.log
 jenkins_agent_credentials.xml
 *.tfstate
+ssh_secret_key.xml
+Videos_for_presentation/
+jenkins-cli.jar.*

@@ -25,7 +25,12 @@ output "sec_grp_consul_ui" {
 output "sec_grp_kube" {
   value = aws_security_group.kubernetes_sec_grp_http
 }
-
+output "aws_acm_certificate_id" {
+  value = aws_acm_certificate.compoze_acm.id
+}
+output "aws_acm_certificate_arn" {
+  value = aws_acm_certificate.compoze_acm.arn
+}
 output "vpc_id" {
   value = aws_vpc.vpc.id
 }

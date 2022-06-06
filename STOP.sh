@@ -17,5 +17,5 @@ read -p "Press ENTER for continue, othervise [CTRL + C] . . . . . ." -n1 -s
 ./destroy_full_evironment.sh
 
 echo "=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+"
-echo "|    Congratulations : You can go and look for your Kandula "
+echo "|    Congratulations : You destroyed your environment "
 echo "=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+"

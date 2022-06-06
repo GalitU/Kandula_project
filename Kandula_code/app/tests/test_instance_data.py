@@ -24,7 +24,9 @@ def aws_credentials():
     os.environ['AWS_SECURITY_TOKEN'] = 'testing'
     os.environ['AWS_SESSION_TOKEN'] = 'testing'
     os.environ['AWS_DEFAULT_REGION'] = 'eu-central-1'
-
+    os.environ["USER_NAME"] = 'admin'
+    os.environ["USER_PASSWORD"] = 'password'
+	os.environ["TERMINATION_DRY_RUN"] = 'True'
     yield aws_credentials
 
 

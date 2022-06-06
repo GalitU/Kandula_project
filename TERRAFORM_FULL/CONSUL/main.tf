@@ -22,12 +22,13 @@ module "iam_roles_describe" {
 }
 
 module "reguest_data" {
-  source           = "../../modules/data"
-  region           = var.region
-  application_name = var.application_name
-  application_task = var.application_task
-  created_by       = var.created_by
-  vpc_name         = join("-", ["VPC", lower(var.application_name), var.application_task])
+  source                 = "../../modules/data"
+  region                 = var.region
+  application_name       = var.application_name
+  application_task       = var.application_task
+  created_by             = var.created_by
+  vpc_name               = join("-", ["VPC", lower(var.application_name), var.application_task])
+  route53_host_zone_name = "galitu.site"
 }
 
 #####################################################################################################
@@ -59,16 +60,31 @@ module "ec2_consul_servers" {
 module "consul_server_load_balancers" {
   source                   = "../../modules/load_balancer"
   subnets                  = module.reguest_data.pub_subnets_ids
-  lb_sec_group_array       = concat(module.reguest_data.sec_grp_http_ids, module.reguest_data.sec_grp_ssh_ids, module.reguest_data.sec_grp_consul_ui_ids, module.reguest_data.sec_grp_consul_ids)
+  lb_sec_group_array       = concat(module.reguest_data.sec_grp_http_ids, module.reguest_data.sec_grp_https_ids)
   application_task         = var.application_task
   application_name         = var.application_name
   created_by               = var.created_by
   vpc_id                   = module.reguest_data.vpc_id
   servers_for_attach_to_lb = concat(module.ec2_consul_servers.ec2_servers_id_arr)
-  listener_ports           = [80, 8500]
-  listener_protocols       = ["HTTP", "HTTP"]
+  listener_ports           = [443]
+  listener_protocols       = ["HTTPS"]
+  aws_acm_certificate_id   = module.reguest_data.aws_acm_certificate_arn
   idle_timeout             = 60
   internal                 = false
   lb_purpose               = "consul"
   target_port              = 8500
+}
+
+
+module "route53" {
+  source                     = "../../modules/route_53"
+  route53_host_zone_name     = "galitu.site"
+  route53_record_name        = "consul"
+  route53_address_list_array = [module.consul_server_load_balancers.alb_dns]
+  ttl                        = 300
+  application_task           = var.application_task
+  application_name           = var.application_name
+  created_by                 = var.created_by
+  application_owner          = var.application_owner
+  depends_on                 = [module.consul_server_load_balancers]
 }

@@ -34,12 +34,13 @@ module "iam_roles_describe_jenkins_agent" {
 }
 
 module "reguest_data" {
-  source           = "../../modules/data"
-  region           = var.region
-  application_name = var.application_name
-  application_task = var.application_task
-  created_by       = var.created_by
-  vpc_name         = join("-", ["VPC", lower(var.application_name), var.application_task])
+  source                 = "../../modules/data"
+  region                 = var.region
+  application_name       = var.application_name
+  application_task       = var.application_task
+  created_by             = var.created_by
+  vpc_name               = join("-", ["VPC", lower(var.application_name), var.application_task])
+  route53_host_zone_name = "galitu.site"
 }
 
 data "aws_instance" "bastion" {
@@ -92,14 +93,15 @@ module "jenkins_server" {
 module "jenkins_server_load_balancers" {
   source                   = "../../modules/load_balancer"
   subnets                  = module.reguest_data.pub_subnets_ids
-  lb_sec_group_array       = concat(module.reguest_data.sec_grp_http_ids, module.reguest_data.sec_grp_jenkins_ids, module.reguest_data.sec_grp_ssh_ids, )
+  lb_sec_group_array       = concat(module.reguest_data.sec_grp_http_ids, module.reguest_data.sec_grp_https_ids)
   application_task         = var.application_task
   application_name         = var.application_name
   created_by               = var.created_by
   vpc_id                   = module.reguest_data.vpc_id
   servers_for_attach_to_lb = concat(module.jenkins_server.jenkins_servers_id_arr)
-  listener_ports           = [80, 8080]
-  listener_protocols       = ["HTTP", "HTTP"]
+  listener_ports           = [443]
+  listener_protocols       = ["HTTPS"]
+  aws_acm_certificate_id  = module.reguest_data.aws_acm_certificate_arn
   idle_timeout             = 60
   internal                 = false
   lb_purpose               = "jenkins"
@@ -132,4 +134,17 @@ module "jenkins_agent" {
   aws_default_acss_key        = var.aws_default_acss_key
   aws_default_secret_key      = var.aws_default_secret_key
   aws_default_region          = var.aws_default_region
+}
+
+module "route53" {
+  source                     = "../../modules/route_53"
+  route53_host_zone_name     = "galitu.site"
+  route53_record_name        = "jenkins"
+  route53_address_list_array = [module.jenkins_server_load_balancers.alb_dns]
+  ttl                        = 300
+  application_task           = var.application_task
+  application_name           = var.application_name
+  created_by                 = var.created_by
+  application_owner          = var.application_owner
+  depends_on                 = [module.jenkins_server_load_balancers]
 }

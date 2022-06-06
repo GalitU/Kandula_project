@@ -54,7 +54,6 @@ output "kube_security_group_ids" {
 output "data_aws_security_groups_bastion" {
   value = data.aws_security_groups.bastion
 }
-
 output "key_pair_master" {
   value = join("_", ["Key", "Master", var.application_task, var.application_name])
 }
@@ -66,4 +65,16 @@ output "key_pair_webservers" {
 }
 output "key_pair_consul" {
   value = join("_", ["Key", "Consul", var.application_task, var.application_name])
+}
+output "hosted_zone_53_id" {
+  value = data.aws_route53_zone.hosted_zone_53.id
+}
+output "hosted_zone_53_name" {
+  value = data.aws_route53_zone.hosted_zone_53.name
+}
+output "hosted_zone_53_name_servers" {
+  value = data.aws_route53_zone.hosted_zone_53.name_servers
+}
+output "aws_acm_certificate_arn" {
+  value = data.aws_acm_certificate.compoze_acm.arn
 }

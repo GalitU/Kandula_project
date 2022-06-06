@@ -42,7 +42,7 @@ resource "aws_iam_policy_attachment" "role_join" {
 
 # Create the instance profile
 resource "aws_iam_instance_profile" "role_join" {
-  name = "Role_Instance_${local.role_info}_join1"
+  name = "Role_Instance_${local.role_info}_join"
   role = aws_iam_role.role_join.name
 }
 

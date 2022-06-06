@@ -33,6 +33,9 @@ variable "servers_for_attach_to_lb" {
   description = "List of instances for attach to lb"
   type        = list(string)
 }
+variable "aws_acm_certificate_id" {
+  description = "ARN of allowed certificate to public domain"
+}
 variable "listener_ports" {
   description = "List of ports for lb listeners"
   type        = list(number)

@@ -8,7 +8,7 @@ from .src.services import instance_data, instance_actions
 class Container(containers.DeclarativeContainer):
     config = providers.Configuration()
 
-    session = providers.Resource(
+    session_EYAL = providers.Resource(
         boto3.session.Session,
         aws_access_key_id=config.aws_access_key_id,
         aws_secret_access_key=config.aws_secret_access_key,
@@ -16,7 +16,7 @@ class Container(containers.DeclarativeContainer):
     )
 
     ec2_client = providers.Resource(
-        session.provided.client.call(),
+        session_EYAL.provided.client.call(),
         service_name='ec2',
     )
 

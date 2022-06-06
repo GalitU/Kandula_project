@@ -16,5 +16,8 @@ variable "created_by" {
   description = "Create manually or by terraform"
 }
 variable "vpc_name" {
-    description = "Name of VPC for get its info"
+  description = "Name of VPC for get its info"
+}
+variable "route53_host_zone_name" {
+  description = "Name of hosted zone where we will add records"
 }

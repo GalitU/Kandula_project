@@ -30,17 +30,27 @@ kubectl apply -f $KUBERNETIS_CTL_PATH/pod_kandula_secrets.yaml
 kubectl create -f $KUBERNETIS_CTL_PATH/pod-svc-deploy-kandula-LB.yaml
 kubectl create -f $KUBERNETIS_CTL_PATH/deploy-kandula.yaml
 
-kubectl get secrets
-kubectl get svc --show-labels
-kubectl get pods --show-labels
-kubectl get events
-kubectl get deployments --show-labels
 kubectl logs kandula-pod
-
 pod_1=`kubectl get pods | awk 'FNR == 2 {print $1}'`
 pod_2=`kubectl get pods | awk 'FNR == 3 {print $1}'`
 kubectl logs $pod_1
 kubectl logs $pod_2
 
+kubectl get secrets
+echo -e "\n\n" ===== Kube Services are =================
+kubectl get svc --show-labels
+
+echo -e "\n\n" ===== Kube Pods are =================
+kubectl get pods --show-labels
+
+echo -e "\n\n" ===== Kube Events are =================
+kubectl get events
+
+echo -e "\n\n" ===== Kube Deployments are =================
+kubectl get deployments --show-labels
+
+echo -e "\n\n" ===== Kube Pods are =================
+echo $pod_1
+echo $pod_2
 echo =================================================
 echo -e "\n\n" "BUILD KUBE FINISHED"

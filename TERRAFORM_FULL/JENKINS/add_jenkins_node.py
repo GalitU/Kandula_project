@@ -3,9 +3,9 @@ import os
 import re
 from jinja2 import Template
 import os.path
-import jinja2
 import requests
 import time
+import sys
 
 total_number_for_cleaning = 2
 jenkins_lb_url_for_register = None
@@ -36,8 +36,12 @@ def get_jenkins_address():
         "terraform output jenkins_alb_dns").read().replace("'", "").replace('"', '').replace('\n', '')
     print("\n\n-----------------------\nJenkins ALB dns = ",
           lb_terraform_address, end="\n")
-    jenkins_lb_url_for_register = 'http://' + lb_terraform_address
-    jenkins_lb_url = 'http://' + lb_terraform_address + '/jnlpJars/jenkins-cli.jar'
+   ###jenkins_lb_url_for_register = 'http://' + lb_terraform_address
+   ###jenkins_lb_url = 'http://' + lb_terraform_address + '/jnlpJars/jenkins-cli.jar'
+    jenkins_lb_url_for_register = 'https://jenkins.galitu.site'
+    jenkins_lb_url = 'https://jenkins.galitu.site' + \
+        '/jnlpJars/jenkins-cli.jar'
+
     print("Jenkins address is ", jenkins_lb_url_for_register, end="\n")
 
 
@@ -45,9 +49,10 @@ def get_jar_file():
     global jenkins_lb_url_for_register, jenkins_lb_url
 
     print("Jenkins CLI file will be received from ", jenkins_lb_url, end="\n")
-    if not os.path.exists('jenkins-cli.jar'):
-        print("File jenkins-cli.jar will be downloaded from Jenkins server", end="\n")
-        os.system("wget " + jenkins_lb_url)
+    if not os.path.exists('~/jenkins-cli.jar'):
+        print("File ~/ will be downloaded from Jenkins server", end="\n")
+        os.system(
+            "wget -O ~/jenkins-cli.jar --no-check-certificate " + jenkins_lb_url)
     else:
         print("File jenkins-cli.jar exits locally", end="\n")
 
@@ -81,7 +86,7 @@ def add_nodes():
             with open("jenkins_node.xml", mode="wt") as f:
                 f.write(registration_node_xml)
 
-            cmd = 'cat jenkins_node.xml | java -jar jenkins-cli.jar -auth galitu:113addc54d29cfb5a38bcbb402c9aaf46c -s ' + \
+            cmd = 'cat jenkins_node.xml | java -Djavax.net.ssl.trustStore=cacerts -jar ~/jenkins-cli.jar -auth galitu:113addc54d29cfb5a38bcbb402c9aaf46c -s ' + \
                 jenkins_lb_url_for_register + \
                 " -webSocket create-node JenkinsAgent_" + str(i)
             i = i + 1
@@ -94,7 +99,7 @@ def decrease_unused_nodes():
 
     # in case when we decreased number of servers
     for i in range(total_number_for_cleaning):
-        cmd = 'java -jar jenkins-cli.jar -auth galitu:113addc54d29cfb5a38bcbb402c9aaf46c -s ' + \
+        cmd = 'java -Djavax.net.ssl.trustStore=cacerts -jar ~/jenkins-cli.jar -auth galitu:113addc54d29cfb5a38bcbb402c9aaf46c -s ' + \
             jenkins_lb_url_for_register + \
             " -webSocket get-node JenkinsAgent_" + str(i)
         print(cmd, end="\n")
@@ -105,7 +110,7 @@ def decrease_unused_nodes():
             jenkins_agent_ip = search_result.group(1)
             print(
                 "\n\n-----------------------\nDelete unused JenkinsAgent_", str(i), " with ip = ", jenkins_agent_ip, end="\n")
-            cmd = 'java -jar jenkins-cli.jar -auth galitu:113addc54d29cfb5a38bcbb402c9aaf46c -s ' + \
+            cmd = 'java -Djavax.net.ssl.trustStore=cacerts -jar ~/jenkins-cli.jar -auth galitu:113addc54d29cfb5a38bcbb402c9aaf46c -s ' + \
                 jenkins_lb_url_for_register + \
                 " -webSocket delete-node JenkinsAgent_" + str(i)
             print(cmd, end="\n")
@@ -114,43 +119,35 @@ def decrease_unused_nodes():
         print("\n\n=-=-=-=-=-=", "Finished you can open your jenkins server now by click on ",
               jenkins_lb_url_for_register, end="\n\n")
 
+# wget --no-check-certificate https://jenkins.galitu.site/jnlpJars/jenkins-cli.jar
 
-def update_agent_credentials_ssh_private_key():
-    script_dir = os.path.abspath(os.path.dirname(__file__))
-    master_key_file = open(
-        script_dir + "/../KEYS/Key_Master_Kandula_MPrj.pem", "r")
-    master_key_file_content = master_key_file.read()
-    cred_template_key_file = open(
-        script_dir + "/jenkins_agent_credentials.j2", "r")
-    cred_template_key_file_content = cred_template_key_file.read()
 
-    tm = Template(cred_template_key_file_content)
+def update_agent_credentials_ssh_private_key_by_script():
+    script_dir_local = "."
 
-    change_credentials_for_node_xml = tm.render(
-        PRIVATE_KEY_AGENT=master_key_file_content)
-    print(change_credentials_for_node_xml, end="\n\n\n")
-
-    with open(script_dir + "/jenkins_agent_credentials.xml", mode="wt") as f:
-        f.write(change_credentials_for_node_xml)
-
-    cmd = 'cat {} | java -jar jenkins-cli.jar -auth galitu:113addc54d29cfb5a38bcbb402c9aaf46c -s {}' \
-        ' -webSocket update-credentials-by-xml \"SystemCredentialsProvider::SystemContextResolver::jenkins\" "(global)\" slaves_ssh_key'.format(
-            script_dir + "/jenkins_agent_credentials.xml", jenkins_lb_url_for_register)
-
+    cmd = 'python3 {}/../UPDATE_SECRETS/updata_ssh_key.py -i "slaves_ssh_key" -d "slaves_ssh_key" -s "{}/../KEYS/Key_Master_Kandula_MPrj.pem" -f "{}/../UPDATE_SECRETS/ssh_secret_key.j2" -u "ubuntu" -a {}'.format(script_dir_local, script_dir_local, script_dir_local, 'https://jenkins.galitu.site')
     print(cmd, end="\n")
-    os.system(cmd)
+    change_credentials_ssh_jenkins_result = os.popen(cmd).read()
+    print(change_credentials_ssh_jenkins_result, end="\n")
 
-
-# wget http://lb-jenkins-mprj-kandula-1740977339.eu-central-1.elb.amazonaws.com/jnlpJars/jenkins-cli.jar
 
 def start():
     get_jenkins_address()
     validate_jenkins_server_is_up_and_running()
     get_jar_file()
-    update_agent_credentials_ssh_private_key()
+    update_agent_credentials_ssh_private_key_by_script()
     decrease_unused_nodes()
     add_nodes()
 
 
-# Start the action
-start()
+def main(argv):
+    get_jenkins_address()
+    validate_jenkins_server_is_up_and_running()
+    get_jar_file()
+    update_agent_credentials_ssh_private_key_by_script()
+    decrease_unused_nodes()
+    add_nodes()
+
+
+if __name__ == "__main__":
+    main(sys.argv[1:])

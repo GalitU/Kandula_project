@@ -153,8 +153,8 @@ Remark: All process of creating, updating, assigning, installation, fine tuning 
 
  8. At finish of installation the script will inform about all public relevant IPs like in next example<br>
 =========================================================================<br>
-CONSUL UI = [http://LB-consul-mprj-Kandula-1158479661.eu-central-1.elb.amazonaws.com]<br>
-CONSUL UI = [http://LB-jenkins-mprj-Kandula-949533713.eu-central-1.elb.amazonaws.com]<br>
+CONSUL UI = [https://consul.galitu.site]<br>
+JENKINS UI = [https://jenkins.galitu.site]<br>
 KANDULA started at [http://ac1e8035a9cfa4edf99fa250fee5c9f9-798254734.eu-central-1.elb.amazonaws.com]<br>
 =========================================================================<br>
 ====> All servers and services started OK<br>
@@ -167,17 +167,17 @@ KANDULA started at [http://ac1e8035a9cfa4edf99fa250fee5c9f9-798254734.eu-central
       - https://github.com/GalitU/Mid_project_Kandula_code
           - It contains all Kandula application code based on python
           - It contain Jenkinsfile which will be trigger to CI Kandula process
-          - Commit to this repo will be done by developer and trigger Jenkins job http://lb-jenkins-mprj-kandula-949533713.eu-central-1.elb.amazonaws.com/job/Start_Build_Docker_Kandula/
+          - Commit to this repo will be done by developer and trigger Jenkins job https://jenkins.galitu.site/Start_Build_Docker_Kandula/
       - https://github.com/GalitU/Mid_project_Kandula_deployment
           - It contains all Kandula deployment manifests and relevant Jenkinsfile
-          - It contain Jenkinsfile will start Kandula CD process by Jenkins job http://lb-jenkins-mprj-kandula-949533713.eu-central-1.elb.amazonaws.com/job/Start_Deployment_Kandula/
-          - Commit to this repo will be done by Jenkins job http://lb-jenkins-mprj-kandula-949533713.eu-central-1.elb.amazonaws.com/job/Start_Build_Docker_Kandula/
+          - It contain Jenkinsfile will start Kandula CD process by Jenkins job https://jenkins.galitu.site/job/Start_Deployment_Kandula/
+          - Commit to this repo will be done by Jenkins job https://jenkins.galitu.site/job/Start_Build_Docker_Kandula/
       - https://github.com/GalitU/Mid_project/tree/Candiadate_mid_Kandula branch Candiadate_mid_Kandula
           - It contains IaC which create AWS environment and which we start now
 
  2. Jenkins
   - There exist next relevant Jenkins jobs for execute all CI/CD processes
-      - http://lb-jenkins-mprj-kandula-949533713.eu-central-1.elb.amazonaws.com/job/Start_Build_Docker_Kandula/
+      - https://jenkins.galitu.site
           - This is multi-pipeline job
           - It based on Jenkisfile
           - It triggered by commit to Git repo https://github.com/GalitU/Mid_project_Kandula_code
@@ -190,7 +190,7 @@ KANDULA started at [http://ac1e8035a9cfa4edf99fa250fee5c9f9-798254734.eu-central
               - Update manifest version number in deployment yaml file
               - Commit and push manifests to Git https://github.com/GalitU/Mid_project_Kandula_deployment
               - Inform Slack channel for process results
-      - http://lb-jenkins-mprj-kandula-949533713.eu-central-1.elb.amazonaws.com/job/Start_Deployment_Kandula/
+      - https://jenkins.galitu.site/job/Start_Deployment_Kandula/
           - This is multi-pipeline job
           - It triggered by commit to Git repo https://github.com/GalitU/Mid_project_Kandula_deployment
           - It based on Jenkisfile
@@ -202,7 +202,7 @@ KANDULA started at [http://ac1e8035a9cfa4edf99fa250fee5c9f9-798254734.eu-central
               - Start Kandula deployment with new version
               - Validate of starting of Kandula
               - Inform Slack channel for process results
-      - http://lb-jenkins-mprj-kandula-949533713.eu-central-1.elb.amazonaws.com/job/Start_manual_Kandula_deployment/
+      - https://jenkins.galitu.site/job/Start_manual_Kandula_deployment/
           - This is multi-pipeline job
           - It based on Jenkisfile
           - It manual execution job
@@ -214,7 +214,7 @@ KANDULA started at [http://ac1e8035a9cfa4edf99fa250fee5c9f9-798254734.eu-central
               - Start Kandula deployment with new version
               - Validate of starting of Kandula
               - Inform Slack channel for process results
-      - http://lb-jenkins-mprj-kandula-949533713.eu-central-1.elb.amazonaws.com/job/Stop_Kandula/
+      - https://jenkins.galitu.site/job/Stop_Kandula/
           - It manual execution job
           - which stops all kubernetes software elements (deployments, services, secret)
 

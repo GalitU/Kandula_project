@@ -66,19 +66,31 @@
     - CONSUL_TEMPLATE_FILE_TYPE == "consul_agent"
     - SERVICE_NAME == "webserver"
 
-- name: Create /etc/consul.d/jenkins.json file by template for jenkins only
+- name: Create /etc/consul.d/jenkins.json file by template for jenkins slave only
   ansible.builtin.template:
-    src: ./templates/etc.consul.d.service.jenkins.j2
+    src: ./templates/etc.consul.d.service.tcp.j2
     dest: /etc/consul.d/jenkins.json
     mode: "0644"
   notify: Restart consul
   when:
     - CONSUL_TEMPLATE_FILE_TYPE == "consul_agent"
     - SERVICE_TAGS == "jenkins"
+    - SERVICE_NAME == "Jenkins slave"
+
+- name: Create /etc/consul.d/jenkins.json file by template for jenkins server only
+  ansible.builtin.template:
+    src: ./templates/etc.consul.d.service.jenkins.server.j2
+    dest: /etc/consul.d/jenkins.json
+    mode: "0644"
+  notify: Restart consul
+  when:
+    - CONSUL_TEMPLATE_FILE_TYPE == "consul_agent"
+    - SERVICE_TAGS == "jenkins"
+    - SERVICE_NAME == "Jenkins server"
 
 - name: Create /etc/consul.d/bastion.json file by template for jenkins only
   ansible.builtin.template:
-    src: ./templates/etc.consul.d.service.jenkins.j2
+    src: ./templates/etc.consul.d.service.tcp.j2
     dest: /etc/consul.d/bastion.json
     mode: "0644"
   notify: Restart consul

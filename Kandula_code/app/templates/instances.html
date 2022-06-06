@@ -11,29 +11,10 @@
             <div class="panel-group">
                 {% for instance in instances %}
                 <div class="panel panel-default">
+                    <table border=0>
+                    <tr>
+                    <td align="left">
                     <div class="panel-body">
-                        <div class="float-right">
-                            <form>
-                                <input type="hidden" id="instanceId" name="instanceId" value="{{ instance.Id }}">
-                                 <button class="btn small"
-                                         title="Schedule instance to stop at a given hour"
-                                         data-toggle="tooltip"
-                                        formaction="{{ url_for('scheduler') }}">⏱️</button>
-                                <button class="btn small"
-                                        title="Start instance"
-                                         data-toggle="tooltip"
-                                        formaction="{{ url_for('instance_actions', instance_id=instance.Id, instance_action='start') }}">⏩</button>
-                                <button class="btn small flashes"
-                                        title="Stop instance"
-                                         data-toggle="tooltip"
-                                        formaction="{{ url_for('instance_actions', instance_id=instance.Id, instance_action='stop') }}">⏹</button>
-                                <button class="btn small"
-                                        title="Terminate instance"
-                                         data-toggle="tooltip"
-                                        formaction="{{ url_for('instance_actions', instance_id=instance.Id, instance_action='terminate') }}">❌</button>
-
-                            </form>
-                        </div>
                         <h3 class="panel-title">
                             <a data-toggle="collapse" href="#{{ instance.Id }}">
                                 {% if (instance.Tags is defined) and instance.Tags %}
@@ -43,11 +24,52 @@
                                     {% endif %}
                                     {% endfor %}
                                 {% else %}
+                                <font color="green">
                                     {{ instance.Id }}
+                                </font>
                                 {% endif %}
                             </a>
                         </h3>
-
+                    </td>
+                    <td align="Right">
+                        <form>
+                            {% if instance.State != "shutting-down" and instance.State != "terminated" %}
+                            <input type="hidden" id="instanceId" name="instanceId" value="{{ instance.Id }}">
+                                <button class="btn button_blue small" style="width: 46px;"
+                                    title="Schedule instance to stop at a given hour"
+                                    data-toggle="tooltip"
+                                    formaction="{{ url_for('scheduler') }}">⏱️</button>
+                            {% endif %}
+                            {% if instance.State == "stopping" or instance.State == "stopped" %}
+                            <button class="btn button_green small" style="width: 46px;"
+                                title="Start instance"
+                                    data-toggle="tooltip"
+                                formaction="{{ url_for('instance_actions', instance_id=instance.Id, instance_action='start') }}">⏩</button>
+                            {% endif %}
+                            {% if instance.State == "running" or instance.State == "pending" %}
+                            <button class="btn small flashes" style="width: 46px;"
+                                title="Stop instance"
+                                    data-toggle="tooltip"
+                                formaction="{{ url_for('instance_actions', instance_id=instance.Id, instance_action='stop') }}">🛑</button>
+                            {% endif %}
+                            {% if instance.State != "shutting-down" and instance.State != "terminated" %}
+                            <button class="btn button_red small" style="width: 46px;"
+                                {% if termination_dry_run == "True" %}
+                                    title="DRY Terminate instance"
+                                {% else %}
+                                    title="REAL Terminate instance"
+                                {% endif %}
+                                data-toggle="tooltip"
+                                formaction="{{ url_for('instance_actions', instance_id=instance.Id, instance_action='terminate') }}">💣</button>
+                            {% endif %}
+                        </form>
+                            {% if instance.State == "shutting-down" or instance.State == "terminated" %}
+                                <font color="red"><center><p style="align:center">terminated</p></center></font>
+                            {% endif %}
+                    </td>
+                    </tr>
+                    <tr>
+                    <td colspan=2>
                     </div>
                     <div id="{{ instance.Id }}" class="panel-collapse collapse">
                         <div class="panel-body p-3 mb-2 bg-light text-dark">
@@ -84,6 +106,9 @@
                         </div>
                         <br/>
                     </div>
+                </td>
+                    </tr>
+                    </table>
                 </div>
                 {% endfor %}
             </div>

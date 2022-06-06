@@ -52,6 +52,9 @@ output "iam_role_join_name_jenkins_agent" {
 output "jenkins_alb_dns" {
   value = module.jenkins_server_load_balancers.alb_dns
 }
+output "jenkins_http_address" {
+  value = "https://${module.route53.hosted_zone_record_fqdn}"
+}
 /* Jenkins
  agent output */
 output "jenkins_slaves_arn" {

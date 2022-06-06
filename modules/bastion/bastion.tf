@@ -32,12 +32,13 @@ module "iam_roles_describe" {
 }
 
 module "reguest_data" {
-  source           = "../data"
-  region           = var.region
-  application_name = var.application_name
-  application_task = var.application_task
-  created_by       = var.created_by
-  vpc_name         = join("-", ["VPC", lower(var.application_name), var.application_task])
+  source                 = "../data"
+  region                 = var.region
+  application_name       = var.application_name
+  application_task       = var.application_task
+  created_by             = var.created_by
+  vpc_name               = join("-", ["VPC", lower(var.application_name), var.application_task])
+  route53_host_zone_name = "galitu.site"
 }
 
 module "ec2_bastion_server" {

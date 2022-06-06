@@ -33,6 +33,9 @@ output "oidc_provider_arn" {
 output "cluster_certificate_authority_data" {
   value = module.eks.cluster_certificate_authority_data
 }
+output "cluster_oidc_issuer_url" {
+  value = module.eks.cluster_oidc_issuer_url
+}
 
 output "eks_cluster_auth" {
   value = data.aws_eks_cluster_auth.cluster

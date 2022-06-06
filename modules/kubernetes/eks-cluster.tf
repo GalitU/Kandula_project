@@ -45,15 +45,15 @@ module "eks" {
   cluster_name    = local.cluster_name
   cluster_version = var.kubernetes_version
 
-  cluster_addons = {
-    coredns = {
-      resolve_conflicts = "OVERWRITE"
-    }
-    kube-proxy = {}
-    vpc-cni = {
-      resolve_conflicts = "OVERWRITE"
-    }
-  }
+ ####### cluster_addons = {
+ #######   coredns = {
+ #######     resolve_conflicts = "OVERWRITE"
+ #######   }
+ #######   kube-proxy = {}
+ #######   vpc-cni = {
+ #######     resolve_conflicts = "OVERWRITE"
+ #######   }
+ ####### }
 
   enable_irsa = true
   vpc_id      = var.vpc_id

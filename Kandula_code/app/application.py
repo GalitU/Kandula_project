@@ -3,6 +3,8 @@ import os
 from datetime import datetime
 
 from flask import Flask
+
+
 from flask_bootstrap import Bootstrap
 
 from .containers import Container
@@ -17,6 +19,8 @@ def create_app() -> Flask:
     container.config.aws_access_key_id.from_env('AWS_ACCESS_KEY_ID')
     container.config.aws_secret_access_key.from_env('AWS_SECRET_ACCESS_KEY')
     container.config.aws_session_token.from_env('AWS_SESSION_TOKEN')
+    container.config.user_name.from_env('USER_NAME')
+    container.config.user_password.from_env('USER_PASSWORD')
     container.wire(packages=[views])
 
     app = Flask(__name__)
@@ -24,13 +28,18 @@ def create_app() -> Flask:
 
     app.container = container
 
-    app.add_url_rule('/', 'home', views.home, methods=['GET'])
+    app.add_url_rule('/', 'main', views.main, methods=['GET', 'POST'])
+    app.add_url_rule('/login', 'login', views.login, methods=['GET', 'POST'])
+    app.add_url_rule('/logout', 'logout', views.logout,
+                     methods=['GET', 'POST'])
     app.add_url_rule('/home', 'home', views.home, methods=['GET'])
-    app.add_url_rule('/scheduler', 'scheduler', views.scheduler, methods=['GET', 'POST'])
+    app.add_url_rule('/scheduler', 'scheduler',
+                     views.scheduler, methods=['GET', 'POST'])
     app.add_url_rule('/metrics', 'metrics', views.metrics, methods=['GET'])
     app.add_url_rule('/about', 'about', views.about, methods=['GET'])
     app.add_url_rule('/health', 'health', views.health, methods=['GET'])
-    app.add_url_rule('/instances', 'instances', views.instances, methods=['GET'])
+    app.add_url_rule('/instances', 'instances',
+                     views.instances, methods=['GET', 'POST'])
     app.add_url_rule('/instances/<string:instance_id>/<string:instance_action>',
                      view_func=InstanceAPI.as_view('instance_actions'), methods=['GET', 'POST'])
 
@@ -43,7 +52,8 @@ def create_app() -> Flask:
         @app.template_filter()
         def today_scheduling(hour):
             now = datetime.now()
-            today_scheduling_time = now.replace(second=0, microsecond=0, minute=0, hour=hour)
+            today_scheduling_time = now.replace(
+                second=0, microsecond=0, minute=0, hour=hour)
             return today_scheduling_time.strftime("%d/%m/%y %H:%M:%S")
 
         init_logging()

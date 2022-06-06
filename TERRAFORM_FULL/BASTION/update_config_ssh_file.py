@@ -5,7 +5,7 @@ from jinja2 import Template
 import os.path
 
 
-# wget http://lb-jenkins-mprj-kandula-1740977339.eu-central-1.elb.amazonaws.com/jnlpJars/jenkins-cli.jar
+# wget --no-check-certificate https://jenkins.galitu.site/jnlpJars/jenkins-cli.jar
 
 bastion_terraform_address = os.popen("terraform output bastion_server_public_ip").read(
 ).replace("'", "").replace('"', '').replace('\n', '')
