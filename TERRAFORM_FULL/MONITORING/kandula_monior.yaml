@@ -1,0 +1,28 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: kandula-app-svc-monitor
+  labels:
+    task: Final-Project
+    app: kandula
+spec:
+  selector:
+    matchLabels:
+      app: kandula
+  endpoints:
+    - port: "5000"
+
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: kandula-app-pod-monitor
+  labels:
+    task: Final-Project
+    app: kandula
+spec:
+  selector:
+    matchLabels:
+      app: kandula
+  podMetricsEndpoints:
+  - targetPort: 5000

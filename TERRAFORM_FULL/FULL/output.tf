@@ -1,0 +1,80 @@
+/*
+  Galit Udovik
+
+  OpsSchool DevOps cource
+  Output data
+*/
+
+output "account_id" {
+  value = data.aws_caller_identity.current.account_id
+}
+output "caller_arn" {
+  value = data.aws_caller_identity.current.arn
+}
+output "caller_user" {
+  value = data.aws_caller_identity.current.user_id
+}
+output "data_aws_region" {
+  value = data.aws_region.current.name
+}
+output "data_aws_region_description" {
+  value = data.aws_region.current.description
+}
+
+/* VPC info */
+output "vpc_id" {
+  value = module.gu_reguest_data.vpc_id
+}
+
+/* Bastion output */
+output "bastion_server_arn" {
+  value = module.gu_bastion_server.bastion_server_arn
+}
+output "bastion_server_id" {
+  value = module.gu_bastion_server.bastion_server_id
+}
+output "bastion_server_dns" {
+  value = module.gu_bastion_server.bastion_server_dns
+}
+output "bastion_server_private_ip" {
+  value = module.gu_bastion_server.bastion_server_private_ip
+}
+output "bastion_server_public_ip" {
+  value = module.gu_bastion_server.bastion_server_public_ip
+}
+
+
+/* Consul  output */
+output "role" {
+  value = module.gu_iam_roles_describe_consul.role
+}
+output "role_policy" {
+  value = module.gu_iam_roles_describe_consul.role_policy
+}
+
+output "iam_role_name" {
+  value = module.gu_iam_roles_describe_consul.iam_role_name
+}
+
+output "cosul_alb_dns" {
+  value = module.gu_consul_server_load_balancers.alb_dns
+}
+output "consul_http_address" {
+  value = "https://${module.gu_route53.hosted_zone_record_fqdn}"
+}
+/* Consul server output */
+output "ec2_consul_servers_arn" {
+  value = module.gu_ec2_consul_servers.ec2_servers_arn
+}
+output "ec2_consul_servers_id" {
+  value = module.gu_ec2_consul_servers.ec2_servers_id
+}
+output "ec2_consul_servers_dns" {
+  value = module.gu_ec2_consul_servers.ec2_servers_dns
+}
+output "ec2_consul_servers_private_ip" {
+  value = module.gu_ec2_consul_servers.ec2_servers_private_ips
+}
+output "ec2_servers_private_ips_arr" {
+  value = module.gu_ec2_consul_servers.ec2_servers_private_ips_arr
+}

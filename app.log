@@ -1,0 +1,4 @@
+2022-07-14 13:17:00,766-[ WARNING]-[Class_6.py:   6:            <module>] -     root - This will get logged to a file
+2022-07-14 13:17:00,767-[ WARNING]-[Class_6.py:  10:            <module>] -     root - This is a warning message
+2022-07-14 13:17:00,767-[   ERROR]-[Class_6.py:  11:            <module>] -     root - This is an error message
+2022-07-14 13:17:00,767-[CRITICAL]-[Class_6.py:  12:            <module>] -     root - This is a critical message

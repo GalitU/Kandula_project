@@ -1,0 +1,66 @@
+- job_name: consul_node_exporter
+  scrape_interval: 5s
+  scrape_timeout: 5s
+  consul_sd_configs:
+    - server: "consul.galitu.site"
+      scheme: https
+      datacenter: "galit_dc_kandula"
+  relabel_configs:
+    - source_labels: ["__address__"]
+      target_label: "__address__"
+      regex: "(.*):(.*)"
+      replacement: "$1:9100"
+    - source_labels: ["__meta_consul_node"]
+      target_label: "instance"
+    - source_labels: ["__meta_consul_node"]
+      regex: "k8s-sync"
+      action:
+        drop
+        #- source_labels: [ '__meta_consul_tags' ]
+        #regex: .*,monitor,.*
+        #action: 'keep'
+        #target_label: '__meta_consul_service_port'
+
+####
+####  - job_name: 'kandula_metrics'
+####    scrape_interval: 5s
+####    scrape_timeout: 5s
+####    kubernetes_sd_configs:
+####      - role: endpoints
+####    relabel_configs:
+####      - source_labels: [ 'address' ]
+####        target_label: 'address'
+####        regex: "(.):(.)"
+####        replacement: "$1:5000"
+####      - source_labels: [ "__meta_consul_service_address" ]
+####        target_label: "instance"
+####      - source_labels: [ "__meta_kubernetes_service_name" ]
+####        target_label: "kandula-cluster-ip"
+####        regex: "kandula-cluster-ip(.*)"
+####        action: keep
+
+- job_name: kandula_by_web_address
+  scrape_interval: 5s
+  static_configs:
+    - targets: ["kandula.galitu.site"]
+  metrics_path: /metrics
+  scheme: https
+
+- job_name: "Jenkins"
+  metrics_path: "/prometheus/"
+  static_configs:
+    - targets: ["jenkins.galitu.site"]
+  scheme: https
+  metric_relabel_configs:
+    #- action: replace
+    #  source_labels: [exported_job]
+    #  target_label: jenkins_job
+    #- action: labeldrop
+    #  regex: exported_job
+
+- job_name: grafana_web_site
+  scrape_interval: 5s
+  static_configs:
+    - targets: ["grafana.galitu.site"]
+  metrics_path: /metrics
+  scheme: https
