@@ -23,11 +23,11 @@ output "data_aws_region_description" {
 
 /* VPC info */
 output "vpc_id" {
-  value = module.vpc.vpc_id
+  value = module.gu_vpc.vpc_id
 }
 output "vpc_pub-subnet" {
-  value = join(",\n", module.vpc.pub_subnets[*].cidr_block)
+  value = join(",\n", module.gu_vpc.pub_subnets[*].cidr_block)
 }
 output "vpc_pvt-subnet" {
-  value = join(",\n", module.vpc.pvt_subnets[*].cidr_block)
+  value = join(",\n", module.gu_vpc.pvt_subnets[*].cidr_block)
 }

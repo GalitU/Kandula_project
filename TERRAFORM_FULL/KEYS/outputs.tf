@@ -25,18 +25,18 @@ output "data_aws_region_description" {
 output "private_key_files_with_path" {
   value = join(",\n",
     [
-      module.key_credentials_consul.private_key_file_with_path,
-      module.key_credentials_bastion.private_key_file_with_path,
-      module.key_credentials_master.private_key_file_with_path,
-      module.key_credentials_webserver.private_key_file_with_path
+      module.gu_key_credentials_consul.private_key_file_with_path,
+      module.gu_key_credentials_bastion.private_key_file_with_path,
+      module.gu_key_credentials_master.private_key_file_with_path,
+      module.gu_key_credentials_webserver.private_key_file_with_path
   ])
 }
 output "private_key_names" {
   value = join(",\n",
     [
-      module.key_credentials_consul.private_key_name,
-      module.key_credentials_bastion.private_key_name,
-      module.key_credentials_master.private_key_name,
-      module.key_credentials_webserver.private_key_name
+      module.gu_key_credentials_consul.private_key_name,
+      module.gu_key_credentials_bastion.private_key_name,
+      module.gu_key_credentials_master.private_key_name,
+      module.gu_key_credentials_webserver.private_key_name
   ])
 }

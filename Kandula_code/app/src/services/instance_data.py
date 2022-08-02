@@ -126,7 +126,7 @@ class InstanceData:
                     finally:
                         logger.debug(
                             "GALITU: Count %d, instance from boto [%s]", count, instance)
-                        logger.info(
+                        logger.debug(
                             "GALITU: Instance #%d ID = [%s] investigated with %s.", count, instance_id, result)
 
         except Exception as error:

@@ -13,11 +13,14 @@ cd $SCRIPT_DIR/..
 cd ./BASTION
 
 echo -e "\n\n" ==== Creates Bastion ==== [basename $(pwd)]
+#### terraform init
 terraform apply -auto-approve
+EXITCODE=$?
+test $EXITCODE -ne 0 && exit $EXITCODE
 
-python3 update_config_ssh_file.py
-chmod 644 ./config
-cp ./config ~/.ssh/config
+###  python3 update_config_ssh_file.py
+###  chmod 644 ./config
+###  cp ./config ~/.ssh/config
 
 cd ..
 

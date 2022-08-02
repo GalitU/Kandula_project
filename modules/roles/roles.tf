@@ -3,12 +3,12 @@ locals {
 }
 
 # Create an IAM role for the auto-join
-resource "aws_iam_role" "role_join" {
-  name = "Role_${local.role_info}_join"
+resource "aws_iam_role" "role" {
+  name = "Role_${local.role_info}"
   assume_role_policy = var.role_policy_type
 
   tags = {
-    Name      = "Role_Assume_${local.role_info}_join"
+    Name      = "Role_Assume_${local.role_info}"
     App_name  = var.application_name
     Task      = var.application_task
     Owner     = var.application_owner
@@ -18,13 +18,13 @@ resource "aws_iam_role" "role_join" {
 }
 
 # Create the policy
-resource "aws_iam_policy" "role_join" {
-  name        = "Policy_${local.role_info}_join"
+resource "aws_iam_policy" "policy" {
+  name        = "Policy_${local.role_info}"
   description = "Allows Relevant nodes to describe instances for joining."
   policy = var.access_policy_type
 
   tags = {
-    Name      = "Policy_${local.role_info}_join"
+    Name      = "Policy_${local.role_info}"
     App_name  = var.application_name
     Task      = var.application_task
     Owner     = var.application_owner
@@ -34,28 +34,28 @@ resource "aws_iam_policy" "role_join" {
 }
 
 # Attach the policy
-resource "aws_iam_policy_attachment" "role_join" {
-  name       = "Policy_attach_${local.role_info}_join"
-  roles      = [aws_iam_role.role_join.name]
-  policy_arn = aws_iam_policy.role_join.arn
+resource "aws_iam_policy_attachment" "attach_policy" {
+  name       = "Policy_attach_${local.role_info}"
+  roles      = [aws_iam_role.role.name]
+  policy_arn = aws_iam_policy.policy.arn
 }
 
 # Create the instance profile
-resource "aws_iam_instance_profile" "role_join" {
+resource "aws_iam_instance_profile" "role" {
   name = "Role_Instance_${local.role_info}_join"
-  role = aws_iam_role.role_join.name
+  role = aws_iam_role.role.name
 }
 
 output "role" {
-  value = aws_iam_role.role_join.name
+  value = aws_iam_role.role.name
 }
 output "role_policy" {
-  value = aws_iam_policy.role_join.name
+  value = aws_iam_policy.policy.name
 }
 
 output "iam_instance_profile" {
-  value = aws_iam_instance_profile.role_join.name
+  value = aws_iam_instance_profile.role.name
 }
-output "iam_role_join_name" {
-  value = aws_iam_role.role_join.name
+output "iam_role_name" {
+  value = aws_iam_role.role.name
 }

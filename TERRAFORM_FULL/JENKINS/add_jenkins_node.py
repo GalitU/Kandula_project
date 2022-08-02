@@ -32,10 +32,10 @@ def validate_jenkins_server_is_up_and_running():
 def get_jenkins_address():
     global jenkins_lb_url_for_register, jenkins_lb_url
 
-    lb_terraform_address = os.popen(
-        "terraform output jenkins_alb_dns").read().replace("'", "").replace('"', '').replace('\n', '')
-    print("\n\n-----------------------\nJenkins ALB dns = ",
-          lb_terraform_address, end="\n")
+    #lb_terraform_address = os.popen(
+    #    "terraform output jenkins_alb_dns").read().replace("'", "").replace('"', '').replace('\n', '')
+    #print("\n\n-----------------------\nJenkins ALB dns = ",
+    #      lb_terraform_address, end="\n")
    ###jenkins_lb_url_for_register = 'http://' + lb_terraform_address
    ###jenkins_lb_url = 'http://' + lb_terraform_address + '/jnlpJars/jenkins-cli.jar'
     jenkins_lb_url_for_register = 'https://jenkins.galitu.site'
@@ -125,19 +125,11 @@ def decrease_unused_nodes():
 def update_agent_credentials_ssh_private_key_by_script():
     script_dir_local = "."
 
-    cmd = 'python3 {}/../UPDATE_SECRETS/updata_ssh_key.py -i "slaves_ssh_key" -d "slaves_ssh_key" -s "{}/../KEYS/Key_Master_Kandula_MPrj.pem" -f "{}/../UPDATE_SECRETS/ssh_secret_key.j2" -u "ubuntu" -a {}'.format(script_dir_local, script_dir_local, script_dir_local, 'https://jenkins.galitu.site')
+    cmd = 'python3 {}/../UPDATE_SECRETS/updata_ssh_key.py -i "slaves_ssh_key" -d "slaves_ssh_key" -s "{}/../KEYS/Key_Master_Kandula_FPrj.pem" -f "{}/../UPDATE_SECRETS/ssh_secret_key.j2" -u "ubuntu" -a {}'.format(
+        script_dir_local, script_dir_local, script_dir_local, 'https://jenkins.galitu.site')
     print(cmd, end="\n")
     change_credentials_ssh_jenkins_result = os.popen(cmd).read()
     print(change_credentials_ssh_jenkins_result, end="\n")
-
-
-def start():
-    get_jenkins_address()
-    validate_jenkins_server_is_up_and_running()
-    get_jar_file()
-    update_agent_credentials_ssh_private_key_by_script()
-    decrease_unused_nodes()
-    add_nodes()
 
 
 def main(argv):

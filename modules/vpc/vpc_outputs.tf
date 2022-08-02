@@ -25,6 +25,18 @@ output "sec_grp_consul_ui" {
 output "sec_grp_kube" {
   value = aws_security_group.kubernetes_sec_grp_http
 }
+output "sec_group_bastion_ssh" {
+  value = aws_security_group.bastion_sec_grp_ssh
+}
+output "sec_grp_monitoring" {
+  value = aws_security_group.monitor_sg
+}
+output "sec_grp_monitoring_ui" {
+  value = aws_security_group.grafana_prometheus
+}
+output "sec_grp_node_exporter" {
+  value = aws_security_group.node_exporter_sg
+}
 output "aws_acm_certificate_id" {
   value = aws_acm_certificate.compoze_acm.id
 }

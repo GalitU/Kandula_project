@@ -20,7 +20,7 @@ Remark: All process of creating, updating, assigning, installation, fine tuning 
 
  AWS ENVIRONMENT
 1. Will be created S3 for keep all TF states. All TF states are saved in to relevant directories, depends of purpose
-   - Name of S3 bucket is s3-mprj-kandula-bucket
+   - Name of S3 bucket is s3-fprj-kandula-bucket
    - This bucket is private
    - Inside structure:
     - bastion/
@@ -64,7 +64,7 @@ Remark: All process of creating, updating, assigning, installation, fine tuning 
 
  5. Creating kubernetes cluster
   - There will be created :
-      - EKS cluster with name kandula-mid-kube
+      - EKS cluster with name kandula-prj-kube
       - It will be placed on private subnets for Kubernetes worker, see 2.2.-
       - There will be created :
           - 2 Kandula_worker_m medium workers
@@ -75,7 +75,7 @@ Remark: All process of creating, updating, assigning, installation, fine tuning 
       - Will be created relevant roles
       - After entire cluster environment will be created its info will be updated automatically in local PC at ~/.kube/config file
       - Next steps will start Kandula deployment application based kubernetes cluster
-          - There prepared separated github repo for Kandula deployment process at https://github.com/GalitU/Mid_project_Kandula_deployment.git
+          - There prepared separated github repo for Kandula deployment process at https://github.com/GalitU/Kandula_deployment.git
                 - Each commit there with updated new docker image version will cause to Jenkins trigger for start deploy
                 - For first creating environment it will be executed automatically as part of this script
           - All releant credential keys for Kandula application (AWS_KEY... will be encripted by base64
@@ -96,7 +96,7 @@ Remark: All process of creating, updating, assigning, installation, fine tuning 
           - It was installed once by TF and configured for start manually
           - It was saved in private AMI snapshot from which Jenkins server is created by Terraform any time after that
           - Jenkins server itself placed on private subnet with purpose 'Master'
-          - Jenkins server uses Key_Master_Kandula_MPrj.pem key
+          - Jenkins server uses Key_Master_Kandula_FPrj.pem key
           - Jenkins server has Security Groups for acceess for:
               - SSH
               - port 8080
@@ -109,7 +109,7 @@ Remark: All process of creating, updating, assigning, installation, fine tuning 
      - 2 Jenkins slaves
           - It was installed by TF
           - Jenkins slaves placed on private subnet with purpose 'Master'
-          - Jenkins slaves uses Key_Master_Kandula_MPrj.pem key
+          - Jenkins slaves uses Key_Master_Kandula_FPrj.pem key
           - Jenkins slaves has Security Groups for acceess for:
               - SSH
               - consul ports
@@ -137,7 +137,7 @@ Remark: All process of creating, updating, assigning, installation, fine tuning 
       - 3 Consul servers
           - It was installed once by TF and configured after starting by Ansible playbook via SSH forwarding of Bastion host
           - Consul servers itself placed on private subnet with purpose 'Consul'
-          - Consul server uses Key_Consul_Kandula_MPrj.pem
+          - Consul server uses Key_Consul_Kandula_FPrj.pem
           - Consul server has Security Groups for acceess for:
               - SSH
               - port 8301
@@ -163,16 +163,16 @@ KANDULA started at [http://ac1e8035a9cfa4edf99fa250fee5c9f9-798254734.eu-central
 
  TOOLS and methodologies
 1. Git
- - There exist next relevant repo for implement Kandula Mid project
-      - https://github.com/GalitU/Mid_project_Kandula_code
+ - There exist next relevant repo for implement Kandula project
+      - https://github.com/GalitU/Kandula_code
           - It contains all Kandula application code based on python
           - It contain Jenkinsfile which will be trigger to CI Kandula process
           - Commit to this repo will be done by developer and trigger Jenkins job https://jenkins.galitu.site/Start_Build_Docker_Kandula/
-      - https://github.com/GalitU/Mid_project_Kandula_deployment
+      - https://github.com/GalitU/Kandula_deployment
           - It contains all Kandula deployment manifests and relevant Jenkinsfile
           - It contain Jenkinsfile will start Kandula CD process by Jenkins job https://jenkins.galitu.site/job/Start_Deployment_Kandula/
           - Commit to this repo will be done by Jenkins job https://jenkins.galitu.site/job/Start_Build_Docker_Kandula/
-      - https://github.com/GalitU/Mid_project/tree/Candiadate_mid_Kandula branch Candiadate_mid_Kandula
+      - https://github.com/GalitU/Kandula_project/tree/Candiadate_mid_Kandula branch Candiadate_mid_Kandula
           - It contains IaC which create AWS environment and which we start now
 
  2. Jenkins
@@ -180,22 +180,22 @@ KANDULA started at [http://ac1e8035a9cfa4edf99fa250fee5c9f9-798254734.eu-central
       - https://jenkins.galitu.site
           - This is multi-pipeline job
           - It based on Jenkisfile
-          - It triggered by commit to Git repo https://github.com/GalitU/Mid_project_Kandula_code
+          - It triggered by commit to Git repo https://github.com/GalitU/Kandula_code
           - List of stages
-              - Clone from Git repo https://github.com/GalitU/Mid_project_Kandula_code
+              - Clone from Git repo https://github.com/GalitU/Kandula_code
               - Docker build and Tag with number of version as build number
               - Push docker to private registry
               - Clean docker image from disk of Jenkins slave
-              - Get Kandula pod manifests from https://github.com/GalitU/Mid_project_Kandula_deployment
+              - Get Kandula pod manifests from https://github.com/GalitU/Kandula_deployment
               - Update manifest version number in deployment yaml file
-              - Commit and push manifests to Git https://github.com/GalitU/Mid_project_Kandula_deployment
+              - Commit and push manifests to Git https://github.com/GalitU/Kandula_deployment
               - Inform Slack channel for process results
       - https://jenkins.galitu.site/job/Start_Deployment_Kandula/
           - This is multi-pipeline job
-          - It triggered by commit to Git repo https://github.com/GalitU/Mid_project_Kandula_deployment
+          - It triggered by commit to Git repo https://github.com/GalitU/Kandula_deployment
           - It based on Jenkisfile
           - List of stages
-              - Get Kandula pod manifests from https://github.com/GalitU/Mid_project_Kandula_deployment
+              - Get Kandula pod manifests from https://github.com/GalitU/Kandula_deployment
               - Update Kandula secrets
               - Update eks cluster configuration according cluster info
               - Validate Kandula current status
@@ -207,7 +207,7 @@ KANDULA started at [http://ac1e8035a9cfa4edf99fa250fee5c9f9-798254734.eu-central
           - It based on Jenkisfile
           - It manual execution job
           - List of stages
-              - Get Kandula pod manifests from https://github.com/GalitU/Mid_project_Kandula_deployment
+              - Get Kandula pod manifests from https://github.com/GalitU/Kandula_deployment
               - Update Kandula secrets
               - Update eks cluster configuration according cluster info
               - Validate Kandula current status

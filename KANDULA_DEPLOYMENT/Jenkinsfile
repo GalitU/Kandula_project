@@ -8,12 +8,12 @@ pipeline {
     {
         user_name = 'Galit U.'
         git_hub_credentials = 'jenkins-mid-kandula-git-ssh'
-        git_hub_repo_path_eks = 'git@github.com:GalitU/Mid_project_Kandula_deployment.git'
+        git_hub_repo_path_eks = 'git@github.com:GalitU/Kandula_deployment.git'
         git_hub_branch_name_eks = 'main'
         slack_color_good = 'GREEN'
         slack_color_failure = 'RED'
         end = "success"
-        kube_cluster_name = 'kandula-mid-kube'
+        kube_cluster_name = 'kandula-prj-kube'
     }
     stages
     {
@@ -112,10 +112,11 @@ EOF
                 {
                     try {
                         sh '''
-                        cat ${WORKSPACE}/kandula_secret.yaml
-                        kubectl apply -f ${WORKSPACE}/kandula_secret.yaml
-                        kubectl apply -f ${WORKSPACE}/kandula_on_kube.yaml
-                        rm ${WORKSPACE}/kandula_secret.yaml
+                        #cat ${WORKSPACE}/kandula_secret.yaml
+                        #kubectl apply -f ${WORKSPACE}/kandula_secret.yaml
+                        #kubectl apply -f ${WORKSPACE}/kandula_on_kube.yaml
+                        kubectl apply -f ${WORKSPACE}/deploy-kandula.yaml
+                        #rm ${WORKSPACE}/kandula_secret.yaml
                         '''
                     } catch (Exception e) {
                         end = "failure"

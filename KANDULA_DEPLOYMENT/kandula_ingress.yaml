@@ -1,0 +1,163 @@
+###### ---
+###### apiVersion: v1
+###### kind: Namespace
+###### metadata:
+######   name: kandula
+######   labels:
+######     task: Final-Project
+######     app: kandula
+######
+######
+###### ---
+###### apiVersion: v1
+###### kind: Secret
+###### metadata:
+######   namespace: kandula
+######   name: kandula-secrets
+###### type: Opaque
+###### data:
+######   AWS_ACCESS_KEY_ID: QUtJQVhMQTY3QlRaT0NURlhJTjU=
+######   AWS_SECRET_ACCESS_KEY: d0lqZklteEpTVlZJWXk5NGNDR2twc3FzVHliVWlCbTlleE92Y2o3RQ==
+######   AWS_DEFAULT_REGION: ZXUtY2VudHJhbC0x
+######   USER_NAME: Z2FsaXQK
+######   USER_PASSWORD: a2FuZHVsYQo=
+######   TERMINATION_DRY_RUN: VHJ1ZQo=
+######
+######
+###### ---
+###### apiVersion: apps/v1
+###### kind: Deployment
+###### metadata:
+######   namespace: kandula
+######   name: deployment-kandula-app
+######   annotations:
+######     kubernetes.io/change-cause: "Release Kandula:v3.0.23.139897e1"
+######   labels:
+######     version: v3.0.23.139897e1
+######     task: Final-Project
+######     app: kandula
+###### spec:
+######   replicas: 2
+######   minReadySeconds: 10
+######   strategy:
+######     type: RollingUpdate
+######     rollingUpdate:
+######         maxUnavailable: 1
+######         maxSurge: 1
+######   selector:
+######     matchLabels:
+######       app: kandula
+######   template:
+######     metadata:
+######       labels:
+######         version: v3.0.23.139897e1
+######         app: kandula
+######     spec:
+######       containers:
+######         - name: kandula
+######           image: galitu/kandula-repo:kandula-final-prj-v3.0.23.139897e1
+######           ports:
+######             - containerPort: 5000
+######               name: http
+######               protocol: TCP
+######           env:
+######             - name: FLASK_ENV
+######               value: development
+######           envFrom:
+######             - secretRef:
+######                 name: kandula-secrets
+######
+###### ---
+###### apiVersion: v1
+###### kind: Service
+###### metadata:
+######   namespace: kandula
+######   name: kandula-cluster-ip
+######   labels:
+######     version: v3.0.23.139897e1
+######     task: Final-Project
+######     app: kandula
+###### spec:
+######   selector:
+######     app: kandula
+######   type: ClusterIP
+######   ports:
+######     - name: http
+######       port: 80
+######       targetPort: 5000
+######
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: kandula
+  name: kandula-ingress
+  labels:
+    version: v3.0.22.fffff480
+    task: Final-Project
+    app: kandula
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/backend-protocol: HTTP
+    alb.ingress.kubernetes.io/group.name: kandula
+    alb.ingress.kubernetes.io/healthcheck-path: /
+    alb.ingress.kubernetes.io/healthcheck-port: "5000"
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
+    #alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443, "HTTP":80}]'
+    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+    #alb.ingress.kubernetes.io/certificate-arn: <cert>
+    alb.ingress.kubernetes.io/tags: Owner=Galit Udovik,Task=Kandula,App_name=FPrj,CreatedBy=IngressYaml
+    alb.ingress.kubernetes.io/load-balancer-attributes: idle_timeout.timeout_seconds=4000,routing.http2.enabled=false
+    alb.ingress.kubernetes.io/target-group-attributes: stickiness.enabled=true,stickiness.lb_cookie.duration_seconds=86400
+    ### kubernetes.io/tls-acme: "true"
+
+spec:
+  #ingressClassName: alb
+  defaultBackend:
+    service:
+      name: kandula-cluster-ip
+      port:
+        number: 80
+  rules:
+    - host: kandula.galitu.site
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: ssl-redirect
+                port:
+                  name: use-annotation
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: kandula-cluster-ip
+                port:
+                  number: 80
+
+    - host: web1.galitu.site
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: kandula-cluster-ip
+                port:
+                  number: 80
+
+    - host: web2.galitu.site
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: kandula-cluster-ip
+                port:
+                  number: 80

@@ -17,7 +17,6 @@ JENKINS_DOCKER_TEST/
 jenkins-cli.jar
 pod_kandula_secrets.yaml
 jenkins_agent.tfvars
-terraform.tfvars
 kandula.log*
 *____*
 *.terraform.tfstate.lock.info
@@ -33,3 +32,7 @@ ssh_secret_key.xml
 Videos_for_presentation/
 jenkins-cli.jar.*
 KANDULA_DEPLOYMENT___
+KANDULA_PRJ_POT/
+terraform.tfvars
+FromDuduAnna
+*dudu*

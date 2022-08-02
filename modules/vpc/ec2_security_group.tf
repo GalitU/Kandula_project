@@ -35,7 +35,8 @@ resource "aws_security_group_rule" "ingress_http" {
   from_port   = 80
   to_port     = 80
   protocol    = "tcp"
-  cidr_blocks = ["0.0.0.0/0"]
+  #cidr_blocks = ["0.0.0.0/0"]
+  cidr_blocks = ["${chomp(data.http.local_workstation_ip.body)}/32"]
 
   security_group_id = aws_security_group.sec_grp_http.id
 }
@@ -147,6 +148,6 @@ resource "aws_security_group_rule" "ingress_https" {
   to_port     = 443
   protocol    = "tcp"
   cidr_blocks = ["0.0.0.0/0"]
-
+  #cidr_blocks = ["${chomp(data.http.local_workstation_ip.body)}/32", "10.0.0.0/10"]
   security_group_id = aws_security_group.sec_grp_https.id
 }

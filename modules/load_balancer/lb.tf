@@ -72,7 +72,7 @@ resource "aws_lb_listener" "alb-listener-https" {
 }
 
 resource "aws_lb_target_group" "alb-target" {
-  name     = "LB-tgrp-${var.lb_purpose}-${local.alb_type}"
+  name     = "LB-tgrp-80-${var.lb_purpose}"
   port     = 80
   protocol = "HTTP"
   vpc_id   = var.vpc_id
@@ -87,7 +87,7 @@ resource "aws_lb_target_group" "alb-target" {
   }
 
   tags = {
-    Name      = "LB_target_group_${var.lb_purpose}_${local.alb_type}"
+    Name      = "LB_target_group_80_${var.lb_purpose}_${local.alb_type}"
     App_name  = var.application_name
     Task      = var.application_task
     Owner     = var.application_owner
@@ -104,4 +104,8 @@ resource "aws_lb_target_group_attachment" "server-attach-group" {
 
 output "alb_dns" {
   value = aws_lb.alb.dns_name
+}
+
+output "alb_arn" {
+  value = aws_lb.alb.arn
 }

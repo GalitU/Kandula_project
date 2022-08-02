@@ -1,12 +1,28 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: kandula-pod
+  namespace: kandula
   labels:
-    app: backend
+    version: v4.0.11.cd1af5e2
+    task: Final-Project
+    app: kandula
+  annotations:
+    kubernetes.io/change-cause                : "Release Kandula:v4.0.11.cd1af5e2"
+    consul.hashicorp.com/connect-inject       : "true"
+    consul.hashicorp.com/transparent-proxy    : "false"
+    consul.hashicorp.com/connect-service      : "kandula"
+    consul.hashicorp.com/connect-service-port : "5000"
+    consul.hashicorp.com/service-tags         : "kandula,fprj"
+    consul.hashicorp.com/service-name         : "kandula-application"
+    consul.hashicorp.com/service-meta-owner   : "Galit Udovik"
+    consul.hashicorp.com/service-meta-purpose : "Kandula final project"
+    prometheus.io/scrape                      : "true"
+    prometheus.io/port                        : "5000"
+    prometheus.io/path                        : "/metrics"
+
 spec:
   containers:
-    - image: galitu/kandula-repo:kandula-mid-prj-v3.0.21.786d20ff
+    - image: galitu/kandula-repo:kandula-final-prj-v4.0.11.cd1af5e2
       name: kandula
       ports:
         - containerPort: 5000

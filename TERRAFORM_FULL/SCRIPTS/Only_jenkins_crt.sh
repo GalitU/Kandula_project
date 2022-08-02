@@ -11,10 +11,13 @@ cd $SCRIPT_DIR/..
 
 cd ./JENKINS
 echo -e "\n\n" ==== Creates Jenkins ==== [basename $(pwd)]
+#### terraform init
 terraform apply -auto-approve
+EXITCODE=$?
+test $EXITCODE -ne 0 && exit $EXITCODE
 
-echo ==== Update Jenkins nodes at Jenkins server ====
-python3 add_jenkins_node.py
+####  echo ==== Update Jenkins nodes at Jenkins server ====
+####  python3 add_jenkins_node.py
 
 cd ..
 # read -p "Press any key to continue...    " -n1 -s

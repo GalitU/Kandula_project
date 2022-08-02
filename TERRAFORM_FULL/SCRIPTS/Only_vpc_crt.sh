@@ -11,7 +11,11 @@ cd $SCRIPT_DIR/..
 
 cd ./VPC
 echo -e "\n\n" ==== Creates VPC ==== [basename $(pwd)]
+#### terraform init
 terraform apply -auto-approve
+EXITCODE=$?
+test $EXITCODE -ne 0 && exit $EXITCODE
+
 cd ..
 # read -p "Press any key to continue...    " -n1 -s
 
