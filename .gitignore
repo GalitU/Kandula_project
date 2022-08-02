@@ -36,3 +36,5 @@ KANDULA_PRJ_POT/
 terraform.tfvars
 FromDuduAnna
 *dudu*
+*.log
+*.tfstate
