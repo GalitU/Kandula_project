@@ -248,7 +248,7 @@ PROMETHEUS UI = [https://prometheus.galitu.site/graph]<br>
    - There are few secrets which relevant to this project
    - Private keys for access via SSH created and saved on my PC, there is only 1 key which are exported to Jenkins Server
      for access to Jenkins slaved and this is done by update credentials via Jenkins CLI
-   - Access of Ansible done via bastian host to all relevant machine from my PC
+   - On each private server will be installed the same additional public ssh key for Ansible action which will be executed from Jenkins server. Private key for this ansible action will be kept by Jenkins server in its secrets
    - Jenkins slaves need have access to AWS, so it was done by remote provision with local vars file of terraform and it not committed to GIT
    - AWS credentials for Kandula were saved on Jenkins server as environment variables and them inserted into kuberentes secret file with encripted base64
      algorithm, file is deleted imeediatelly after execution
