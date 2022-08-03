@@ -66,20 +66,3 @@ If no errors appear in the log, the app should run on `http://localhost:5000`
    ```
    **IMPORTANT NOTE:** Some tests may fail due to missing implementation. Usually you will not merge code unless code passes, but for our case most of the code will only be implemented in **final project**. So some tests will still fail in first implementations and that is **OKAY**.
 
-# Logging
-While running, the Kandula application produces a `kandula.log` at the root path of the application. Use the log as an additional tool to debug your application
-
-# Where Do I Implement My Code?
-Kandula has additional code that is needed in order for it to run including UI, configuration and other application runtime files.
-Much of this code is out of scope for this course and is not needed to be touched.
-
-You should only implement code in places you see a `TODO` comment explaining you what you need to perform.
-
-Feel free to extract functions or files if you wish to.
-
-## Important Notes PLEASE READ!
-1. Notice that the Kandula implementation uses [Python classes](https://docs.python.org/3/tutorial/classes.html#classes).
- Though **you do not need to implement any classes** it is important you understand how classes & objects look and used in Python
- 
-    [Click here](https://docs.python.org/3/tutorial/classes.html#classes) to Read more about classes and object in Python (Do not need to go beyond section `9.4`)
-1. You can extract or create any additional methods or files but in now way should you change the signature or name of the existing methods, classes or files
