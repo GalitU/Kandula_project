@@ -60,6 +60,9 @@ output "sec_grp_monitoring_ui" {
 output "sec_grp_node_exporter" {
   value = [for id in data.aws_security_groups.sec_grp_node_exporter.ids : id]
 }
+output "sec_grp_elk_server" {
+  value = [for id in data.aws_security_groups.sec_grp_elk_server.ids : id]
+}
 output "data_aws_security_groups_bastion" {
   value = data.aws_security_groups.bastion
 }

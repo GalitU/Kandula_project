@@ -267,6 +267,19 @@ data "aws_security_groups" "sec_grp_node_exporter" {
   }
 }
 
+data "aws_security_groups" "sec_grp_elk_server" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.selected.id]
+  }
+  tags = {
+    Type      = "ELK"
+    Name      = "SG_EKL-${lower(var.application_name)}-${var.application_task}"
+    Task     = var.application_task
+    App_name = var.application_name
+  }
+}
+
 data "aws_acm_certificate" "compoze_acm" {
   domain   = "*.galitu.site"
   statuses = ["ISSUED"]

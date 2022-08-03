@@ -46,4 +46,7 @@ resource "null_resource" "jenkins_execute_ansible_action" {
   provisioner "local-exec" {
     command = "java -jar ~/jenkins-cli.jar -s https://jenkins.galitu.site/ -auth galitu:113addc54d29cfb5a38bcbb402c9aaf46c -webSocket build Ansible_NodeExporter_Install -s -v"
   }
+  provisioner "local-exec" {
+    command = "java -jar ~/jenkins-cli.jar -s https://jenkins.galitu.site/ -auth galitu:113addc54d29cfb5a38bcbb402c9aaf46c -webSocket build Ansible_filebeat_Install -s -v"
+  }
 }

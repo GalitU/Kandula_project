@@ -4,10 +4,10 @@
 
 locals {
   map_roles = [for role in var.kube_additional_role_names : {
-    rolearn  = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/Role_${role}_${var.application_task}_${var.application_name}_join"
-    username = "Role_${role}_${var.application_task}_${var.application_name}_join"
-    groups   = ["system:masters", "system:nodes", "system:bootstrappers"]
-
+    rolearn  = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/Role_${role}_${var.application_task}_${var.application_name}"
+    username = "Role_${role}_${var.application_task}_${var.application_name}"
+    groups   = ["system:masters"]
+    #groups   = ["system:masters", "system:nodes", "system:bootstrappers"]
   }]
 }
 

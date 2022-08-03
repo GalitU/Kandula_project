@@ -52,6 +52,11 @@ rm "${SCRIPT_DIR}/../../FULL_CREATE_LOG.log"
     test $EXITCODE -eq 0 && echo -e "\n" "====> Jenkins environment created OK" || echo "====> Failed create Jenkins environment";
     test $EXITCODE -ne 0 && exit $EXITCODE
 
+    ./Only_elk.sh
+    EXITCODE=$?
+    test $EXITCODE -eq 0 && echo -e "\n" "====> ELK environment created OK" || echo "====> Failed create ELK environment";
+    test $EXITCODE -ne 0 && exit $EXITCODE
+
     ./Only_consul_crt.sh
     EXITCODE=$?
     test $EXITCODE -eq 0 && echo -e "\n" "====> Consul environment created OK" || echo "====> Failed create Consul environment";

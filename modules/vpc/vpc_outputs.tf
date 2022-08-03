@@ -37,6 +37,9 @@ output "sec_grp_monitoring_ui" {
 output "sec_grp_node_exporter" {
   value = aws_security_group.node_exporter_sg
 }
+output "sec_grp_elk_server" {
+  value = aws_security_group.elk_server
+}
 output "aws_acm_certificate_id" {
   value = aws_acm_certificate.compoze_acm.id
 }
