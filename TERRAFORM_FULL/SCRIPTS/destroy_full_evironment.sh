@@ -69,6 +69,15 @@ rm "${SCRIPT_DIR}/../../FULL_DESTROY_LOG.log"
     cd ..
     #read -p "Press any key to continue...    " -n1 -s
 
+    cd ./ELK
+    echo -e "\n\n" ==== Destroy ELK servers ==== [basename $(pwd)]
+    echo yes | terraform destroy
+    EXITCODE=$?
+    test $EXITCODE -eq 0 && echo "====> Destroy ELK finished OK" || echo "====> Failed destroy ELK";
+    ####---####  test $EXITCODE -ne 0 && exit $EXITCODE
+    cd ..
+    #read -p "Press any key to continue...    " -n1 -s
+
     cd ./JENKINS
 
     echo ==== Delete Jenkins nodes at Jenkins server ====

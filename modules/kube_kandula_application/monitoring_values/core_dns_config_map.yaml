@@ -20,7 +20,7 @@ data:
      log
      errors
      cache 30
-     forward . 172.20.17.189 {
+     forward . 172.20.72.77 {
       # policy round_robin
       # health_check /health:8080
       }
