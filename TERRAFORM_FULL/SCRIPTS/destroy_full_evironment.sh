@@ -11,32 +11,71 @@ cd $SCRIPT_DIR/..
 
 rm "${SCRIPT_DIR}/../../FULL_DESTROY_LOG.log"
 {
+    ######   echo -e "\n\n" ==== Uninstall grafana ====
+    ######   kubectl ns grafana
+    ######   helm uninstall grafana --namespace grafana
+    ######   kubectl delete namespace grafana
+    ######   test $EXITCODE -eq 0 && echo "====> Uninstall grafana via helm finished OK" || echo "====> Failed uninstall grafana via helm";
+    ######   test $EXITCODE -ne 0 && exit $EXITCODE
+######
+    ######   echo -e "\n\n" ==== Uninstall prometheus ====
+    ######   kubectl ns monitoring
+    ######   helm uninstall prometheus --namespace monitoring
+    ######   kubectl delete namespace monitoring
+    ######   test $EXITCODE -eq 0 && echo "====> Uninstall prometheus via helm finished OK" || echo "====> Failed uninstall prometheus via helm";
+    ######   test $EXITCODE -ne 0 && exit $EXITCODE
+######
+    ######   echo -e "\n\n" ==== Uninstall consul ====
+    ######   kubectl ns consul
+    ######   helm uninstall consul --namespace consul
+    ######   kubectl delete namespace consul
+    ######   test $EXITCODE -eq 0 && echo "====> Uninstall consul via helm finished OK" || echo "====> Failed uninstall consul via helm";
+    ######   test $EXITCODE -ne 0 && exit $EXITCODE
+
+    cd ./KUBE_KANDULA_APP
+    echo -e "\n\n" ==== Destroy KUBERNETES Kandula application ==== [basename $(pwd)]
+    echo yes | terraform destroy
+    EXITCODE=$?
+    test $EXITCODE -eq 0 && echo "====> Destroy KUBE kandula application finished OK" || echo "====> Failed kandula application destroy";
+    ####---####  test $EXITCODE -ne 0 && exit $EXITCODE
+    cd ..
+    #read -p "Press any key to continue...    " -n1 -s
+
     echo -e "\n\n" ==== Delete Kandula application and all relevant parts ====
     #kubectl delete pod kandula-pod
     #kubectl delete svc kandula-load-balancer
-    kubectl delete secret kandula-secrets
-    kubectl delete deployment deployment-kandula-app
-    kubectl delete svc kandula-deploy-load-balancer
-    EXITCODE=$?
-    test $EXITCODE -eq 0 && echo "====> Stop Kandula finished OK" || echo "====> Failed stop Kandula";
+    ##kubectl delete secret kandula-secrets
+    ##kubectl delete deployment deployment-kandula-app
+    ##kubectl delete svc kandula-deploy-load-balancer
+    ##EXITCODE=$?
+    ##test $EXITCODE -eq 0 && echo "====> Stop Kandula finished OK" || echo "====> Failed stop Kandula";
     #test $EXITCODE -ne 0 && exit $EXITCODE
 
     cd ./KUBE
     echo -e "\n\n" ==== Destroy KUBERNETES ==== [basename $(pwd)]
     echo yes | terraform destroy
-    cd ..
     EXITCODE=$?
     test $EXITCODE -eq 0 && echo "====> Destroy KUBE finished OK" || echo "====> Failed destroy KUBE";
-    test $EXITCODE -ne 0 && exit $EXITCODE
+    ####---####  test $EXITCODE -ne 0 && exit $EXITCODE
+    cd ..
     #read -p "Press any key to continue...    " -n1 -s
 
     cd ./CONSUL
     echo -e "\n\n" ==== Destroy Consul servers ==== [basename $(pwd)]
     echo yes | terraform destroy
-    cd ..
     EXITCODE=$?
     test $EXITCODE -eq 0 && echo "====> Destroy CONSUL finished OK" || echo "====> Failed destroy CONSUL";
-    test $EXITCODE -ne 0 && exit $EXITCODE
+    ####---####  test $EXITCODE -ne 0 && exit $EXITCODE
+    cd ..
+    #read -p "Press any key to continue...    " -n1 -s
+
+    cd ./ELK
+    echo -e "\n\n" ==== Destroy ELK servers ==== [basename $(pwd)]
+    echo yes | terraform destroy
+    EXITCODE=$?
+    test $EXITCODE -eq 0 && echo "====> Destroy ELK finished OK" || echo "====> Failed destroy ELK";
+    ####---####  test $EXITCODE -ne 0 && exit $EXITCODE
+    cd ..
     #read -p "Press any key to continue...    " -n1 -s
 
     cd ./JENKINS
@@ -46,49 +85,49 @@ rm "${SCRIPT_DIR}/../../FULL_DESTROY_LOG.log"
 
     echo -e "\n\n" ==== Destroy Jenkins ==== [basename $(pwd)]
     echo yes | terraform destroy
-    cd ..
     EXITCODE=$?
     test $EXITCODE -eq 0 && echo "====> Destroy JENKINS environment finished OK" || echo "====> Failed destroy JENKINS environment";
-    test $EXITCODE -ne 0 && exit $EXITCODE
+    ####---####  test $EXITCODE -ne 0 && exit $EXITCODE
+    cd ..
     #read -p "Press any key to continue...    " -n1 -s
 
     cd ./BASTION
     echo -e "\n\n" ==== Destroy Bastion ==== [basename $(pwd)]
     echo yes | terraform destroy
-    cd ..
     EXITCODE=$?
     test $EXITCODE -eq 0 && echo "====> Destroy BASTION environment finished OK" || echo "====> Failed destroy BASTION environment";
-    test $EXITCODE -ne 0 && exit $EXITCODE
+    ####---####  test $EXITCODE -ne 0 && exit $EXITCODE
+    cd ..
     #read -p "Press any key to continue...    " -n1 -s
 
     cd ./KEYS
     echo -e "\n\n" ==== Destroy KEYS ==== [basename $(pwd)]
     echo yes | terraform destroy
-    cd ..
     EXITCODE=$?
     test $EXITCODE -eq 0 && echo "====> Destroy KEYS environment finished OK" || echo "====> Failed destroy KEYS environment";
-    test $EXITCODE -ne 0 && exit $EXITCODE
+    ####---####  test $EXITCODE -ne 0 && exit $EXITCODE
+    cd ..
     #read -p "Press any key to continue...    " -n1 -s
 
     cd ./VPC
     echo -e "\n\n" ==== Destroy VPC ==== [basename $(pwd)]
     echo yes | terraform destroy
-    cd ..
     EXITCODE=$?
     test $EXITCODE -eq 0 && echo "====> Destroy VPC environment finished OK" || echo "====> Failed destroy VPC environment";
-    test $EXITCODE -ne 0 && exit $EXITCODE
+    ####---####  test $EXITCODE -ne 0 && exit $EXITCODE
+    cd ..
     #read -p "Press any key to continue...    " -n1 -s
 
     cd ./S3_BUCKET
-    echo -e "\n\n" ==== Delete all directories from s3://s3-mprj-kandula-bucket/ ====
-    aws s3 rm s3://s3-mprj-kandula-bucket/ --recursive --include "*/*"
+    echo -e "\n\n" ==== Delete all directories from s3://s3-fprj-kandula-bucket/ ====
+    aws s3 rm s3://s3-fprj-kandula-bucket/ --recursive --include "*/*"
 
     echo -e "\n\n" ==== Destroy S3 ==== [basename $(pwd)]
     echo yes | terraform destroy
-    cd ..
     EXITCODE=$?
     test $EXITCODE -eq 0 && echo "====> Destroy S3 environment finished OK" || echo "====> Failed destroy S3 environment";
-    test $EXITCODE -ne 0 && exit $EXITCODE
+    ####---####  test $EXITCODE -ne 0 && exit $EXITCODE
+    cd ..
     #read -p "Press any key to continue...    " -n1 -s
 
     echo =================================================

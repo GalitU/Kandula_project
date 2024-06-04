@@ -13,14 +13,14 @@ def check_aws_connection():
         ec2 = client('ec2')
         response = ec2.describe_instances()
         ret_status = response['ResponseMetadata']['HTTPStatusCode'] == 200
-        logger.info(
-            "GALITU: Connection to AWS %s with status %d", "succeeded" if ret_status else "FAILED", response['ResponseMetadata']['HTTPStatusCode'], exc_info=1)
+        logger.info("GALITU: Connection to AWS %s with status %d", "succeeded" if ret_status else "FAILED",
+                    response['ResponseMetadata']['HTTPStatusCode'], exc_info=1)
         return ret_status
     except Exception as error:
         error_string = str(error)
-        logger.error(
-            "GALITU: There was connection problem to AWS [%s]", error_string, exc_info=1)
+        logger.error("GALITU: There was connection problem to AWS [%s]", error_string, exc_info=1)
         return False
+
 
 def check_db_connection():
     # TODO: implement real select query to db. If successful, return true. otherwise return False
@@ -32,11 +32,10 @@ def is_app_healthy(healthchecks):
 
 
 def get_app_health():
-    health_checks = [
-        {"Name": "machine-time", "Value": get_machine_time()},
-        {"Name": "aws-connection", "Value": check_aws_connection()},
-        {"Name": "db-connection", "Value": check_db_connection()},
-    ]
+    health_checks = [{"Name": "machine-time", "Value": get_machine_time()},
+                     {"Name": "aws-connection", "Value": check_aws_connection()},
+                     {"Name": "db-connection", "Value": check_db_connection()},
+                     ]
 
     return health_checks, is_app_healthy(health_checks)
 

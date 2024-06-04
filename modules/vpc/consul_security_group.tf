@@ -5,7 +5,7 @@
   Configure all consul security groups
 */
 locals {
-  consul_cidr_block = concat(var.cidr_block_pvt, var.cidr_block_pub)
+  consul_cidr_block = ["10.0.0.0/10"]
 }
 
 # One security group for Consul Server UI which includes all relevant rules
@@ -77,7 +77,7 @@ resource "aws_security_group_rule" "http_api_sec_rule" {
   protocol          = "tcp"
   from_port         = 8500
   to_port           = 8500
-  cidr_blocks       = ["0.0.0.0/0"] # TODO - change to - [var.cidr_block_pvt, var.cidr_block_pub]
+  cidr_blocks       = ["10.0.0.0/10"] # TODO - change to - [var.cidr_block_pvt, var.cidr_block_pub]
 }
 
 # DNS Interface - TCP 8600. Useful for resolve DNS consul queries

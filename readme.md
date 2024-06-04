@@ -1,5 +1,5 @@
 
- ==== From here what will be done... ====
+<b> From here what will be done... </b><br>
 Remark: All process of creating, updating, assigning, installation, fine tuning will be done from my PC by:
   - Terraform, including remote provisioning via bastion host and user data template files
       - There will be separated modules for specific purpose in separeated directories
@@ -14,13 +14,13 @@ Remark: All process of creating, updating, assigning, installation, fine tuning 
   - GitHub webhooks
   - Jenkins jobs
   - Jinga2 templates files
-  - All servers (except Kube worker nodes) will Ubuntu 21.04 OS
+  - All servers (except Kube worker nodes) will Ubuntu 20.04 OS
   - Kube worker nodes will be on Linux mashine
 
 
  AWS ENVIRONMENT
 1. Will be created S3 for keep all TF states. All TF states are saved in to relevant directories, depends of purpose
-   - Name of S3 bucket is s3-mprj-kandula-bucket
+   - Name of S3 bucket is s3-fprj-kandula-bucket
    - This bucket is private
    - Inside structure:
     - bastion/
@@ -29,17 +29,21 @@ Remark: All process of creating, updating, assigning, installation, fine tuning 
     - keys/
     - kube/
     - vpc/
+    - elk/
+    - kube_kandula_app/
 
  2. Will be created VPC and all relevant NAT, IG, subnets, route tables
    - Will be created 2 public subnets for:
       - 1 Bastion(Jump) host
       - 1 Load balancer for Consul servers
       - 1 Load balancer for Jenkins server
+      - 1 Load balancer for ELK server
    - Will be created 6 private subnets according the purpose (3 groups, each group has 2 subnets one by one per AZ
       - private subnets for 3 consul servers
       - private subnets for Master servers:
            1 Jenkins Server
            2 Jenkins Slaves/Agents/Nodes... never mind how call them :)
+           1 ELK server
       - 2 private subnets for 4 Kubernetes worker nodes
 
  3. Will be created private keys for all servers according to purpose - one per subnet pair.
@@ -51,33 +55,33 @@ Remark: All process of creating, updating, assigning, installation, fine tuning 
    - Master servers key for Jenkins server and slave
    - Web servers key - now it not in use, due to creating EKS nodes with out key
 
- 4. Creating Bastion host in publilc subnet.
+ 4. Creating Bastion host in public subnet.
    - New public IP address of bastion host will be taken automatically from terraform output and used inside update of ~/.ssh/config file, see below...
    - There will be only 1 server in entire environment which will be exposed to public internet.
    - It will be possible to connect by SSH only from 1 external IP address (my PC).
      It is limitted by Security group and ingress rules.
    - I can update my IP address depends where I am placed in the world by execute ./TERRAFORM/SCRIPT/Only_bastion_crt.sh any time
    - After the Bastion host will be created there will start dynamic updating of its external IP into ~/.ssh/config file
-   - It will be done by python script ./TERRAFORM_FULL/SCRIPTS/update_config_ssh_file.py
+   - It will be done by python script ./TERRAFORM_FULL/SCRIPTS/update_config_ssh_file.py via TF
    - There will be creates new role for bastion host with Describe policies
    - There will be istalled consul service on Bastion host, including heatlh checker of it by port 22, see 'Consul' below
 
  5. Creating kubernetes cluster
   - There will be created :
-      - EKS cluster with name kandula-mid-kube
+      - EKS cluster with name kandula-prj-kube
       - It will be placed on private subnets for Kubernetes worker, see 2.2.-
       - There will be created :
-          - 2 Kandula_worker_m medium workers
-          - 2 Kandula_worker_m large workers
+          - 4 Kandula_worker_m medium workers in 2 nodegroups          
       - There will be assigned next Security Groups
           - Consul SG
           - SSH SG
+          - Node exporter SG
       - Will be created relevant roles
       - After entire cluster environment will be created its info will be updated automatically in local PC at ~/.kube/config file
       - Next steps will start Kandula deployment application based kubernetes cluster
-          - There prepared separated github repo for Kandula deployment process at https://github.com/GalitU/Mid_project_Kandula_deployment.git
+          - There prepared separated github repo for Kandula deployment process at https://github.com/GalitU/Kandula_deployment
                 - Each commit there with updated new docker image version will cause to Jenkins trigger for start deploy
-                - For first creating environment it will be executed automatically as part of this script
+                - For first creating environment it will be executed automatically as part TF action
           - All releant credential keys for Kandula application (AWS_KEY... will be encripted by base64
                  algorithm and inserted to kubernetes secret file which will be started by kubectl tool
                  - This yaml file will be local on my PC and not commited to GIT.
@@ -86,7 +90,11 @@ Remark: All process of creating, updating, assigning, installation, fine tuning 
           - Elements which will be started:
               - Secret file started by kubectl
               - Kandula deployment for 2 replicas based on last docker image version
-              - Load balancer kube service
+              - Ingress (ALB) for Kandula with DNS record https://kandula.galitu.site/login
+              - Prometheus via HELM and TF
+              - Ingress (ALB) for Prometheus with DNS record https://prometheus.galitu.site/graph
+              - Grafana via HELM and TF
+              - Ingress (ALB) for Gatafana with DNS resord https://grafana.galitu.site/?orgId=1
               - 4 worker nodes which are adssigned to kube cluster
       Remark: script which create kube env. will be executed twice due to lot of Terraform bugs  and network performance issues
 
@@ -96,7 +104,7 @@ Remark: All process of creating, updating, assigning, installation, fine tuning 
           - It was installed once by TF and configured for start manually
           - It was saved in private AMI snapshot from which Jenkins server is created by Terraform any time after that
           - Jenkins server itself placed on private subnet with purpose 'Master'
-          - Jenkins server uses Key_Master_Kandula_MPrj.pem key
+          - Jenkins server uses Key_Master_Kandula_FPrj.pem key
           - Jenkins server has Security Groups for acceess for:
               - SSH
               - port 8080
@@ -109,7 +117,7 @@ Remark: All process of creating, updating, assigning, installation, fine tuning 
      - 2 Jenkins slaves
           - It was installed by TF
           - Jenkins slaves placed on private subnet with purpose 'Master'
-          - Jenkins slaves uses Key_Master_Kandula_MPrj.pem key
+          - Jenkins slaves uses Key_Master_Kandula_FPrj.pem key
           - Jenkins slaves has Security Groups for acceess for:
               - SSH
               - consul ports
@@ -137,7 +145,7 @@ Remark: All process of creating, updating, assigning, installation, fine tuning 
       - 3 Consul servers
           - It was installed once by TF and configured after starting by Ansible playbook via SSH forwarding of Bastion host
           - Consul servers itself placed on private subnet with purpose 'Consul'
-          - Consul server uses Key_Consul_Kandula_MPrj.pem
+          - Consul server uses Key_Consul_Kandula_FPrj.pem
           - Consul server has Security Groups for acceess for:
               - SSH
               - port 8301
@@ -155,47 +163,55 @@ Remark: All process of creating, updating, assigning, installation, fine tuning 
 =========================================================================<br>
 CONSUL UI = [https://consul.galitu.site]<br>
 JENKINS UI = [https://jenkins.galitu.site]<br>
-KANDULA started at [http://ac1e8035a9cfa4edf99fa250fee5c9f9-798254734.eu-central-1.elb.amazonaws.com]<br>
+KANDULA started at [https://kandula.galitu.site/]<br>
+GRAFANA = [https://grafana.galitu.site/]<br>
+PROMETHEUS UI = [https://prometheus.galitu.site/graph]<br>
 =========================================================================<br>
 ====> All servers and services started OK<br>
 =================================================<br>
  ====>>>>BUILD ENTIRE ENVIRONMENT FINISHED WITH SUCCESS<br>
 
  TOOLS and methodologies
-1. Git
- - There exist next relevant repo for implement Kandula Mid project
-      - https://github.com/GalitU/Mid_project_Kandula_code
+1. <b>Git</b>
+ - There exist next relevant repo for implement Kandula project
+      - https://github.com/GalitU/Kandula_code
           - It contains all Kandula application code based on python
           - It contain Jenkinsfile which will be trigger to CI Kandula process
           - Commit to this repo will be done by developer and trigger Jenkins job https://jenkins.galitu.site/Start_Build_Docker_Kandula/
-      - https://github.com/GalitU/Mid_project_Kandula_deployment
+      - https://github.com/GalitU/Kandula_deployment
           - It contains all Kandula deployment manifests and relevant Jenkinsfile
           - It contain Jenkinsfile will start Kandula CD process by Jenkins job https://jenkins.galitu.site/job/Start_Deployment_Kandula/
           - Commit to this repo will be done by Jenkins job https://jenkins.galitu.site/job/Start_Build_Docker_Kandula/
-      - https://github.com/GalitU/Mid_project/tree/Candiadate_mid_Kandula branch Candiadate_mid_Kandula
+      - https://github.com/GalitU/Kandula_project
           - It contains IaC which create AWS environment and which we start now
+      - https://github.com/GalitU/Ansible_for_jenkins
+          - It contains all ansible playbooks which will be executed by Jenkins jobs
+            - Ansible_Consul_Install https://jenkins.galitu.site/job/Ansible_Consul_Install/
+            - Ansible_filebeat_Install https://jenkins.galitu.site/job/Ansible_filebeat_Install/
+            - Ansible_NodeExporter_Install https://jenkins.galitu.site/job/Ansible_NodeExporter_Install/
+            
 
  2. Jenkins
   - There exist next relevant Jenkins jobs for execute all CI/CD processes
       - https://jenkins.galitu.site
           - This is multi-pipeline job
           - It based on Jenkisfile
-          - It triggered by commit to Git repo https://github.com/GalitU/Mid_project_Kandula_code
+          - It triggered by commit to Git repo https://github.com/GalitU/Kandula_code
           - List of stages
-              - Clone from Git repo https://github.com/GalitU/Mid_project_Kandula_code
+              - Clone from Git repo https://github.com/GalitU/Kandula_code
               - Docker build and Tag with number of version as build number
               - Push docker to private registry
               - Clean docker image from disk of Jenkins slave
-              - Get Kandula pod manifests from https://github.com/GalitU/Mid_project_Kandula_deployment
+              - Get Kandula pod manifests from https://github.com/GalitU/Kandula_deployment
               - Update manifest version number in deployment yaml file
-              - Commit and push manifests to Git https://github.com/GalitU/Mid_project_Kandula_deployment
+              - Commit and push manifests to Git https://github.com/GalitU/Kandula_deployment
               - Inform Slack channel for process results
       - https://jenkins.galitu.site/job/Start_Deployment_Kandula/
           - This is multi-pipeline job
-          - It triggered by commit to Git repo https://github.com/GalitU/Mid_project_Kandula_deployment
+          - It triggered by commit to Git repo https://github.com/GalitU/Kandula_deployment
           - It based on Jenkisfile
           - List of stages
-              - Get Kandula pod manifests from https://github.com/GalitU/Mid_project_Kandula_deployment
+              - Get Kandula pod manifests from https://github.com/GalitU/Kandula_deployment
               - Update Kandula secrets
               - Update eks cluster configuration according cluster info
               - Validate Kandula current status
@@ -207,7 +223,7 @@ KANDULA started at [http://ac1e8035a9cfa4edf99fa250fee5c9f9-798254734.eu-central
           - It based on Jenkisfile
           - It manual execution job
           - List of stages
-              - Get Kandula pod manifests from https://github.com/GalitU/Mid_project_Kandula_deployment
+              - Get Kandula pod manifests from https://github.com/GalitU/Kandula_deployment
               - Update Kandula secrets
               - Update eks cluster configuration according cluster info
               - Validate Kandula current status
@@ -220,7 +236,7 @@ KANDULA started at [http://ac1e8035a9cfa4edf99fa250fee5c9f9-798254734.eu-central
 
  3. Consul
   - Consul will monitor all relevant environment elements (nodes and services)
-  -. It installed by Ansible
+  - It installed by Ansible from TF process
   - On all Consul servers are installed service of server
   - On all other servers installed service of agent
 
@@ -232,7 +248,7 @@ KANDULA started at [http://ac1e8035a9cfa4edf99fa250fee5c9f9-798254734.eu-central
    - There are few secrets which relevant to this project
    - Private keys for access via SSH created and saved on my PC, there is only 1 key which are exported to Jenkins Server
      for access to Jenkins slaved and this is done by update credentials via Jenkins CLI
-   - Access of Ansible done via bastian host to all relevant machine from my PC
+   - On each private server will be installed the same additional public ssh key for Ansible action which will be executed from Jenkins server. Private key for this ansible action will be kept by Jenkins server in its secrets
    - Jenkins slaves need have access to AWS, so it was done by remote provision with local vars file of terraform and it not committed to GIT
    - AWS credentials for Kandula were saved on Jenkins server as environment variables and them inserted into kuberentes secret file with encripted base64
      algorithm, file is deleted imeediatelly after execution
@@ -241,6 +257,7 @@ KANDULA started at [http://ac1e8035a9cfa4edf99fa250fee5c9f9-798254734.eu-central
    - There exist log of full 'one click' build process
    - There exist log of full 'one click' destroy process
    - There exist notification of CI/CD jobs process to Slack channel
+   - Kandula createds logs
 
  7. Kandula application - last but not least
    - It python based application which implements simple actions on AWS instances as:
@@ -249,3 +266,30 @@ KANDULA started at [http://ac1e8035a9cfa4edf99fa250fee5c9f9-798254734.eu-central
       - Start instance
       - Stop instance
       - Terminate instance
+   - There prepared CLI tool https://github.com/GalitU/Kandula_project/tree/Final_Project/Kandula_code/app/cli/kandulacli.py for manage instances of Kandula
+     
+         -----
+         Usage: kandulacli.py [OPTIONS] COMMAND [ARGS]...
+
+         Options:
+           --help  Show this message and exit.
+
+         Commands:
+           get_instance
+           get_instances
+           start_instance
+           stop_instance
+           terminate_instance
+
+         ------
+         Usage: kandulacli.py get_instances [OPTIONS]
+
+         Options:
+           -d, --debug          Add more debug info.
+           -u, --url TEXT       Web address of site. Example :
+                                https://kandula.galitu.sites
+           --user TEXT          User name with which Kandula application is started
+           -p, --password TEXT  Password with which Kandula application is started
+           --help               Show this message and exit.
+
+         

@@ -29,8 +29,8 @@ variable "ec2_OS" {
   default     = "Ubuntu"
 }
 variable "application_name" {
-  description = "Application name, HW, mid_prj"
-  default     = "MPrj"
+  description = "Application name, HW, fin_prj"
+  default     = "FPrj"
 }
 variable "application_task" {
   description = "Name of task"

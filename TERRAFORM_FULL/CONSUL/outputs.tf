@@ -24,36 +24,39 @@ output "data_aws_region_description" {
 
 /* Roles */
 output "role" {
-  value = module.iam_roles_describe.role
+  value = module.gu_iam_roles_describe.role
 }
 output "role_policy" {
-  value = module.iam_roles_describe.role_policy
+  value = module.gu_iam_roles_describe.role_policy
 }
 
-output "iam_role_join_name" {
-  value = module.iam_roles_describe.iam_role_join_name
+output "iam_role_name" {
+  value = module.gu_iam_roles_describe.iam_role_name
 }
 
 /* VPC info */
 output "vpc_id" {
-  value = module.reguest_data.vpc_id
+  value = module.gu_reguest_data.vpc_id
 }
 output "cosul_alb_dns" {
-  value = module.consul_server_load_balancers.alb_dns
+  value = module.gu_consul_server_load_balancers.alb_dns
 }
 output "consul_http_address" {
-  value = "https://${module.route53.hosted_zone_record_fqdn}"
+  value = "https://${module.gu_route53.hosted_zone_record_fqdn}"
 }
 /* Consul server output */
 output "ec2_consul_servers_arn" {
-  value = module.ec2_consul_servers.ec2_servers_arn
+  value = module.gu_ec2_consul_servers.ec2_servers_arn
 }
 output "ec2_consul_servers_id" {
-  value = module.ec2_consul_servers.ec2_servers_id
+  value = module.gu_ec2_consul_servers.ec2_servers_id
 }
 output "ec2_consul_servers_dns" {
-  value = module.ec2_consul_servers.ec2_servers_dns
+  value = module.gu_ec2_consul_servers.ec2_servers_dns
 }
 output "ec2_consul_servers_private_ip" {
-  value = module.ec2_consul_servers.ec2_servers_private_ips
+  value = module.gu_ec2_consul_servers.ec2_servers_private_ips
+}
+output "ec2_servers_private_ips_arr" {
+  value = module.gu_ec2_consul_servers.ec2_servers_private_ips_arr
 }

@@ -82,11 +82,11 @@ data "aws_subnets" "workers_pvt_subnets" {
 }
 
 /*
-data "aws_iam_instance_profile" "describe_kandula_mid_role" {
-  name_regex = "Role_Assume_Describe_Kandula_MPrj_join"
+data "aws_iam_instance_profile" "describe_kandula_fin_role" {
+  name_regex = "Role_Assume_Describe_Kandula_FPrj_join"
 }
 */
-#data "aws_iam_instance_profile" "describe_kandula_mid_role" {
+#data "aws_iam_instance_profile" "describe_kandula_fin_role" {
 #  name = join("_", ["Role_Describe", var.application_task, var.application_name, "join"])
 #}
 
@@ -110,7 +110,7 @@ data "aws_subnets" "private" {
   tags = {
     Tier     = "Private"
     Task     = "Kandula"
-    App_name = "MPrj"
+    App_name = "FPrj"
   }
 }
 
@@ -229,27 +229,78 @@ data "aws_security_groups" "sec_grp_kube" {
     App_name = var.application_name
   }
 }
+data "aws_security_groups" "sec_grp_monitoring" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.selected.id]
+  }
+  tags = {
+    Type     = "Monitoring"
+    Name     = "SG_monitor-${lower(var.application_name)}-${var.application_task}"
+    Task     = var.application_task
+    App_name = var.application_name
+  }
+}
+
+data "aws_security_groups" "sec_grp_monitoring_ui" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.selected.id]
+  }
+  tags = {
+    Type     = "Monitoring"
+    Name     = "SG_monitor_ui-${lower(var.application_name)}-${var.application_task}"
+    Task     = var.application_task
+    App_name = var.application_name
+  }
+}
+data "aws_security_groups" "sec_grp_node_exporter" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.selected.id]
+  }
+  tags = {
+    Type     = "Monitoring"
+    Name     = "SG_Node_Exporter-${lower(var.application_name)}-${var.application_task}"
+    Task     = var.application_task
+    App_name = var.application_name
+  }
+}
+
+data "aws_security_groups" "sec_grp_elk_server" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.selected.id]
+  }
+  tags = {
+    Type      = "ELK"
+    Name      = "SG_EKL-${lower(var.application_name)}-${var.application_task}"
+    Task     = var.application_task
+    App_name = var.application_name
+  }
+}
 
 data "aws_acm_certificate" "compoze_acm" {
   domain   = "*.galitu.site"
   statuses = ["ISSUED"]
 }
 
-
+locals {
+  cluster_name = "kandula-prj-kube"
+}
 
 /*
-
-data "aws_alb" "alb" {
-
-}
-
-locals {
-  lb_name = split("-", split(".", kubernetes_service_v1.kandula-srv.status.0.load_balancer.0.ingress.0.hostname).0).0
+data "aws_lb" "lb_monitoring" {
+  name = "LB-monitoring-fprj-Kandula"
 }
 
 
-# Read information about the load balancer using the AWS provider.
-data "aws_elb" "k8s_elb" {
-  name = local.lb_name
+data "aws_lb" "lb_consul" {
+  name = "LB-consul-fprj-Kandula"
+}
+
+
+data "aws_lb" "lb_jenkins" {
+  name = "LB-jenkins-fprj-Kandula"
 }
 */

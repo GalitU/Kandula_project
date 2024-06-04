@@ -4,7 +4,7 @@ metadata:
   namespace: kandula
   name: kandula-deploy-load-balancer
   labels:
-    task: Mid-Project
+    task: Final-Project
     purpose: Load_balancer
     app: Kandula
 spec:

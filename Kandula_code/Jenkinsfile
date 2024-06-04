@@ -9,18 +9,18 @@ pipeline {
         user_name = 'Galit U.'
         project = 'Kandula-FinalPrj'
         purpose = 'OpsSchool course'
-        git_hub_repo_path = 'git@github.com:GalitU/Mid_project_Kandula_code.git'
+        git_hub_repo_path = 'git@github.com:GalitU/Kandula_code.git'
         kandula_final_docker_image_name_prefix = 'kandula-final-prj'
         docker_repo_path = 'galitu/kandula-repo'
         git_hub_credentials = 'jenkins-mid-kandula-git-ssh'
-        git_hub_branch_name = 'BranchMidProject'
-        git_hub_repo_path_eks = 'git@github.com:GalitU/Mid_project_Kandula_deployment.git'
+        git_hub_branch_name = 'BranchFinalProject'
+        git_hub_repo_path_eks = 'git@github.com:GalitU/Kandula_deployment.git'
         git_hub_branch_name_eks = 'main'
         slack_color_good = "#00FF00"
         slack_color_failure =  "#FF0000"
         end = "success"
-        kandula_version = "v3.0.$BUILD_NUMBER"
-        kandula_hotfix_version = "v3.0.$BUILD_NUMBER"
+        kandula_version = "v4.0.$BUILD_NUMBER"
+        kandula_hotfix_version = "v4.0.$BUILD_NUMBER"
     }
 
     stages
@@ -63,6 +63,24 @@ pipeline {
                     } catch (Exception e) {
                         end = "failure"
                         slackSend channel: 'opsschool_jenkins_notification', teamDomain: 'PvtDevops', tokenCredentialId: 'PvtDevopsSlack', color: slack_color_failure, message: ":bangbang: <@U03HH1727NK>: Build docker image failed for  ${kandula_full_path_with_version}, Build #${env.BUILD_NUMBER}"
+                        sh 'might fail'
+                    }
+                }
+            }
+        }
+        stage("Security Scanning of docker image")
+        {
+            steps
+            {
+                script
+                {
+                    try
+                    {
+                        echo "===>> Docker image ${kandula_full_path_with_version} will be validate for security issiues"
+                        sh 'trivy image $kandula_full_path_with_version'
+                    } catch (Exception e) {
+                        end = "failure"
+                        slackSend channel: 'opsschool_jenkins_notification', teamDomain: 'PvtDevops', tokenCredentialId: 'PvtDevopsSlack', color: slack_color_failure, message: ":bangbang: <@U03HH1727NK>: Security Scanning of docker image ${kandula_full_path_with_version} failed, Build #${env.BUILD_NUMBER}"
                         sh 'might fail'
                     }
                 }
@@ -142,6 +160,9 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: kandula
+  labels:
+    task: Final-Project
+    app: kandula
 
 ---
 apiVersion: apps/v1
@@ -151,6 +172,17 @@ metadata:
   name: deployment-kandula-app
   annotations:
     kubernetes.io/change-cause: "Release Kandula:$kandula_full_version"
+    consul.hashicorp.com/connect-inject       : "true"
+    consul.hashicorp.com/transparent-proxy    : "false"
+    consul.hashicorp.com/connect-service      : "kandula"
+    consul.hashicorp.com/connect-service-port : "5000"
+    consul.hashicorp.com/service-tags         : "kandula,fprj"
+    consul.hashicorp.com/service-name         : "kandula-application"
+    consul.hashicorp.com/service-meta-owner   : "Galit Udovik"
+    consul.hashicorp.com/service-meta-purpose : "Kandula final project"
+    prometheus.io/scrape                      : "true"
+    prometheus.io/port                        : "5000"
+    prometheus.io/path                        : "/metrics"
   labels:
     version: $kandula_full_version
     task: Final-Project
@@ -171,6 +203,19 @@ spec:
       labels:
         version: $kandula_full_version
         app: kandula
+      annotations:
+        kubernetes.io/change-cause: "Release Kandula:$kandula_full_version"
+        consul.hashicorp.com/connect-inject       : "true"
+        consul.hashicorp.com/transparent-proxy    : "false"
+        consul.hashicorp.com/connect-service      : "kandula"
+        consul.hashicorp.com/connect-service-port : "5000"
+        consul.hashicorp.com/service-tags         : "kandula,fprj"
+        consul.hashicorp.com/service-name         : "kandula-application"
+        consul.hashicorp.com/service-meta-owner   : "Galit Udovik"
+        consul.hashicorp.com/service-meta-purpose : "Kandula final project"
+        prometheus.io/scrape                      : "true"
+        prometheus.io/port                        : "5000"
+        prometheus.io/path                        : "/metrics"
     spec:
       containers:
         - name: kandula
@@ -184,7 +229,7 @@ spec:
               value: development
           envFrom:
             - secretRef:
-                name: kandula-secrets
+              name: kandula-secrets
 
 ---
 apiVersion: v1
@@ -192,6 +237,18 @@ kind: Service
 metadata:
   namespace: kandula
   name: kandula-cluster-ip
+  annotations:
+    consul.hashicorp.com/service-name         : "kandula-application"
+    consul.hashicorp.com/service-port         : "http"
+    consul.hashicorp.com/service-tags         : "kandula,fprj"
+    consul.hashicorp.com/service-meta-owner   : ""Galit Udovik""
+    consul.hashicorp.com/service-meta-purpose : ""Kandula final project""
+    consul.hashicorp.com/connect-inject       : "true"
+    consul.hashicorp.com/transparent-proxy    : "false"
+    consul.hashicorp.com/connect-service      : "kandula"
+    consul.hashicorp.com/connect-service-port : "5000"
+    prometheus.io/scrape                      : "true"
+    prometheus.io/port                        : "5000"
   labels:
     version: $kandula_full_version
     task: Final-Project
@@ -216,21 +273,23 @@ metadata:
     task: Final-Project
     app: kandula
   annotations:
-    kubernetes.io/ingress.class: alb
-    alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/backend-protocol: HTTP
-    alb.ingress.kubernetes.io/group.name: kandula
-    alb.ingress.kubernetes.io/healthcheck-path: /liveness
+    kubernetes.io/ingress.class: "alb"
+    alb.ingress.kubernetes.io/scheme: "internet-facing"
+    alb.ingress.kubernetes.io/target-type: "ip"
+    alb.ingress.kubernetes.io/backend-protocol: "HTTP"
+    alb.ingress.kubernetes.io/group.name: "kandula"
+    alb.ingress.kubernetes.io/healthcheck-path: "/liveness"
     alb.ingress.kubernetes.io/healthcheck-port: "8151"
-    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
-    #alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443, "HTTP":80}]'
-    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+    alb.ingress.kubernetes.io/healthcheck-protocol: "HTTP"
+    alb.ingress.kubernetes.io/listen-ports: "[{"HTTPS":443}]"
+    #alb.ingress.kubernetes.io/listen-ports: "'[{"HTTPS":443, "HTTP":80}]"
+    alb.ingress.kubernetes.io/actions.ssl-redirect: "{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}"
     #alb.ingress.kubernetes.io/certificate-arn: <cert>
-    alb.ingress.kubernetes.io/tags: Owner=Galit Udovik,Task=Kandula,App_name=MPrj,CreatedBy=IngressYaml
-    alb.ingress.kubernetes.io/load-balancer-attributes: idle_timeout.timeout_seconds=4000,routing.http2.enabled=false
-    alb.ingress.kubernetes.io/target-group-attributes: stickiness.enabled=true,stickiness.lb_cookie.duration_seconds=86400
+    alb.ingress.kubernetes.io/tags: "Owner=Galit Udovik,Task=Kandula,App_name=FPrj,CreatedBy=IngressYaml"
+    alb.ingress.kubernetes.io/load-balancer-attributes: "idle_timeout.timeout_seconds=4000,routing.http2.enabled=false"
+    alb.ingress.kubernetes.io/target-group-attributes: "stickiness.enabled=true,stickiness.lb_cookie.duration_seconds=86400"
+    alb.ingress.kubernetes.io/load-balancer-name: "kubernetes-alb"
+    external-dns.alpha.kubernetes.io/hostname: "kandula.galitu.site"
     ### kubernetes.io/tls-acme: "true"
 
 spec:
@@ -259,10 +318,10 @@ spec:
                 port:
                   number: 80
 
-    - host: web1.galitu.site
+    - host: kandula-metrics.galitu.site
       http:
         paths:
-          - path: /
+          - path: /metrics
             pathType: Prefix
             backend:
               service:
@@ -270,10 +329,10 @@ spec:
                 port:
                   number: 80
 
-    - host: web2.galitu.site
+    - host: kandula_raw_instances.galitu.site
       http:
         paths:
-          - path: /
+          - path: /raw-instances
             pathType: Prefix
             backend:
               service:
@@ -289,9 +348,21 @@ tee ${WORKSPACE}/deploy-kandula.yaml > /dev/null <<'EOF'
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  namespace: kandula
   name: deployment-kandula-app
   annotations:
-    kubernetes.io/change-cause: "Release Kandula:$kandula_full_version"
+    kubernetes.io/change-cause                : "Release Kandula:$kandula_full_version"
+    consul.hashicorp.com/connect-inject       : "true"
+    consul.hashicorp.com/transparent-proxy    : "false"
+    consul.hashicorp.com/connect-service      : "kandula"
+    consul.hashicorp.com/connect-service-port : "5000"
+    consul.hashicorp.com/service-tags         : "kandula,fprj"
+    consul.hashicorp.com/service-name         : "kandula-application"
+    consul.hashicorp.com/service-meta-owner   : "Galit Udovik"
+    consul.hashicorp.com/service-meta-purpose : "Kandula final project"
+    prometheus.io/scrape                      : "true"
+    prometheus.io/port                        : "5000"
+    prometheus.io/path                        : "/metrics"
   labels:
     version: $kandula_full_version
     task: Final-Project
@@ -312,6 +383,19 @@ spec:
       labels:
         version: $kandula_full_version
         app: kandula
+      annotations:
+        kubernetes.io/change-cause                : "Release Kandula:$kandula_full_version"
+        consul.hashicorp.com/connect-inject       : "true"
+        consul.hashicorp.com/transparent-proxy    : "false"
+        consul.hashicorp.com/connect-service      : "kandula"
+        consul.hashicorp.com/connect-service-port : "5000"
+        consul.hashicorp.com/service-tags         : "kandula,fprj"
+        consul.hashicorp.com/service-name         : "kandula-application"
+        consul.hashicorp.com/service-meta-owner   : "Galit Udovik"
+        consul.hashicorp.com/service-meta-purpose : "Kandula final project"
+        prometheus.io/scrape                      : "true"
+        prometheus.io/port                        : "5000"
+        prometheus.io/path                        : "/metrics"
     spec:
       containers:
         - name: kandula
@@ -335,10 +419,25 @@ tee ${WORKSPACE}/pod-kandula.yaml > /dev/null <<'EOF'
 apiVersion: v1
 kind: Pod
 metadata:
+  namespace: kandula
   labels:
     version: $kandula_full_version
     task: Final-Project
     app: kandula
+  annotations:
+    kubernetes.io/change-cause                : "Release Kandula:$kandula_full_version"
+    consul.hashicorp.com/connect-inject       : "true"
+    consul.hashicorp.com/transparent-proxy    : "false"
+    consul.hashicorp.com/connect-service      : "kandula"
+    consul.hashicorp.com/connect-service-port : "5000"
+    consul.hashicorp.com/service-tags         : "kandula,fprj"
+    consul.hashicorp.com/service-name         : "kandula-application"
+    consul.hashicorp.com/service-meta-owner   : "Galit Udovik"
+    consul.hashicorp.com/service-meta-purpose : "Kandula final project"
+    prometheus.io/scrape                      : "true"
+    prometheus.io/port                        : "5000"
+    prometheus.io/path                        : "/metrics"
+
 spec:
   containers:
     - image: ${kandula_full_path_with_version}

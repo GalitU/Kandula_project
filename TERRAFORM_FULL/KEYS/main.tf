@@ -4,7 +4,7 @@
   Main file
 */
 
-module "key_credentials_consul" {
+module "gu_key_credentials_consul" {
   source           = "../../modules/key_credentials"
   application_name = var.application_name
   application_task = var.application_task
@@ -13,7 +13,7 @@ module "key_credentials_consul" {
   key_purpose      = "Consul"
 }
 
-module "key_credentials_bastion" {
+module "gu_key_credentials_bastion" {
   source           = "../../modules/key_credentials"
   application_task = var.application_task
   application_name = var.application_name
@@ -22,7 +22,7 @@ module "key_credentials_bastion" {
   key_purpose      = "Bastion"
 }
 
-module "key_credentials_master" {
+module "gu_key_credentials_master" {
   source           = "../../modules/key_credentials"
   application_task = var.application_task
   application_name = var.application_name
@@ -31,7 +31,7 @@ module "key_credentials_master" {
   key_purpose      = "Master"
 }
 
-module "key_credentials_webserver" {
+module "gu_key_credentials_webserver" {
   source           = "../../modules/key_credentials"
   application_task = var.application_task
   application_name = var.application_name
@@ -39,4 +39,3 @@ module "key_credentials_webserver" {
   root_directory   = abspath(path.module)
   key_purpose      = "WebServers"
 }
-

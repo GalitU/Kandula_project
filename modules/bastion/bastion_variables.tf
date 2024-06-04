@@ -18,13 +18,16 @@ variable "db_instance_type" {
 }
 variable "ami" {
   description = "Image type of instance"
-  default     = "ami-01ec9ccdf0676a480" # AMI UBUNTU 21.04
+  #default     = "ami-01ec9ccdf0676a480" # AMI UBUNTU 21.04
 }
 variable "vpc_name" {
   description = "This is name of desired VPC"
-  default     = "VPC-mprj-Kandula"
+  default     = "VPC-fprj-Kandula"
 }
-
+variable "ec2_sec_group_array" {
+  description = "List of relevant security groups for web instances"
+  type        = list(string)
+}
 variable "count_instances" {
   description = "Count of Web server/ DB  instances"
   default     = 1
@@ -34,8 +37,8 @@ variable "ec2_OS" {
   default     = "Ubuntu"
 }
 variable "application_name" {
-  description = "Application name, HW, mid_prj"
-  default     = "MPrj"
+  description = "Application name, HW, fin_prj"
+  default     = "FPrj"
 }
 variable "application_task" {
   description = "Name of task"

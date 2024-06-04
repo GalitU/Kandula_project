@@ -22,7 +22,7 @@
 
 
 ##### Start ALB Amazon Ingress
-aws eks --region=eu-central-1 update-kubeconfig --name kandula-mid-kube
+aws eks --region=eu-central-1 update-kubeconfig --name kandula-prj-kube
 
 kubectl apply -f kandula_on_kube.yaml
 

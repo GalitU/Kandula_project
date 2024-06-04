@@ -60,12 +60,12 @@ Destroy complete! Resources: 0 destroyed.
 
 
  ==== Destroy Bastion ==== [basename /mnt/c/Data/OpsSchool/MidProject/TERRAFORM_FULL/BASTION]
-[0m[1mmodule.bastion_server.module.iam_roles_describe.aws_iam_role.role_join: Refreshing state... [id=Role_Bastion_Describe_Kandula_MPrj_join][0m
-[0m[1mmodule.bastion_server.module.iam_roles_describe.aws_iam_policy.role_join: Refreshing state... [id=arn:aws:iam::504723606770:policy/Policy_Bastion_Describe_Kandula_MPrj_join][0m
+[0m[1mmodule.bastion_server.module.gu_iam_roles_describe.aws_iam_role.role_join: Refreshing state... [id=Role_Bastion_Describe_Kandula_MPrj_join][0m
+[0m[1mmodule.bastion_server.module.gu_iam_roles_describe.aws_iam_policy.role_join: Refreshing state... [id=arn:aws:iam::504723606770:policy/Policy_Bastion_Describe_Kandula_MPrj_join][0m
 [0m[1mmodule.bastion_server.aws_security_group.bastion_sec_grp_ssh: Refreshing state... [id=sg-0a23ef5699a9ec457][0m
 [0m[1mmodule.bastion_server.aws_security_group_rule.bastion_ingress_ssh: Refreshing state... [id=sgrule-3145324985][0m
-[0m[1mmodule.bastion_server.module.iam_roles_describe.aws_iam_instance_profile.role_join: Refreshing state... [id=Role_Instance_Bastion_Describe_Kandula_MPrj_join1][0m
-[0m[1mmodule.bastion_server.module.iam_roles_describe.aws_iam_policy_attachment.role_join: Refreshing state... [id=Policy_attach_Bastion_Describe_Kandula_MPrj_join][0m
+[0m[1mmodule.bastion_server.module.gu_iam_roles_describe.aws_iam_instance_profile.role_join: Refreshing state... [id=Role_Instance_Bastion_Describe_Kandula_MPrj_join1][0m
+[0m[1mmodule.bastion_server.module.gu_iam_roles_describe.aws_iam_policy_attachment.role_join: Refreshing state... [id=Policy_attach_Bastion_Describe_Kandula_MPrj_join][0m
 [0m[1mmodule.bastion_server.module.ec2_bastion_server.aws_instance.ec2_server[0]: Refreshing state... [id=i-04b38348bc8de103c][0m
 
 Terraform used the selected providers to generate the following execution
@@ -249,7 +249,7 @@ Terraform will perform the following actions:
         }
     }
 
-[1m  # module.bastion_server.module.iam_roles_describe.aws_iam_instance_profile.role_join[0m will be [1m[31mdestroyed[0m[0m
+[1m  # module.bastion_server.module.gu_iam_roles_describe.aws_iam_instance_profile.role_join[0m will be [1m[31mdestroyed[0m[0m
 [0m  [31m-[0m[0m resource "aws_iam_instance_profile" "role_join" {
       [31m-[0m [0m[1m[0marn[0m[0m         = "arn:aws:iam::504723606770:instance-profile/Role_Instance_Bastion_Describe_Kandula_MPrj_join1" [90m->[0m [0m[90mnull[0m[0m
       [31m-[0m [0m[1m[0mcreate_date[0m[0m = "2022-05-15T22:47:53Z" [90m->[0m [0m[90mnull[0m[0m
@@ -267,7 +267,7 @@ Terraform will perform the following actions:
       [31m-[0m [0m[1m[0munique_id[0m[0m   = "AIPAXLA67BTZOAZDY2PYT" [90m->[0m [0m[90mnull[0m[0m
     }
 
-[1m  # module.bastion_server.module.iam_roles_describe.aws_iam_policy.role_join[0m will be [1m[31mdestroyed[0m[0m
+[1m  # module.bastion_server.module.gu_iam_roles_describe.aws_iam_policy.role_join[0m will be [1m[31mdestroyed[0m[0m
 [0m  [31m-[0m[0m resource "aws_iam_policy" "role_join" {
       [31m-[0m [0m[1m[0marn[0m[0m         = "arn:aws:iam::504723606770:policy/Policy_Bastion_Describe_Kandula_MPrj_join" [90m->[0m [0m[90mnull[0m[0m
       [31m-[0m [0m[1m[0mdescription[0m[0m = "Allows Relevant nodes to describe instances for joining." [90m->[0m [0m[90mnull[0m[0m
@@ -301,7 +301,7 @@ Terraform will perform the following actions:
         } [90m->[0m [0m[90mnull[0m[0m
     }
 
-[1m  # module.bastion_server.module.iam_roles_describe.aws_iam_policy_attachment.role_join[0m will be [1m[31mdestroyed[0m[0m
+[1m  # module.bastion_server.module.gu_iam_roles_describe.aws_iam_policy_attachment.role_join[0m will be [1m[31mdestroyed[0m[0m
 [0m  [31m-[0m[0m resource "aws_iam_policy_attachment" "role_join" {
       [31m-[0m [0m[1m[0mgroups[0m[0m     = [] [90m->[0m [0m[90mnull[0m[0m
       [31m-[0m [0m[1m[0mid[0m[0m         = "Policy_attach_Bastion_Describe_Kandula_MPrj_join" [90m->[0m [0m[90mnull[0m[0m
@@ -313,7 +313,7 @@ Terraform will perform the following actions:
       [31m-[0m [0m[1m[0musers[0m[0m      = [] [90m->[0m [0m[90mnull[0m[0m
     }
 
-[1m  # module.bastion_server.module.iam_roles_describe.aws_iam_role.role_join[0m will be [1m[31mdestroyed[0m[0m
+[1m  # module.bastion_server.module.gu_iam_roles_describe.aws_iam_role.role_join[0m will be [1m[31mdestroyed[0m[0m
 [0m  [31m-[0m[0m resource "aws_iam_role" "role_join" {
       [31m-[0m [0m[1m[0marn[0m[0m                   = "arn:aws:iam::504723606770:role/Role_Bastion_Describe_Kandula_MPrj_join" [90m->[0m [0m[90mnull[0m[0m
       [31m-[0m [0m[1m[0massume_role_policy[0m[0m    = jsonencode(
@@ -377,13 +377,13 @@ Do you really want to destroy all resources?[0m
   There is no undo. Only 'yes' will be accepted to confirm.
 
   [1mEnter a value:[0m [0m
-[0m[1mmodule.bastion_server.module.iam_roles_describe.aws_iam_policy_attachment.role_join: Destroying... [id=Policy_attach_Bastion_Describe_Kandula_MPrj_join][0m[0m
+[0m[1mmodule.bastion_server.module.gu_iam_roles_describe.aws_iam_policy_attachment.role_join: Destroying... [id=Policy_attach_Bastion_Describe_Kandula_MPrj_join][0m[0m
 [0m[1mmodule.bastion_server.module.ec2_bastion_server.aws_instance.ec2_server[0]: Destroying... [id=i-04b38348bc8de103c][0m[0m
 [0m[1mmodule.bastion_server.aws_security_group_rule.bastion_ingress_ssh: Destroying... [id=sgrule-3145324985][0m[0m
 [0m[1mmodule.bastion_server.aws_security_group_rule.bastion_ingress_ssh: Destruction complete after 1s[0m
-[0m[1mmodule.bastion_server.module.iam_roles_describe.aws_iam_policy_attachment.role_join: Destruction complete after 1s[0m
-[0m[1mmodule.bastion_server.module.iam_roles_describe.aws_iam_policy.role_join: Destroying... [id=arn:aws:iam::504723606770:policy/Policy_Bastion_Describe_Kandula_MPrj_join][0m[0m
-[0m[1mmodule.bastion_server.module.iam_roles_describe.aws_iam_policy.role_join: Destruction complete after 0s[0m
+[0m[1mmodule.bastion_server.module.gu_iam_roles_describe.aws_iam_policy_attachment.role_join: Destruction complete after 1s[0m
+[0m[1mmodule.bastion_server.module.gu_iam_roles_describe.aws_iam_policy.role_join: Destroying... [id=arn:aws:iam::504723606770:policy/Policy_Bastion_Describe_Kandula_MPrj_join][0m[0m
+[0m[1mmodule.bastion_server.module.gu_iam_roles_describe.aws_iam_policy.role_join: Destruction complete after 0s[0m
 [0m[1mmodule.bastion_server.module.ec2_bastion_server.aws_instance.ec2_server[0]: Still destroying... [id=i-04b38348bc8de103c, 10s elapsed][0m[0m
 [0m[1mmodule.bastion_server.module.ec2_bastion_server.aws_instance.ec2_server[0]: Still destroying... [id=i-04b38348bc8de103c, 20s elapsed][0m[0m
 [0m[1mmodule.bastion_server.module.ec2_bastion_server.aws_instance.ec2_server[0]: Still destroying... [id=i-04b38348bc8de103c, 30s elapsed][0m[0m
@@ -400,11 +400,11 @@ Do you really want to destroy all resources?[0m
 [0m[1mmodule.bastion_server.module.ec2_bastion_server.aws_instance.ec2_server[0]: Still destroying... [id=i-04b38348bc8de103c, 2m20s elapsed][0m[0m
 [0m[1mmodule.bastion_server.module.ec2_bastion_server.aws_instance.ec2_server[0]: Destruction complete after 2m22s[0m
 [0m[1mmodule.bastion_server.aws_security_group.bastion_sec_grp_ssh: Destroying... [id=sg-0a23ef5699a9ec457][0m[0m
-[0m[1mmodule.bastion_server.module.iam_roles_describe.aws_iam_instance_profile.role_join: Destroying... [id=Role_Instance_Bastion_Describe_Kandula_MPrj_join1][0m[0m
+[0m[1mmodule.bastion_server.module.gu_iam_roles_describe.aws_iam_instance_profile.role_join: Destroying... [id=Role_Instance_Bastion_Describe_Kandula_MPrj_join1][0m[0m
 [0m[1mmodule.bastion_server.aws_security_group.bastion_sec_grp_ssh: Destruction complete after 0s[0m
-[0m[1mmodule.bastion_server.module.iam_roles_describe.aws_iam_instance_profile.role_join: Destruction complete after 1s[0m
-[0m[1mmodule.bastion_server.module.iam_roles_describe.aws_iam_role.role_join: Destroying... [id=Role_Bastion_Describe_Kandula_MPrj_join][0m[0m
-[0m[1mmodule.bastion_server.module.iam_roles_describe.aws_iam_role.role_join: Destruction complete after 1s[0m
+[0m[1mmodule.bastion_server.module.gu_iam_roles_describe.aws_iam_instance_profile.role_join: Destruction complete after 1s[0m
+[0m[1mmodule.bastion_server.module.gu_iam_roles_describe.aws_iam_role.role_join: Destroying... [id=Role_Bastion_Describe_Kandula_MPrj_join][0m[0m
+[0m[1mmodule.bastion_server.module.gu_iam_roles_describe.aws_iam_role.role_join: Destruction complete after 1s[0m
 [0m[1m[32m
 Destroy complete! Resources: 7 destroyed.
 [0m====> Destroy BASTION environment finished OK
@@ -459,7 +459,7 @@ Terraform will perform the following actions:
       [31m-[0m [0m[1m[0mcontent[0m[0m              = (sensitive value)
       [31m-[0m [0m[1m[0mdirectory_permission[0m[0m = "0700" [90m->[0m [0m[90mnull[0m[0m
       [31m-[0m [0m[1m[0mfile_permission[0m[0m      = "0700" [90m->[0m [0m[90mnull[0m[0m
-      [31m-[0m [0m[1m[0mfilename[0m[0m             = "Key_Bastion_Kandula_MPrj.pem" [90m->[0m [0m[90mnull[0m[0m
+      [31m-[0m [0m[1m[0mfilename[0m[0m             = "Key_Bastion_Kandula_FPrj.pem" [90m->[0m [0m[90mnull[0m[0m
       [31m-[0m [0m[1m[0mid[0m[0m                   = "9e1955ff670743381d332296f5303a09060f16fd" [90m->[0m [0m[90mnull[0m[0m
     }
 
@@ -524,7 +524,7 @@ Terraform will perform the following actions:
       [31m-[0m [0m[1m[0mcontent[0m[0m              = (sensitive value)
       [31m-[0m [0m[1m[0mdirectory_permission[0m[0m = "0700" [90m->[0m [0m[90mnull[0m[0m
       [31m-[0m [0m[1m[0mfile_permission[0m[0m      = "0700" [90m->[0m [0m[90mnull[0m[0m
-      [31m-[0m [0m[1m[0mfilename[0m[0m             = "Key_Consul_Kandula_MPrj.pem" [90m->[0m [0m[90mnull[0m[0m
+      [31m-[0m [0m[1m[0mfilename[0m[0m             = "Key_Consul_Kandula_FPrj.pem" [90m->[0m [0m[90mnull[0m[0m
       [31m-[0m [0m[1m[0mid[0m[0m                   = "c60cdc8d2d646728dfdce531631accd312e28fd4" [90m->[0m [0m[90mnull[0m[0m
     }
 
@@ -589,7 +589,7 @@ Terraform will perform the following actions:
       [31m-[0m [0m[1m[0mcontent[0m[0m              = (sensitive value)
       [31m-[0m [0m[1m[0mdirectory_permission[0m[0m = "0700" [90m->[0m [0m[90mnull[0m[0m
       [31m-[0m [0m[1m[0mfile_permission[0m[0m      = "0700" [90m->[0m [0m[90mnull[0m[0m
-      [31m-[0m [0m[1m[0mfilename[0m[0m             = "Key_Master_Kandula_MPrj.pem" [90m->[0m [0m[90mnull[0m[0m
+      [31m-[0m [0m[1m[0mfilename[0m[0m             = "Key_Master_Kandula_FPrj.pem" [90m->[0m [0m[90mnull[0m[0m
       [31m-[0m [0m[1m[0mid[0m[0m                   = "70e5c1c1912e6f321cb86a6486c262024d8c4538" [90m->[0m [0m[90mnull[0m[0m
     }
 
@@ -654,7 +654,7 @@ Terraform will perform the following actions:
       [31m-[0m [0m[1m[0mcontent[0m[0m              = (sensitive value)
       [31m-[0m [0m[1m[0mdirectory_permission[0m[0m = "0700" [90m->[0m [0m[90mnull[0m[0m
       [31m-[0m [0m[1m[0mfile_permission[0m[0m      = "0700" [90m->[0m [0m[90mnull[0m[0m
-      [31m-[0m [0m[1m[0mfilename[0m[0m             = "Key_WebServers_Kandula_MPrj.pem" [90m->[0m [0m[90mnull[0m[0m
+      [31m-[0m [0m[1m[0mfilename[0m[0m             = "Key_WebServers_Kandula_FPrj.pem" [90m->[0m [0m[90mnull[0m[0m
       [31m-[0m [0m[1m[0mid[0m[0m                   = "d08ecd981c6ba401a0610fa5cf83fad86883f3f2" [90m->[0m [0m[90mnull[0m[0m
     }
 
@@ -703,10 +703,10 @@ Terraform will perform the following actions:
   [31m-[0m [0m[1m[0mdata_aws_region[0m[0m             = "eu-central-1" [90m->[0m [0m[90mnull[0m[0m
   [31m-[0m [0m[1m[0mdata_aws_region_description[0m[0m = "Europe (Frankfurt)" [90m->[0m [0m[90mnull[0m[0m
   [31m-[0m [0m[1m[0mprivate_key_files_with_path[0m[0m = <<-EOT
-        /mnt/c/Data/OpsSchool/MidProject/TERRAFORM_FULL/KEYS/Key_Consul_Kandula_MPrj.pem,
-        /mnt/c/Data/OpsSchool/MidProject/TERRAFORM_FULL/KEYS/Key_Bastion_Kandula_MPrj.pem,
-        /mnt/c/Data/OpsSchool/MidProject/TERRAFORM_FULL/KEYS/Key_Master_Kandula_MPrj.pem,
-        /mnt/c/Data/OpsSchool/MidProject/TERRAFORM_FULL/KEYS/Key_WebServers_Kandula_MPrj.pem
+        /mnt/c/Data/OpsSchool/MidProject/TERRAFORM_FULL/KEYS/Key_Consul_Kandula_FPrj.pem,
+        /mnt/c/Data/OpsSchool/MidProject/TERRAFORM_FULL/KEYS/Key_Bastion_Kandula_FPrj.pem,
+        /mnt/c/Data/OpsSchool/MidProject/TERRAFORM_FULL/KEYS/Key_Master_Kandula_FPrj.pem,
+        /mnt/c/Data/OpsSchool/MidProject/TERRAFORM_FULL/KEYS/Key_WebServers_Kandula_FPrj.pem
     EOT [90m->[0m [0m[90mnull[0m[0m
   [31m-[0m [0m[1m[0mprivate_key_names[0m[0m           = <<-EOT
         Key_Consul_Kandula_MPrj,

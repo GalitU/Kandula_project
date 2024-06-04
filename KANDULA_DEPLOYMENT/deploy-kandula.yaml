@@ -1,12 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  namespace: kandula
   name: deployment-kandula-app
   annotations:
-    kubernetes.io/change-cause: "Release Kandula:v3.0.21.786d20ff"
+    kubernetes.io/change-cause                : "Release Kandula:v4.0.11.cd1af5e2"
+    consul.hashicorp.com/connect-inject       : "true"
+    consul.hashicorp.com/transparent-proxy    : "false"
+    consul.hashicorp.com/connect-service      : "kandula"
+    consul.hashicorp.com/connect-service-port : "5000"
+    consul.hashicorp.com/service-tags         : "kandula,fprj"
+    consul.hashicorp.com/service-name         : "kandula-application"
+    consul.hashicorp.com/service-meta-owner   : "Galit Udovik"
+    consul.hashicorp.com/service-meta-purpose : "Kandula final project"
+    prometheus.io/scrape                      : "true"
+    prometheus.io/port                        : "5000"
+    prometheus.io/path                        : "/metrics"
   labels:
-    version: v3.0.21.786d20ff
-    task: Mid-Project
+    version: v4.0.11.cd1af5e2
+    task: Final-Project
+    app: kandula
 spec:
   replicas: 2
   minReadySeconds: 10
@@ -21,12 +34,25 @@ spec:
   template:
     metadata:
       labels:
-        version: v3.0.21.786d20ff
+        version: v4.0.11.cd1af5e2
         app: kandula
+      annotations:
+        kubernetes.io/change-cause                : "Release Kandula:v4.0.11.cd1af5e2"
+        consul.hashicorp.com/connect-inject       : "true"
+        consul.hashicorp.com/transparent-proxy    : "false"
+        consul.hashicorp.com/connect-service      : "kandula"
+        consul.hashicorp.com/connect-service-port : "5000"
+        consul.hashicorp.com/service-tags         : "kandula,fprj"
+        consul.hashicorp.com/service-name         : "kandula-application"
+        consul.hashicorp.com/service-meta-owner   : "Galit Udovik"
+        consul.hashicorp.com/service-meta-purpose : "Kandula final project"
+        prometheus.io/scrape                      : "true"
+        prometheus.io/port                        : "5000"
+        prometheus.io/path                        : "/metrics"
     spec:
       containers:
         - name: kandula
-          image: galitu/kandula-repo:kandula-mid-prj-v3.0.21.786d20ff
+          image: galitu/kandula-repo:kandula-final-prj-v4.0.11.cd1af5e2
           ports:
             - containerPort: 5000
               name: http

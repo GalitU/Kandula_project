@@ -24,8 +24,8 @@ output "pub_subnets_ids" {
 output "pvt_subnets_ids" {
   value = [for id in data.aws_subnets.private.ids : id]
 }
-output "describe_kandula_mid_iam_instance_profile" {
-  value = join("_", ["Role_Describe", var.application_task, var.application_name, "join"])
+output "describe_kandula_fin_iam_instance_profile" {
+  value = join("_", ["Role_Describe", var.application_task, var.application_name])
 }
 output "sec_grp_http_ids" {
   value = [for id in data.aws_security_groups.http.ids : id]
@@ -50,6 +50,18 @@ output "sec_grp_bastion_ids" {
 }
 output "kube_security_group_ids" {
   value = [for id in data.aws_security_groups.sec_grp_kube.ids : id]
+}
+output "sec_grp_monitoring" {
+  value = [for id in data.aws_security_groups.sec_grp_monitoring.ids : id]
+}
+output "sec_grp_monitoring_ui" {
+  value = [for id in data.aws_security_groups.sec_grp_monitoring_ui.ids : id]
+}
+output "sec_grp_node_exporter" {
+  value = [for id in data.aws_security_groups.sec_grp_node_exporter.ids : id]
+}
+output "sec_grp_elk_server" {
+  value = [for id in data.aws_security_groups.sec_grp_elk_server.ids : id]
 }
 output "data_aws_security_groups_bastion" {
   value = data.aws_security_groups.bastion
@@ -78,3 +90,14 @@ output "hosted_zone_53_name_servers" {
 output "aws_acm_certificate_arn" {
   value = data.aws_acm_certificate.compoze_acm.arn
 }
+/*
+output "lb_monitoring" {
+  value = data.aws_lb.lb_monitoring
+}
+output "lb_consul" {
+  value = data.aws_lb.lb_consul
+}
+output "lb_jenkins" {
+  value = data.aws_lb.lb_jenkins
+}
+*/

@@ -4,7 +4,7 @@
   Main file
 */
 
-module "reguest_data" {
+module "gu_reguest_data" {
   source                 = "../../modules/data"
   region                 = var.region
   application_name       = var.application_name
@@ -15,39 +15,46 @@ module "reguest_data" {
 }
 
 locals {
-  cluster_name = "kandula-mid-kube"
+  cluster_name = "kandula-prj-kube"
 }
 #########################################################################################
 /* EKS environment */
-module "kubernetes" {
-  source                     = "../../modules/kubernetes"
-  vpc_id                     = module.reguest_data.vpc_id
-  application_task           = var.application_task
-  application_name           = var.application_name
-  created_by                 = var.created_by
-  cluster_name               = local.cluster_name
-  kube_node_sec_groups       = concat(module.reguest_data.kube_security_group_ids, module.reguest_data.sec_grp_consul_ids)
-  kube_pub_subnets_ids       = module.reguest_data.pub_subnets_ids
-  kube_pvt_subnets_ids       = module.reguest_data.workers_pvt_subnets_ids
+module "gu_kube" {
+  source           = "../../modules/kubernetes"
+  vpc_id           = module.gu_reguest_data.vpc_id
+  application_task = var.application_task
+  application_name = var.application_name
+  created_by       = var.created_by
+  cluster_name     = local.cluster_name
+  kube_node_sec_groups = concat(module.gu_reguest_data.kube_security_group_ids,
+                                module.gu_reguest_data.sec_grp_consul_ids,
+                                module.gu_reguest_data.sec_grp_node_exporter)
+  kube_pub_subnets_ids       = module.gu_reguest_data.pub_subnets_ids
+  kube_pvt_subnets_ids       = module.gu_reguest_data.workers_pvt_subnets_ids
   kube_additional_role_names = ["JenkinsSrv_Describe", "JenkinsAgent_Describe"]
 }
 
-
-###########   ###########   ###########   ###########   ###########   ###########   ###########
 data "aws_eks_cluster" "target" {
   name = local.cluster_name
-  depends_on = [module.kubernetes]
-}
-data "aws_eks_cluster_auth" "aws_iam_authenticator" {
-  name = data.aws_eks_cluster.target.name
+  depends_on = [
+    module.gu_kube
+  ]
 }
 
+data "aws_eks_cluster_auth" "aws_iam_authenticator" {
+  name = data.aws_eks_cluster.target.name
+  depends_on = [
+    module.gu_kube
+  ]
+}
+
+
 provider "kubernetes" {
-  alias                  = "eks"
+  config_path            = "~/.kube/config"
+  config_context         = "arn:aws:eks:eu-central-1:${data.aws_caller_identity.current.account_id}:cluster/${local.cluster_name}"
   host                   = data.aws_eks_cluster.target.endpoint
   cluster_ca_certificate = base64decode(data.aws_eks_cluster.target.certificate_authority[0].data)
   token                  = data.aws_eks_cluster_auth.aws_iam_authenticator.token
-  #load_config_file       = false
 }
 
 module "alb_ingress_controller" {
@@ -55,17 +62,16 @@ module "alb_ingress_controller" {
   version = "3.4.0"
 
   providers = {
-    kubernetes = kubernetes.eks
+    kubernetes = kubernetes
   }
 
-  aws_vpc_id = module.reguest_data.vpc_id
-
-  k8s_cluster_type = "eks"
-  k8s_namespace    = "kube-system"
-
-  aws_region_name  = data.aws_region.current.name
-  k8s_cluster_name = data.aws_eks_cluster.target.name
-
+  k8s_cluster_type         = "eks"
+  k8s_namespace            = "kube-system"
+  aws_vpc_id               = module.gu_reguest_data.vpc_id
+  aws_iam_path_prefix      = ""
+  aws_resource_name_prefix = "gu-"
+  aws_region_name          = data.aws_region.current.name
+  k8s_cluster_name         = data.aws_eks_cluster.target.name
   aws_tags = {
     Name      = "IngressCtrl-${var.application_task} ${var.application_name}"
     Purpose   = "Kubernetes"
@@ -76,5 +82,8 @@ module "alb_ingress_controller" {
     #ConsulPrefixForAnsible = "ConsulAgent-${var.application_name}-${var.application_task}"
     #ConsulAppDiscoveryTag  = "Consul"
   }
-  depends_on = [module.kubernetes]
+
+  depends_on = [
+    module.gu_kube
+  ]
 }

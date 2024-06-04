@@ -1,0 +1,18 @@
+global:
+  enabled: false
+  image: "hashicorp/consul:1.11.5"
+  datacenter: galit_dc_kandula
+  gossipEncryption:
+    secretName: consul-gossip-encryption-key
+    secretKey: key
+
+client:
+  enabled: true
+  join:
+    - "provider=aws tag_key=ConsulAppDiscoveryTag tag_value=Consul"
+  exposeGossipPorts: true
+dns:
+  enabled: true
+
+syncCatalog:
+  enabled: true

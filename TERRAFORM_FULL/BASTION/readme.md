@@ -1,1 +1,1 @@
-This directory will be base for mid. project
+This directory will be base for final project

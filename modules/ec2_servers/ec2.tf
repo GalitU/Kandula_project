@@ -50,7 +50,7 @@ resource "aws_instance" "ec2_server" {
   }
 
   tags = {
-    Name                   = "${var.application_task} ${var.application_name} ${var.ec2_purpose} ${var.ec2_OS}_${count.index}"
+    Name                   = "${var.application_task}-${var.application_name}-${var.ec2_purpose}-${var.ec2_OS}-${count.index}"
     Purpose                = var.ec2_purpose
     App_name               = var.application_name
     Task                   = var.application_task
@@ -76,6 +76,10 @@ output "ec2_servers_dns" {
 output "ec2_servers_private_ips" {
   value = join(", ", aws_instance.ec2_server[*].private_ip)
 }
+output "ec2_servers_private_ips_arr" {
+  value = aws_instance.ec2_server[*].private_ip
+}
+
 output "ec2_servers_public_ips" {
   value = join(", ", aws_instance.ec2_server[*].public_ip)
 }

@@ -10,7 +10,11 @@ echo -e "\n\n" $SCRIPT_DIR
 cd $SCRIPT_DIR/..
 cd ./S3_BUCKET
 echo -e "\n\n" ==== Creates S3 ==== [basename $(pwd)]
+#### terraform init
 terraform apply -auto-approve
+EXITCODE=$?
+test $EXITCODE -ne 0 && exit $EXITCODE
+
 cd ..
 # read -p "Press any key to continue...    " -n1 -s
 

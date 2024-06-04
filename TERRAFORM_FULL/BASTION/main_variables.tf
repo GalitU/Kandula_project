@@ -18,7 +18,8 @@ variable "db_instance_type" {
 }
 variable "ami" {
   description = "Image type of instance"
-  default     = "ami-01ec9ccdf0676a480" # AMI UBUNTU 21.04
+  default = "ami-0d527b8c289b4af7f"  # AMI UBUNTU 20.04
+  #default     = "ami-01ec9ccdf0676a480" # AMI UBUNTU 21.04
 }
 variable "count_instances" {
   description = "Count of Web server/ DB  instances"
@@ -29,8 +30,8 @@ variable "ec2_OS" {
   default     = "Ubuntu"
 }
 variable "application_name" {
-  description = "Application name, HW, mid_prj"
-  default     = "MPrj"
+  description = "Application name, HW, fin_prj"
+  default     = "FPrj"
 }
 variable "application_task" {
   description = "Name of task"

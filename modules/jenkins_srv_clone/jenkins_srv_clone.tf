@@ -103,7 +103,7 @@ resource "aws_instance" "jenkins_server" {
   }
 
   tags = {
-    Name                   = "${var.application_task} ${var.application_name} ${var.jenkins_purpose} ${var.jenkins_OS}"
+    Name                   = "${var.application_task}-${var.application_name}-${var.jenkins_purpose}-${var.jenkins_OS}"
     Purpose                = var.jenkins_purpose
     App_name               = var.application_name
     Task                   = var.application_task

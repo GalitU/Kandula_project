@@ -11,7 +11,7 @@ from .containers import Container
 from .utils.app_logging import init_logging
 from .views import views
 from .views.views import InstanceAPI
-
+from apscheduler.schedulers.background import BackgroundScheduler
 
 def create_app() -> Flask:
     container = Container()
@@ -24,6 +24,12 @@ def create_app() -> Flask:
     container.wire(packages=[views])
 
     app = Flask(__name__)
+
+    # For metrics cron function
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(scheduled_metrics_job, trigger='interval', seconds=60)
+    scheduler.start()
+
     app.secret_key = os.environ.get('SECRET_KEY')
 
     app.container = container
@@ -38,6 +44,7 @@ def create_app() -> Flask:
     app.add_url_rule('/metrics', 'metrics', views.metrics, methods=['GET'])
     app.add_url_rule('/about', 'about', views.about, methods=['GET'])
     app.add_url_rule('/health', 'health', views.health, methods=['GET'])
+    app.add_url_rule('/raw_instances', 'raw_instances', views.raw_instances, methods=['GET', 'POST'])
     app.add_url_rule('/instances', 'instances',
                      views.instances, methods=['GET', 'POST'])
     app.add_url_rule('/instances/<string:instance_id>/<string:instance_action>',
@@ -62,3 +69,7 @@ def create_app() -> Flask:
     bootstrap.init_app(app)
 
     return app
+
+# Will update instance state of metrics
+def scheduled_metrics_job():
+    views.cron_update_metrics()

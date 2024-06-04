@@ -40,6 +40,7 @@ variable "listener_ports" {
   description = "List of ports for lb listeners"
   type        = list(number)
 }
+
 variable "target_port" {
   description = "Port for lb represent"
 }

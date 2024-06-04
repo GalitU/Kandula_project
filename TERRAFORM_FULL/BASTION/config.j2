@@ -10,7 +10,7 @@ Host 10.0.1.*
     ForwardAgent yes
     User ubuntu
     Port 22
-    IdentityFile ~/.ssh/SSH_KEYS_FOR_Amazon/Key_Consul_Kandula_MPrj.pem
+    IdentityFile ~/.ssh/SSH_KEYS_FOR_Amazon/Key_Consul_Kandula_FPrj.pem
     ProxyJump Bastion_host
     StrictHostKeyChecking no
     UserKnownHostsFile /dev/null
@@ -18,7 +18,7 @@ Host 10.0.2.*
     ForwardAgent yes
     User ubuntu
     Port 22
-    IdentityFile ~/.ssh/SSH_KEYS_FOR_Amazon/Key_Consul_Kandula_MPrj.pem
+    IdentityFile ~/.ssh/SSH_KEYS_FOR_Amazon/Key_Consul_Kandula_FPrj.pem
     ProxyJump Bastion_host
     StrictHostKeyChecking no
     UserKnownHostsFile /dev/null
@@ -26,7 +26,7 @@ Host 10.0.3.*
     ForwardAgent yes
     User ubuntu
     Port 22
-    IdentityFile ~/.ssh/SSH_KEYS_FOR_Amazon/Key_Master_Kandula_MPrj.pem
+    IdentityFile ~/.ssh/SSH_KEYS_FOR_Amazon/Key_Master_Kandula_FPrj.pem
     ProxyJump Bastion_host
     StrictHostKeyChecking no
     UserKnownHostsFile /dev/null
@@ -34,7 +34,7 @@ Host 10.0.31.*
     ForwardAgent yes
     User ubuntu
     Port 22
-    IdentityFile ~/.ssh/SSH_KEYS_FOR_Amazon/Key_Bastion_Kandula_MPrj.pem
+    IdentityFile ~/.ssh/SSH_KEYS_FOR_Amazon/Key_Bastion_Kandula_FPrj.pem
     ProxyJump Bastion_host
     StrictHostKeyChecking no
     UserKnownHostsFile /dev/null
@@ -42,7 +42,7 @@ Host 10.0.4.*
     ForwardAgent yes
     User ubuntu
     Port 22
-    IdentityFile ~/.ssh/SSH_KEYS_FOR_Amazon/Key_Master_Kandula_MPrj.pem
+    IdentityFile ~/.ssh/SSH_KEYS_FOR_Amazon/Key_Master_Kandula_FPrj.pem
     ProxyJump Bastion_host
     StrictHostKeyChecking no
     UserKnownHostsFile /dev/null
@@ -50,7 +50,7 @@ Host 10.0.5.*
     ForwardAgent yes
     User ubuntu
     Port 22
-    IdentityFile ~/.ssh/SSH_KEYS_FOR_Amazon/Key_WebServers_Kandula_MPrj.pem
+    IdentityFile ~/.ssh/SSH_KEYS_FOR_Amazon/Key_WebServers_Kandula_FPrj.pem
     ProxyJump Bastion_host
     StrictHostKeyChecking no
     UserKnownHostsFile /dev/null
@@ -58,16 +58,16 @@ Host 10.0.6.*
     ForwardAgent yes
     User ubuntu
     Port 22
-    IdentityFile ~/.ssh/SSH_KEYS_FOR_Amazon/Key_WebServers_Kandula_MPrj.pem
+    IdentityFile ~/.ssh/SSH_KEYS_FOR_Amazon/Key_WebServers_Kandula_FPrj.pem
     ProxyJump Bastion_host
     StrictHostKeyChecking no
     UserKnownHostsFile /dev/null
 Host Bastion_host
     ForwardAgent yes
-    HostName {{BASTION_PUBLIC_IP}}
+    HostName ${BASTION_PUBLIC_IP}
     User ubuntu
     Port 22
-    IdentityFile ~/.ssh/SSH_KEYS_FOR_Amazon/Key_Bastion_Kandula_MPrj.pem
+    IdentityFile ~/.ssh/SSH_KEYS_FOR_Amazon/Key_Bastion_Kandula_FPrj.pem
     StrictHostKeyChecking no
     UserKnownHostsFile /dev/null
 Host 3.123.232.172

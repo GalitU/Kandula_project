@@ -14,9 +14,8 @@ locals {
   subnet_pub_cidr_arr = ["10.0.31.0/24", "10.0.32.0/24"]
 }
 
-module "vpc" {
+module "gu_vpc" {
   source = "../../modules/vpc"
-  #source                          = "git@github.com:GalitU/Mid_project.git//tree/Candiadate_mid_Kandula/modules/vpc"
   region                         = var.region
   cidr_block_pvt                 = local.subnet_pvt_cidr_arr
   cidr_block_pub                 = local.subnet_pub_cidr_arr

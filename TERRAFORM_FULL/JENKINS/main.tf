@@ -11,7 +11,7 @@ locals {
   jenkins_agent_access_policy_file  = "${local.root_path}/../../modules/roles/policies/jenkins_agents_policy.json"
 }
 
-module "iam_roles_describe_jenkins_server" {
+module "gu_iam_roles_describe_jenkins_server" {
   source                    = "../../modules/roles"
   access_policy_description = "Describe"
   role_policy_type          = file(local.assume_policy_file_path)
@@ -22,7 +22,7 @@ module "iam_roles_describe_jenkins_server" {
   created_by                = var.created_by
 }
 
-module "iam_roles_describe_jenkins_agent" {
+module "gu_iam_roles_describe_jenkins_agent" {
   source                    = "../../modules/roles"
   access_policy_description = "Describe"
   role_policy_type          = file(local.assume_policy_file_path)
@@ -33,7 +33,7 @@ module "iam_roles_describe_jenkins_agent" {
   created_by                = var.created_by
 }
 
-module "reguest_data" {
+module "gu_reguest_data" {
   source                 = "../../modules/data"
   region                 = var.region
   application_name       = var.application_name
@@ -51,14 +51,14 @@ data "aws_instance" "bastion" {
   }
   filter {
     name   = "vpc-id"
-    values = [module.reguest_data.vpc_id]
+    values = [module.gu_reguest_data.vpc_id]
   }
 }
 
 locals {
   abs_path_to_keys    = abspath(path.module)
-  master_key          = module.reguest_data.key_pair_master
-  bastion_key         = module.reguest_data.key_pair_bastion
+  master_key          = module.gu_reguest_data.key_pair_master
+  bastion_key         = module.gu_reguest_data.key_pair_bastion
   path_to_keys        = "${local.abs_path_to_keys}/../KEYS/"
   path_to_master_key  = "${local.abs_path_to_keys}/../KEYS/${local.master_key}.pem"
   path_to_bastion_key = "${local.abs_path_to_keys}/../KEYS/${local.bastion_key}.pem"
@@ -66,20 +66,24 @@ locals {
 
 #####################################################################################################
 /* Jenkins server */
-module "jenkins_server" {
+module "gu_jenkins_server" {
   source                      = "../../modules/jenkins_srv_clone"
   region                      = var.region
   jenkins_purpose             = "JenkinsSrv"
   type_of_subnet              = "Private"
   subnet_association_tag      = "Master"
-  jenkins_sec_group_array     = concat(module.reguest_data.sec_grp_ssh_ids, module.reguest_data.sec_grp_jenkins_ids, module.reguest_data.sec_grp_consul_ids)
-  access_key_name             = module.reguest_data.key_pair_master
+  jenkins_sec_group_array     = concat(
+                                module.gu_reguest_data.sec_grp_ssh_ids,
+                                module.gu_reguest_data.sec_grp_jenkins_ids,
+                                module.gu_reguest_data.sec_grp_consul_ids,
+                                module.gu_reguest_data.sec_grp_node_exporter)
+  access_key_name             = module.gu_reguest_data.key_pair_master
   access_key_file             = file(local.path_to_master_key)
   bastion_public_ip           = data.aws_instance.bastion.public_ip
   bastion_access_key          = file(local.path_to_bastion_key)
-  vpc_id                      = module.reguest_data.vpc_id
+  vpc_id                      = module.gu_reguest_data.vpc_id
   jenkins_OS                  = "Ubuntu"
-  iam_instance_profile        = module.iam_roles_describe_jenkins_server.iam_instance_profile
+  iam_instance_profile        = module.gu_iam_roles_describe_jenkins_server.iam_instance_profile
   associate_public_ip_address = false
   application_name            = var.application_name
   application_task            = var.application_task
@@ -90,18 +94,18 @@ module "jenkins_server" {
 
 
 /* Jenkins server LB */
-module "jenkins_server_load_balancers" {
+module "gu_jenkins_server_load_balancers" {
   source                   = "../../modules/load_balancer"
-  subnets                  = module.reguest_data.pub_subnets_ids
-  lb_sec_group_array       = concat(module.reguest_data.sec_grp_http_ids, module.reguest_data.sec_grp_https_ids)
+  subnets                  = module.gu_reguest_data.pub_subnets_ids
+  lb_sec_group_array       = concat(module.gu_reguest_data.sec_grp_http_ids, module.gu_reguest_data.sec_grp_https_ids)
   application_task         = var.application_task
   application_name         = var.application_name
   created_by               = var.created_by
-  vpc_id                   = module.reguest_data.vpc_id
-  servers_for_attach_to_lb = concat(module.jenkins_server.jenkins_servers_id_arr)
+  vpc_id                   = module.gu_reguest_data.vpc_id
+  servers_for_attach_to_lb = concat(module.gu_jenkins_server.jenkins_servers_id_arr)
   listener_ports           = [443]
   listener_protocols       = ["HTTPS"]
-  aws_acm_certificate_id  = module.reguest_data.aws_acm_certificate_arn
+  aws_acm_certificate_id   = module.gu_reguest_data.aws_acm_certificate_arn
   idle_timeout             = 60
   internal                 = false
   lb_purpose               = "jenkins"
@@ -110,21 +114,26 @@ module "jenkins_server_load_balancers" {
 
 ######################################################################################
 /* Jenkins agent */
-module "jenkins_agent" {
+module "gu_jenkins_agent" {
+  depends_on = [module.gu_jenkins_server_load_balancers]
+
   source                      = "../../modules/jenkins_agent"
   region                      = var.region
   jenkins_purpose             = "JenkinsSlave"
   type_of_subnet              = "Private"
   subnet_association_tag      = "Master"
   count_instances             = 2
-  jenkins_sec_group_array     = concat(module.reguest_data.sec_grp_ssh_ids, module.reguest_data.sec_grp_consul_ids)
-  access_key_name             = module.reguest_data.key_pair_master
+  jenkins_sec_group_array     = concat(
+                                  module.gu_reguest_data.sec_grp_ssh_ids,
+                                  module.gu_reguest_data.sec_grp_consul_ids,
+                                  module.gu_reguest_data.sec_grp_node_exporter)
+  access_key_name             = module.gu_reguest_data.key_pair_master
   access_key_file             = file(local.path_to_master_key)
   bastion_public_ip           = data.aws_instance.bastion.public_ip
   bastion_access_key          = file(local.path_to_bastion_key)
-  vpc_id                      = module.reguest_data.vpc_id
+  vpc_id                      = module.gu_reguest_data.vpc_id
   jenkins_OS                  = "Ubuntu"
-  iam_instance_profile        = module.iam_roles_describe_jenkins_agent.iam_instance_profile
+  iam_instance_profile        = module.gu_iam_roles_describe_jenkins_agent.iam_instance_profile
   associate_public_ip_address = false
   application_name            = var.application_name
   application_task            = var.application_task
@@ -136,15 +145,15 @@ module "jenkins_agent" {
   aws_default_region          = var.aws_default_region
 }
 
-module "route53" {
+module "gu_route53" {
   source                     = "../../modules/route_53"
   route53_host_zone_name     = "galitu.site"
   route53_record_name        = "jenkins"
-  route53_address_list_array = [module.jenkins_server_load_balancers.alb_dns]
+  route53_address_list_array = [module.gu_jenkins_server_load_balancers.alb_dns]
   ttl                        = 300
   application_task           = var.application_task
   application_name           = var.application_name
   created_by                 = var.created_by
   application_owner          = var.application_owner
-  depends_on                 = [module.jenkins_server_load_balancers]
+  depends_on                 = [module.gu_jenkins_server_load_balancers]
 }

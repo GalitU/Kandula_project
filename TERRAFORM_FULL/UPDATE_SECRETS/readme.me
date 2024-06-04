@@ -13,7 +13,7 @@ Usage:
                 updata_secret_text.py -a <address of your Jenkins server> -i <id of secret> -d <description of secret> -s <secret> -f <relative path of jinja2 template file with name>
 Example :
                 updata_secret_text.py -a https://jenkins.mysite.com -i "kuku" -d "key for slack" -s "ki4235343tsdgrki" -f "./secret_key.j2."
-				
+
 My execution:
 	python ./updata_secret_text.py -a https://jenkins.mysite.com -i my_secret_id -d "Secret for Kandula" -s "Kandula" -f ./secret_key.j2
 
@@ -29,7 +29,7 @@ Usage:
 Example :
                 updata_ssh_key.py -a https://jenkins.mysite.com -i "kuku" -d "key for slack" -s "../KEYS/key_1.pem" -f "./secret_key.j2." -u "ubuntu"
 
-My execution : 
-python ./updata_ssh_key.py -a https://jenkins.mysite.com -i ansible_vault_ssh_1 -d "Ansible secret for consul" -s "../KEYS/Key_Consul_Kandula_MPrj.pem" -f "./ssh_secret_key.j2" -u "ubuntu"
+My execution :
+python ./updata_ssh_key.py -a https://jenkins.mysite.com -i ansible_vault_ssh_1 -d "Ansible secret for consul" -s "../KEYS/Key_Consul_Kandula_FPrj.pem" -f "./ssh_secret_key.j2" -u "ubuntu"
 
 {\rtf1}
