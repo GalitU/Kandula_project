@@ -1,0 +1,4 @@
+---
+# tasks file for filebeat
+- include: filebeat_install.yml
+- include: filebeat_update.yml  

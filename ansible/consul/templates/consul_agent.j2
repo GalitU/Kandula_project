@@ -1,0 +1,13 @@
+{
+  "advertise_addr": "{{private_ip_address}}",
+  "data_dir": "{{DATA_DIRECTORY}}",
+  "datacenter": "{{DATA_CENTER_NAME}}",
+  "node_name": "{{ curr_instance.instances | map(attribute='tags.Name')| list | join('\n') }}",
+  "encrypt": "uDBV4e+LbFW3019YKPxIrg==",
+  "disable_remote_exec": true,
+  "disable_update_check": true,
+  "leave_on_terminate": true,
+  "retry_join": ["provider=aws tag_key={{CONSUL_TAG_NAME}} tag_value={{CONSUL_TAG_VALUE}}"],
+  "enable_script_checks": true,
+  "server": false
+}

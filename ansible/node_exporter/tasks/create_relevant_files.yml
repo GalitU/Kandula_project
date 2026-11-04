@@ -1,0 +1,25 @@
+---
+- name: Create textfile collector dir
+  file:
+    path: "{{ node_exporter_textfile_dir }}"
+    state: directory
+    owner: "{{ _node_exporter_system_user }}"
+    group: "{{ _node_exporter_system_group }}"
+    recurse: true
+    mode: u+rwX,g+rwX,o=rX
+  when: node_exporter_textfile_dir | length > 0
+
+- name: Change node_exporter dir permission
+  file:
+    path: /var/lib/node_exporter
+    owner: "{{ ansible_effective_user_id }}"
+    group: "{{ ansible_effective_group_id }}"
+
+- name: Copy the node_exporter systemd service file
+  template:
+    src: node_exporter.service
+    dest: /etc/systemd/system/node_exporter.service
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart node_exporter

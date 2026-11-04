@@ -1,0 +1,22 @@
+{
+  "service": {
+    "id":  "{{SERVICE_NAME}}",
+    "name":  "{{SERVICE_NAME}}",
+    "tags": [
+        "{{SERVICE_TAGS}}"
+        ],
+    "port":  {{HEALTH_CHECKER_PORT}},
+    "checks": [
+      {
+        "args": [
+        "curl",
+        "localhost:{{HEALTH_CHECKER_PORT}}/status"
+        ],
+        "id": "http",
+        "name": "http-{{HEALTH_CHECKER_PORT}}",
+        "interval": "30s",
+        "timeout": "20s"
+      }
+    ]
+  }
+}

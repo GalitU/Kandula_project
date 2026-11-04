@@ -1,0 +1,10 @@
+- name: copy filebeat config file
+  template:
+    src: filebeat-config.j2
+    dest: /etc/filebeat/filebeat.yml
+
+- name: Enable and restart filebeat service
+  service:
+    name: filebeat
+    state: restarted
+    enabled: yes

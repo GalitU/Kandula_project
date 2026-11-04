@@ -1,0 +1,33 @@
+filebeat.inputs:
+  - type: log
+    enabled: false
+    paths:
+      - /var/log/auth.log
+
+filebeat.modules:
+  - module: system
+    syslog:
+      enabled: true
+    auth:
+      enabled: true
+
+filebeat.config.modules:
+  path: ${path.config}/modules.d/*.yml
+  reload.enabled: true
+
+setup.dashboards.enabled: true
+setup.kibana.host: "http://elk.service.consul:5601"
+
+setup.template.name: "filebeat-servers"
+setup.template.pattern: "filebeat-servers-*"
+setup.template.settings:
+  index.number_of_shards: 1
+
+processors:
+  - add_host_metadata:
+      when.not.contains.tags: forwarded
+  - add_cloud_metadata: ~
+
+output.elasticsearch:
+  hosts: [ "elk.service.consul:9200" ]
+  index: "filebeat-servers-%{[agent.version]}-%{+yyyy.MM.dd}"

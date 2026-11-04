@@ -1,0 +1,37 @@
+---
+# This playbook will Setup and install consul for server * 3 and all relevant Consul agents
+
+- name: Install node_exporter for Consul Servers
+  hosts: tag_ConsulPrefixForAnsible_ConsulServer_*
+  become: true
+  remote_user: ubuntu
+  roles:
+    - role: node_exporter
+
+- name: Install node_exporter for Jenkins server
+  hosts: tag_Purpose_JenkinsSrv
+  become: true
+  remote_user: ubuntu
+  roles:
+    - role: node_exporter
+
+- name: Install node_exporter for Jenkins slave
+  hosts: tag_Purpose_JenkinsSlave
+  become: true
+  remote_user: ubuntu
+  roles:
+    - role: node_exporter
+
+- name: Install node_exporter for Bastion
+  hosts: tag_Purpose_Bastion
+  become: true
+  remote_user: ubuntu
+  roles:
+    - role: node_exporter
+
+- name: Install node_exporter for ELK
+  hosts: tag_Purpose_ELKSrv
+  become: true
+  remote_user: ubuntu
+  roles:
+    - role: node_exporter
