@@ -1,0 +1,37 @@
+---
+# This playbook will Setup and install consul for server * 3 and all relevant Consul agents
+
+- name: Install filebeat for Consul Servers
+  hosts: tag_ConsulPrefixForAnsible_ConsulServer_*
+  become: true
+  remote_user: ubuntu
+  roles:
+    - role: filebeat
+
+- name: Install filebeat for Jenkins server
+  hosts: tag_Purpose_JenkinsSrv
+  become: true
+  remote_user: ubuntu
+  roles:
+    - role: filebeat
+
+- name: Install filebeat for Jenkins slave
+  hosts: tag_Purpose_JenkinsSlave
+  become: true
+  remote_user: ubuntu
+  roles:
+    - role: filebeat
+
+- name: Install filebeat for Bastion
+  hosts: tag_Purpose_Bastion
+  become: true
+  remote_user: ubuntu
+  roles:
+    - role: filebeat
+
+- name: Install filebeat for ELK
+  hosts: tag_Purpose_ELKSrv
+  become: true
+  remote_user: ubuntu
+  roles:
+    - role: filebeat

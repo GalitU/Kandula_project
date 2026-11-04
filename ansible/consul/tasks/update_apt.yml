@@ -1,0 +1,4 @@
+---
+- name: Update OS
+  package:
+    update_cache: yes

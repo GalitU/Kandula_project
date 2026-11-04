@@ -1,0 +1,7 @@
+
+---
+- include_vars: "main.yml"
+- include_tasks: "user.yml"
+- include_tasks: "handle_download.yml"
+- include_tasks: "create_relevant_files.yml"
+- include_tasks: "start_node_exporter.yml"
